@@ -1,0 +1,50 @@
+:root {
+  --pan-color-black: #080808;
+  --pan-color-screen: #050505;
+  --pan-color-panel: #111210;
+  --pan-color-panel-raised: #181a16;
+  --pan-color-button: #24261f;
+  --pan-color-white: #f1f1e9;
+  --pan-color-muted: #989b91;
+  --pan-color-green: #a8ff00;
+  --pan-color-success: #a8ff00;
+  --pan-color-error: #ff5c45;
+  --pan-color-line: #3a3d35;
+  --pan-color-line-strong: #5a5e52;
+  --pan-space-1: 4px;
+  --pan-space-2: 8px;
+  --pan-space-3: 12px;
+  --pan-space-4: 16px;
+  --pan-space-5: 20px;
+  --pan-space-6: 24px;
+  --pan-space-8: 32px;
+  --pan-space-10: 40px;
+  --pan-space-16: 64px;
+  --pan-line: 1px solid var(--pan-color-line);
+  --pan-font-sans: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --pan-font-size-meta: 10px;
+  --pan-font-size-label: 11px;
+  --pan-font-size-body: 16px;
+  --pan-weight-bold: 800;
+  --pan-weight-black: 950;
+  --pan-letter-meta: .12em;
+  --pan-letter-label: .18em;
+  --pan-z-noise: 20;
+  --pan-z-sticky: 30;
+  --pan-z-floating: 40;
+  --pan-z-dialog: 100;
+  --pan-breakpoint-mobile: 800px;
+  --pan-breakpoint-small: 520px;
+  --pan-focus: 2px solid var(--pan-color-green);
+  --pan-focus-offset: 3px;
+
+  /* Backward-compatible aliases used by Image Machine v0. */
+  --black: var(--pan-color-black);
+  --panel: var(--pan-color-panel);
+  --panel-2: var(--pan-color-panel-raised);
+  --white: var(--pan-color-white);
+  --muted: var(--pan-color-muted);
+  --green: var(--pan-color-green);
+  --line: var(--pan-color-line);
+  --danger: var(--pan-color-error);
+}

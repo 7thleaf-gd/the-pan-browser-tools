@@ -3,9 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="THE PAN IMAGE MACHINE — a private, browser-based image distortion tool by 7thleaf Records.">
+  <meta name="theme-color" content="#080808">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="THE PAN IMAGE MACHINE is a private, free browser-based image distortion tool by 7thleaf Records.">
+  <link rel="canonical" href="https://tools.thepan.xyz/">
+  <meta property="og:title" content="THE PAN IMAGE MACHINE — CREATE. PLAY. DISTORT.">
+  <meta property="og:description" content="Load an image. Break the signal. Export the result. Every pixel stays in your browser.">
+  <meta property="og:url" content="https://tools.thepan.xyz/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
   <title>THE PAN IMAGE MACHINE — CREATE. PLAY. DISTORT.</title>
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebApplication","name":"THE PAN IMAGE MACHINE","url":"https://tools.thepan.xyz/","applicationCategory":"MultimediaApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"7thleaf Records"}}
+  </script>
 
   <!-- Consent Mode defaults must run before Google Tag Manager. -->
   <script>
@@ -21,12 +31,17 @@
     (function () {
       try {
         if (localStorage.getItem('thePanAnalyticsConsent') === 'granted') {
-          gtag('consent', 'update', { analytics_storage: 'granted' });
+          gtag('consent', 'update', {
+            analytics_storage: 'granted',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied'
+          });
         }
       } catch (_) {}
     }());
   </script>
-  <!-- Google Tag Manager (GA4 is configured inside GTM; no direct gtag.js). -->
+  <!-- Google Tag Manager (GA4 G-5WHCJ6DCMF is configured inside GTM; no direct gtag.js). -->
   <script>
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -35,19 +50,33 @@
     })(window,document,'script','dataLayer','GTM-5W74796T');
   </script>
 
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="assets/js/analytics.js" defer></script>
+  <script src="assets/js/consent.js" defer></script>
+  <script src="assets/js/canvas-utils.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#machine">Skip to image controls</a>
   <div class="noise-layer" aria-hidden="true"></div>
   <header class="masthead">
     <a class="brand" href="./" aria-label="THE PAN IMAGE MACHINE home">
       <span class="brand-kicker">THE PAN BROWSER TOOLS / UNIT 001</span>
       <span class="brand-name">THE PAN<br>IMAGE MACHINE</span>
     </a>
-    <div class="masthead-meta">
-      <span>V0 / 7THLEAF RECORDS</span>
-      <span class="signal"><i></i> LOCAL PROCESSING</span>
+    <div class="masthead-side">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="./" aria-current="page">IMAGE MACHINE</a>
+        <a href="tools/">TOOLS</a>
+        <a href="about/">ABOUT</a>
+      </nav>
+      <div class="masthead-meta">
+        <span>V0 / 7THLEAF RECORDS</span>
+        <span class="signal"><i aria-hidden="true"></i> LOCAL PROCESSING</span>
+      </div>
     </div>
   </header>
 
@@ -63,13 +92,13 @@
       <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
     </section>
 
-    <section class="machine" aria-label="Image processing machine">
+    <section id="machine" class="machine" aria-label="Image processing machine">
       <div class="screen-panel">
         <div class="panel-label">
           <span>MONITOR / OUTPUT PREVIEW</span>
           <span id="imageInfo">NO SIGNAL</span>
         </div>
-        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Upload an image by selecting a file or dropping it here">
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Upload an image by selecting a file or dropping it here" aria-busy="false">
           <div id="emptyState" class="empty-state">
             <div class="target-mark" aria-hidden="true"></div>
             <strong>INPUT REQUIRED</strong>
@@ -78,35 +107,59 @@
             <small>PRIVATE BY DESIGN / NO SERVER UPLOAD</small>
           </div>
           <canvas id="previewCanvas" hidden aria-label="Processed image preview"></canvas>
-          <div id="busyIndicator" class="busy-indicator" hidden>PROCESSING SIGNAL…</div>
+          <button id="fullscreenButton" class="fullscreen-button" type="button" hidden>FULLSCREEN PREVIEW</button>
+          <div id="busyIndicator" class="busy-indicator" role="status" aria-live="polite" hidden>PROCESSING SIGNAL…</div>
         </div>
-        <div id="errorMessage" class="error-message" role="alert" hidden></div>
+        <div id="errorMessage" class="error-message" role="alert" aria-live="assertive" hidden></div>
       </div>
 
-      <aside class="control-panel">
+      <aside class="control-panel" aria-label="Image effect controls">
         <div class="panel-label">
           <span>CONTROL BANK / FX</span>
-          <span>LIVE</span>
+          <span class="status-badge is-available">● LIVE</span>
         </div>
         <div id="controls" class="controls">
-          <label class="control"><span>PIXELATE</span><output for="pixelate">0</output><input id="pixelate" data-effect="pixelate" type="range" min="0" max="40" value="0"></label>
-          <label class="control"><span>DITHER</span><output for="dither">0</output><input id="dither" data-effect="dither" type="range" min="0" max="100" value="0"></label>
-          <label class="control"><span>NOISE</span><output for="noise">0</output><input id="noise" data-effect="noise" type="range" min="0" max="100" value="0"></label>
-          <label class="control"><span>RGB SPLIT</span><output for="rgbSplit">0</output><input id="rgbSplit" data-effect="rgb_split" type="range" min="0" max="30" value="0"></label>
-          <label class="control"><span>SCANLINE</span><output for="scanline">0</output><input id="scanline" data-effect="scanline" type="range" min="0" max="100" value="0"></label>
-          <label class="control"><span>CONTRAST</span><output for="contrast">100</output><input id="contrast" data-effect="contrast" type="range" min="50" max="200" value="100"></label>
-          <label class="control"><span>BRIGHTNESS</span><output for="brightness">100</output><input id="brightness" data-effect="brightness" type="range" min="50" max="150" value="100"></label>
+          <details class="fx-group" data-fx-group="basic" open>
+            <summary><span>BASIC</span><span class="fx-count" data-fx-count="basic">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>PIXELATE</span><output for="pixelate">0</output><input id="pixelate" aria-label="Pixelate" data-effect="pixelate" type="range" min="0" max="40" value="0"></label>
+              <label class="control"><span>CONTRAST</span><output for="contrast">100</output><input id="contrast" aria-label="Contrast" data-effect="contrast" type="range" min="50" max="200" value="100"></label>
+              <label class="control"><span>BRIGHTNESS</span><output for="brightness">100</output><input id="brightness" aria-label="Brightness" data-effect="brightness" type="range" min="50" max="150" value="100"></label>
+              <button class="fx-reset" type="button" data-reset-group="basic">RESET BASIC</button>
+            </div>
+          </details>
+          <details class="fx-group" data-fx-group="analog" open>
+            <summary><span>ANALOG</span><span class="fx-count" data-fx-count="analog">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>NOISE</span><output for="noise">0</output><input id="noise" aria-label="Noise" data-effect="noise" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>SCANLINE</span><output for="scanline">0</output><input id="scanline" aria-label="Scanline" data-effect="scanline" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>RGB SPLIT</span><output for="rgbSplit">0</output><input id="rgbSplit" aria-label="RGB Split" data-effect="rgb_split" type="range" min="0" max="30" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="analog">RESET ANALOG</button>
+            </div>
+          </details>
+          <details class="fx-group" data-fx-group="print">
+            <summary><span>PRINT</span><span class="fx-count" data-fx-count="print">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>DITHER</span><output for="dither">0</output><input id="dither" aria-label="Dither" data-effect="dither" type="range" min="0" max="100" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="print">RESET PRINT</button>
+            </div>
+          </details>
+          <section class="fx-future" aria-labelledby="futureFxTitle">
+            <h3 id="futureFxTitle">EXPANSION BANK / RESERVED</h3>
+            <p data-planned-effects>GRAIN · BLUR · SHARPEN · BLOOM · JPEG ARTIFACT · HALFTONE · THRESHOLD · EDGE</p>
+            <span>NO MODULES INSTALLED</span>
+          </section>
+          <p class="privacy-note"><span aria-hidden="true">●</span> Images are processed locally with Canvas API. No image, filename, or personal data is transmitted or added to analytics.</p>
         </div>
-        <div class="button-grid">
+        <div class="button-grid" aria-label="Image actions">
           <button id="randomButton" class="machine-button accent" type="button">RANDOM<br>DISTORT</button>
           <button id="resetButton" class="machine-button" type="button">RESET<br>TO ZERO</button>
           <button id="exportButton" class="machine-button export" type="button" disabled>EXPORT<br>PNG ↓</button>
         </div>
-        <p class="privacy-note"><span>●</span> Images are processed locally with Canvas API. No image, filename, or personal data is transmitted or added to analytics.</p>
       </aside>
     </section>
 
-    <section class="manifesto">
+    <section class="manifesto" aria-label="Product principles">
       <span>NO ACCOUNT.</span><span>NO INSTALL.</span><span>NO CLOUD.</span><span>JUST SIGNAL.</span>
     </section>
   </main>
@@ -127,5 +180,31 @@
       </div>
     </div>
   </section>
+
+  <section id="fullscreenPreview" class="fullscreen-preview" role="dialog" aria-modal="true" aria-label="Fullscreen processed image preview" hidden>
+    <button id="closeFullscreen" class="machine-button fullscreen-close" type="button">CLOSE ×</button>
+    <canvas id="fullscreenCanvas" aria-label="Fullscreen processed image"></canvas>
+  </section>
+
+  <aside id="floatingPreview" class="floating-preview" data-mode="current" data-corner="top-right" aria-label="Floating Preview Monitor" hidden>
+    <div id="floatingDragHandle" class="floating-header">
+      <strong>FLOATING PREVIEW MONITOR</strong>
+      <div class="floating-window-actions">
+        <button id="floatingMinimize" type="button" aria-label="Minimize floating preview">_</button>
+        <button id="floatingClose" type="button" aria-label="Close floating preview">×</button>
+      </div>
+    </div>
+    <button id="floatingCanvasButton" class="floating-canvas-button" type="button" aria-label="Open fullscreen preview">
+      <canvas id="floatingCanvas" width="480" height="270" aria-label="Floating image preview"></canvas>
+      <span id="compareDivider" class="compare-divider" aria-hidden="true"></span>
+      <span class="compare-label compare-before">BEFORE</span>
+      <span class="compare-label compare-after">AFTER</span>
+    </button>
+    <div class="floating-controls">
+      <button id="floatingPrevious" type="button" aria-label="Previous preview mode">←</button>
+      <span id="floatingMode" role="status" aria-live="polite">CURRENT</span>
+      <button id="floatingNext" type="button" aria-label="Next preview mode">→</button>
+    </div>
+  </aside>
 </body>
 </html>
