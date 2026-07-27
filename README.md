@@ -1,97 +1,76 @@
-# THE PAN IMAGE MACHINE v0
+# THE PAN Browser Tools
 
 **CREATE. PLAY. DISTORT.**
 
-THE PAN IMAGE MACHINE is the first release in **THE PAN Browser Tools**—free, installation-free creative software from **7thleaf Records**. It is a static HTML/CSS/JavaScript application designed to run directly on GitHub Pages.
+Free, installation-free creative browser tools from **7thleaf Records**. The public root remains **THE PAN IMAGE MACHINE v0**:
 
-## Concept
+https://7thleaf-gd.github.io/the-pan-browser-tools/
 
-An image-processing control panel inspired by DIY labels, photocopiers, experimental music, analog noise, and old studio machinery. No account, installation, build step, or server is required.
+## Wave 0 Foundation
 
-## Features
+Wave 0 keeps the Image Machine design, processing, PNG export, privacy behavior, analytics, and public URL while establishing a small static foundation for future Image, Audio, Video, Poster, Zine, and Dub tools.
 
-- Image upload, file selection, and drag-and-drop
-- Live before-processing source and processed Canvas preview
-- Pixelate, ordered dither, noise, RGB split, scanline, contrast, and brightness controls
-- Random Distort and Reset controls
-- PNG export
-- Automatic resizing of very large images (maximum 2048 px on the longest side and 4 megapixels)
-- Responsive interface for desktop and mobile
-- User-facing validation and processing errors
-- Keyboard-accessible upload and controls
+```text
+assets/
+  css/            design tokens, base styles, components, content pages
+  js/             analytics, consent, Canvas utilities, shared page behavior
+about/            project and privacy explanation
+tools/            available/planned tool index
+docs/             design, tool, analytics, and release contracts
+scripts/          dependency-free site validation
+```
 
-## Privacy
+There is no framework, package installation, build command, or external runtime dependency.
 
-All image processing runs locally in the browser with the Canvas API. Uploaded images are never sent to an external server. Image data, filenames, and personal information are never added to `dataLayer` or analytics events. Declining analytics does not disable any tool feature.
+## Image Machine features
 
-Optional, consent-based analytics are loaded through Google Tag Manager:
+- File selection and drag-and-drop
+- Live Canvas preview
+- Pixelate, ordered dither, noise, RGB split, scanline, contrast, and brightness
+- Random Distort and Reset
+- PNG export and fullscreen preview
+- Automatic scaling to a maximum 2048px side and 4 megapixels
+- Desktop Studio Workspace and mobile sticky preview/action controls
+- Keyboard-accessible interactions and user-facing errors
 
-- GTM container: `GTM-5W74796T`
-- GA4 measurement ID configured in GTM: `G-5WHCJ6DCMF`
+## Privacy and analytics
 
-The site does **not** load GA4 `gtag.js` directly, preventing double measurement. Google Consent Mode defaults are set before GTM loads. The initial values of `analytics_storage`, `ad_storage`, `ad_user_data`, and `ad_personalization` are all `denied`. Only `analytics_storage` changes to `granted` after the visitor explicitly accepts analytics. The choice is saved in `localStorage` and can be changed later from **Privacy settings** in the footer. Advertising tags are not used.
+Creative files are processed locally and never uploaded. Image data, filenames, free input, and personal information are never sent to `dataLayer`. Declining optional analytics never limits the tools.
 
-### GTM / GA4 setup
+- GTM: `GTM-5W74796T`
+- GA4 configured inside GTM: `G-5WHCJ6DCMF`
+- Direct GA4 `gtag.js`: not used
+- Advertising storage and personalization: always denied
 
-Inside GTM:
+See [docs/ANALYTICS.md](docs/ANALYTICS.md) for the Consent Mode and event contract.
 
-1. Create a **Google tag** using measurement ID `G-5WHCJ6DCMF`.
-2. Set its consent requirement to `analytics_storage`.
-3. Use the Consent Initialization event only for consent-management tags; the site's default Consent Mode command already runs before the container.
-4. Create GA4 event tags or a lookup-driven event tag for the custom events below.
-5. Require `analytics_storage` for every GA4 tag. Do not create advertising tags.
-6. Publish the container.
-
-Events pushed to `dataLayer`:
-
-| Event | Parameter | Purpose |
-| --- | --- | --- |
-| `image_upload` | — | A valid image was loaded |
-| `effect_used` | `effect_name` | A processing control was adjusted |
-| `random_distort` | — | Random Distort was used |
-| `reset_tool` | — | Controls were reset |
-| `image_export` | — | A PNG export completed |
-| `tool_error` | `error_type` | A user-facing tool error occurred |
-
-No event contains image data, a filename, or personal information.
-
-### Verify with Tag Assistant
-
-1. Open GTM Preview / [Tag Assistant](https://tagassistant.google.com/) and connect the deployed URL.
-2. Clear the site's local storage or open a private window.
-3. Confirm the default consent state is denied before the `gtm.js` event.
-4. Decline analytics and verify GA4 tags do not fire while all image tools still work.
-5. Open **Privacy settings**, allow analytics, and verify `analytics_storage` updates to granted.
-6. Use each tool action and inspect the event names and safe parameters in the data layer.
-7. Confirm the Google tag uses `G-5WHCJ6DCMF` and that no separately embedded GA4 script fires.
-
-## Run locally
-
-No build is required. From the repository root:
+## Local development
 
 ```sh
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000`.
+Open `http://localhost:8000/`. Run the same dependency-free checks used by Pages:
 
-## Deploy with GitHub Pages
+```sh
+python3 scripts/check-site.py
+node --check app.js
+node --check assets/js/analytics.js
+node --check assets/js/consent.js
+node --check assets/js/canvas-utils.js
+node --check assets/js/site.js
+```
 
-The workflow at `.github/workflows/pages.yml` deploys the repository root whenever `main` is pushed.
+## GitHub Pages
 
-1. In the GitHub repository, open **Settings → Pages**.
-2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
-3. Push to `main`, or manually run the **Deploy static site to Pages** workflow.
+`.github/workflows/pages.yml` validates the site, uploads the repository as a Pages artifact, and deploys after pushes to `main`. Repository Pages source must remain **GitHub Actions**.
 
-The workflow grants only the required `contents: read`, `pages: write`, and `id-token: write` permissions, uploads the static site as a Pages artifact, and deploys it with `deploy-pages`.
+## Foundation documentation
 
-## Planned Browser Tools
-
-- Audio waveform and destruction machine
-- GIF loop and frame processor
-- Type/poster generator
-- Color sampling and palette machine
-- Video feedback and scanline processor
+- [Design system](docs/DESIGN_SYSTEM.md)
+- [New tool template](docs/TOOL_TEMPLATE.md)
+- [Analytics and Consent](docs/ANALYTICS.md)
+- [Release checklist](docs/RELEASE_CHECKLIST.md)
 
 ---
 
