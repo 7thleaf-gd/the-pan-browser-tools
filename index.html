@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="description" content="THE PAN IMAGE MACHINE — a private, browser-based image distortion tool by 7thleaf Records.">
+  <title>THE PAN IMAGE MACHINE — CREATE. PLAY. DISTORT.</title>
+
+  <!-- Consent Mode defaults must run before Google Tag Manager. -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    (function () {
+      try {
+        if (localStorage.getItem('thePanAnalyticsConsent') === 'granted') {
+          gtag('consent', 'update', { analytics_storage: 'granted' });
+        }
+      } catch (_) {}
+    }());
+  </script>
+  <!-- Google Tag Manager (GA4 is configured inside GTM; no direct gtag.js). -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-5W74796T');
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="noise-layer" aria-hidden="true"></div>
+  <header class="masthead">
+    <a class="brand" href="./" aria-label="THE PAN IMAGE MACHINE home">
+      <span class="brand-kicker">THE PAN BROWSER TOOLS / UNIT 001</span>
+      <span class="brand-name">THE PAN<br>IMAGE MACHINE</span>
+    </a>
+    <div class="masthead-meta">
+      <span>V0 / 7THLEAF RECORDS</span>
+      <span class="signal"><i></i> LOCAL PROCESSING</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p class="eyebrow">BROWSER-BASED IMAGE DESTRUCTION APPARATUS</p>
+      <h1>CREATE.<br>PLAY.<br><em>DISTORT.</em></h1>
+      <p class="lede">Load an image. Break the signal. Export the result. Nothing is uploaded—every pixel stays in your browser.</p>
+      <label class="upload-main" for="fileInput">
+        <span>LOAD IMAGE</span>
+        <small>PNG / JPEG / WEBP / GIF · DROP OR SELECT</small>
+      </label>
+      <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+    </section>
+
+    <section class="machine" aria-label="Image processing machine">
+      <div class="screen-panel">
+        <div class="panel-label">
+          <span>MONITOR / OUTPUT PREVIEW</span>
+          <span id="imageInfo">NO SIGNAL</span>
+        </div>
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Upload an image by selecting a file or dropping it here">
+          <div id="emptyState" class="empty-state">
+            <div class="target-mark" aria-hidden="true"></div>
+            <strong>INPUT REQUIRED</strong>
+            <span>DROP IMAGE HERE</span>
+            <button id="browseButton" class="text-button" type="button">OR BROWSE FILES →</button>
+            <small>PRIVATE BY DESIGN / NO SERVER UPLOAD</small>
+          </div>
+          <canvas id="previewCanvas" hidden aria-label="Processed image preview"></canvas>
+          <div id="busyIndicator" class="busy-indicator" hidden>PROCESSING SIGNAL…</div>
+        </div>
+        <div id="errorMessage" class="error-message" role="alert" hidden></div>
+      </div>
+
+      <aside class="control-panel">
+        <div class="panel-label">
+          <span>CONTROL BANK / FX</span>
+          <span>LIVE</span>
+        </div>
+        <div id="controls" class="controls">
+          <label class="control"><span>PIXELATE</span><output for="pixelate">0</output><input id="pixelate" data-effect="pixelate" type="range" min="0" max="40" value="0"></label>
+          <label class="control"><span>DITHER</span><output for="dither">0</output><input id="dither" data-effect="dither" type="range" min="0" max="100" value="0"></label>
+          <label class="control"><span>NOISE</span><output for="noise">0</output><input id="noise" data-effect="noise" type="range" min="0" max="100" value="0"></label>
+          <label class="control"><span>RGB SPLIT</span><output for="rgbSplit">0</output><input id="rgbSplit" data-effect="rgb_split" type="range" min="0" max="30" value="0"></label>
+          <label class="control"><span>SCANLINE</span><output for="scanline">0</output><input id="scanline" data-effect="scanline" type="range" min="0" max="100" value="0"></label>
+          <label class="control"><span>CONTRAST</span><output for="contrast">100</output><input id="contrast" data-effect="contrast" type="range" min="50" max="200" value="100"></label>
+          <label class="control"><span>BRIGHTNESS</span><output for="brightness">100</output><input id="brightness" data-effect="brightness" type="range" min="50" max="150" value="100"></label>
+        </div>
+        <div class="button-grid">
+          <button id="randomButton" class="machine-button accent" type="button">RANDOM<br>DISTORT</button>
+          <button id="resetButton" class="machine-button" type="button">RESET<br>TO ZERO</button>
+          <button id="exportButton" class="machine-button export" type="button" disabled>EXPORT<br>PNG ↓</button>
+        </div>
+        <p class="privacy-note"><span>●</span> Images are processed locally with Canvas API. No image, filename, or personal data is transmitted or added to analytics.</p>
+      </aside>
+    </section>
+
+    <section class="manifesto">
+      <span>NO ACCOUNT.</span><span>NO INSTALL.</span><span>NO CLOUD.</span><span>JUST SIGNAL.</span>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>THE PAN BROWSER TOOLS</strong><br>FREE CREATIVE MACHINES FROM 7THLEAF RECORDS</div>
+    <div class="footer-right"><span>© <span id="year"></span> 7THLEAF RECORDS</span><button id="privacySettings" class="footer-button" type="button">PRIVACY SETTINGS</button></div>
+  </footer>
+
+  <section id="consentPanel" class="consent-panel" role="dialog" aria-modal="true" aria-labelledby="consentTitle" hidden>
+    <div class="consent-box">
+      <p class="eyebrow">PRIVACY CONTROL</p>
+      <h2 id="consentTitle">ANALYTICS<br>SETTING</h2>
+      <p>Optional analytics help us understand which controls get used. Images, filenames, and personal data are never collected. The machine works fully if you decline.</p>
+      <div class="consent-actions">
+        <button id="acceptAnalytics" class="machine-button accent" type="button">ALLOW ANALYTICS</button>
+        <button id="declineAnalytics" class="machine-button" type="button">DECLINE</button>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
