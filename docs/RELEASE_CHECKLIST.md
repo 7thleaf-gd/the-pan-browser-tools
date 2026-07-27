@@ -29,6 +29,9 @@
 - [ ] Every existing effect works
 - [ ] Presets, Surprise Me, section resets, and Reset All work
 - [ ] PNG export opens a valid file
+- [ ] Tape Machine WAV and MP3 input, transport, seek, Original/Damaged, all presets, and all effect banks work
+- [ ] Tape Machine rejects empty, unsupported, oversized, and over-three-minute audio with useful errors
+- [ ] Tape Machine WAV export, duplicate-export guard, download again, and fixed-text share fallback work
 - [ ] Oversized images are scaled within limits
 - [ ] Unsupported and invalid files show useful errors
 
@@ -42,7 +45,7 @@
 
 ## SEO and pages
 
-- [ ] Image Machine, Tools, About, and 404 render
+- [ ] Image Machine, Tape Machine, Tools, About, and 404 render
 - [ ] Titles, descriptions, canonicals, Open Graph, Twitter, robots, and JSON-LD are correct
 - [ ] Sitemap contains only real indexable pages
 - [ ] Internal links resolve
@@ -52,6 +55,7 @@
 - [ ] Slider work is coalesced by animation frame
 - [ ] Temporary canvases are reused
 - [ ] Maximum-size images remain usable while presets and Surprise Me are repeated
+- [ ] Three-minute audio remains usable, one AudioContext is reused, and old buffers/nodes are released
 - [ ] Critical CSS and JavaScript URLs carry the current cache version
 - [ ] No unexpected console errors or external CDN dependencies
 - [ ] `python3 scripts/check-site.py` passes

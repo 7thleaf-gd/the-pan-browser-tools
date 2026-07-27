@@ -13,9 +13,9 @@ GTM_ID = "GTM-5W74796T"
 ASSET_VERSION = "20260727.2"
 REQUIRED = [
     "index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",
-    "about/index.html", "tools/index.html",
+    "about/index.html", "tools/index.html", "tape/index.html", "tape/tape.css", "tape/tape.js",
     "assets/css/tokens.css", "assets/css/base.css", "assets/css/components.css",
-    "assets/js/analytics.js", "assets/js/consent.js", "assets/js/canvas-utils.js",
+    "assets/js/analytics.js", "assets/js/consent.js", "assets/js/canvas-utils.js", "assets/js/audio-utils.js",
     "docs/DESIGN_SYSTEM.md", "docs/TOOL_TEMPLATE.md", "docs/ANALYTICS.md",
     "docs/RELEASE_CHECKLIST.md", ".github/workflows/pages.yml",
 ]
@@ -23,6 +23,7 @@ PAGES = {
     "index.html": BASE_URL,
     "tools/index.html": BASE_URL + "tools/",
     "about/index.html": BASE_URL + "about/",
+    "tape/index.html": BASE_URL + "tape/",
 }
 
 

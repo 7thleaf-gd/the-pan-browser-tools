@@ -23,7 +23,8 @@ Load `tokens.css`, `base.css`, and `components.css` before tool CSS. Load standa
 1. `analytics.js`
 2. `consent.js`
 3. `canvas-utils.js` when Canvas or export helpers are needed
-4. Tool-specific JavaScript
+4. `audio-utils.js` when waveform peak extraction or WAV encoding is needed
+5. Tool-specific JavaScript
 
 Consent Mode defaults and any stored analytics grant must run inline before the GTM container. Never add direct GA4 `gtag.js` or a GTM noscript iframe.
 

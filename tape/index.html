@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Load a sound, damage the tape, and export a WAV. THE PAN TAPE MACHINE processes every sound privately in your browser.">
+  <link rel="canonical" href="https://tools.thepan.xyz/tape/">
+  <meta property="og:title" content="THE PAN TAPE MACHINE — DESTROY YOUR CLEAN AUDIO.">
+  <meta property="og:description" content="A free browser cassette damage machine. No account, installation, or audio upload.">
+  <meta property="og:url" content="https://tools.thepan.xyz/tape/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <title>THE PAN TAPE MACHINE — DESTROY YOUR CLEAN AUDIO.</title>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"THE PAN TAPE MACHINE","url":"https://tools.thepan.xyz/tape/","applicationCategory":"MultimediaApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"7thleaf Records"}}</script>
+  <script>
+    window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+    gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});
+    try{if(localStorage.getItem('thePanAnalyticsConsent')==='granted'){gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}}catch(_){}
+  </script>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5W74796T');</script>
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20260728.1">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20260728.1">
+  <link rel="stylesheet" href="../assets/css/components.css?v=20260728.1">
+  <link rel="stylesheet" href="tape.css?v=20260728.1">
+  <script src="../assets/js/analytics.js?v=20260728.1" defer></script>
+  <script src="../assets/js/consent.js?v=20260728.1" defer></script>
+  <script src="../assets/js/audio-utils.js?v=20260728.1" defer></script>
+  <script src="tape.js?v=20260728.1" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#tapeMachine">Skip to tape controls</a>
+  <div class="noise-layer" aria-hidden="true"></div>
+  <header class="masthead">
+    <a class="brand" href="../"><span class="brand-kicker">THE PAN BROWSER TOOLS / UNIT 002</span><span class="brand-name">THE PAN<br>TAPE MACHINE</span></a>
+    <div class="masthead-side">
+      <nav class="site-nav" aria-label="Primary navigation"><a href="../">IMAGE MACHINE</a><a href="./" aria-current="page">TAPE MACHINE</a><a href="../tools/">TOOLS</a><a href="../about/">ABOUT</a></nav>
+      <div class="masthead-meta"><span>V0 / 7THLEAF RECORDS</span><span class="signal"><i aria-hidden="true"></i> LOCAL AUDIO</span></div>
+    </div>
+  </header>
+  <main>
+    <section class="tape-hero">
+      <p class="eyebrow">BROWSER CASSETTE DAMAGE APPARATUS</p>
+      <h1>DESTROY YOUR<br><em>CLEAN AUDIO.</em></h1>
+      <p class="lede">LOAD A SOUND. DAMAGE THE TAPE. KEEP THE ACCIDENT.</p>
+      <label class="audio-load-main" for="audioInput"><span>LOAD A SOUND</span><small>WAV / MP3 / DECODABLE M4A · MAX 3 MINUTES</small></label>
+      <input id="audioInput" type="file" accept=".wav,.mp3,.m4a,audio/wav,audio/mpeg,audio/mp4,audio/x-m4a" hidden>
+    </section>
+
+    <section id="tapeMachine" class="tape-machine" aria-label="Tape processing machine">
+      <div class="tape-deck">
+        <div class="panel-label"><span>DECK / WAVEFORM</span><span id="audioInfo">NO TAPE</span></div>
+        <div id="audioDropZone" class="audio-drop-zone" role="button" tabindex="0" aria-label="Load audio by selecting a file or dropping it here" aria-busy="false">
+          <div id="audioEmptyState" class="audio-empty-state"><strong>INSERT TAPE</strong><span>DROP AUDIO HERE</span><span id="audioBrowseButton" class="text-button" aria-hidden="true">OR BROWSE FILES →</span><small>PRIVATE SIGNAL / NOTHING IS UPLOADED</small></div>
+          <canvas id="waveformCanvas" width="1200" height="360" hidden tabindex="0" role="slider" aria-label="Audio waveform position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-describedby="transportStatus"></canvas>
+          <div id="playhead" class="playhead" hidden aria-hidden="true"></div>
+        </div>
+        <div class="transport">
+          <button id="playButton" class="transport-button" type="button" disabled aria-describedby="transportStatus">PLAY</button>
+          <button id="pauseButton" class="transport-button" type="button" disabled>PAUSE</button>
+          <button id="stopButton" class="transport-button" type="button" disabled>STOP</button>
+          <div class="time-display"><span id="currentTime">00:00.0</span><span>/</span><span id="totalTime">00:00.0</span></div>
+          <div id="modeButtons" class="mode-buttons" aria-label="Playback mode"><button type="button" data-playback-mode="original">ORIGINAL</button><button type="button" data-playback-mode="damaged" class="is-active">DAMAGED</button></div>
+        </div>
+        <p id="transportStatus" class="machine-status" role="status" aria-live="polite">LOAD AUDIO TO START.</p>
+        <div id="audioError" class="error-message" role="alert" aria-live="assertive" hidden></div>
+      </div>
+
+      <aside class="tape-controls" aria-label="Tape effect controls">
+        <div class="panel-label"><span>CONTROL BANK / TAPE FX</span><span class="status-badge is-available">● LIVE</span></div>
+        <div class="tape-control-scroll">
+          <section class="tape-preset-bank" aria-labelledby="tapePresetTitle"><div class="preset-heading"><h2 id="tapePresetTitle">TAPE PROGRAMS</h2><span id="tapeActivePreset">NONE</span></div><div id="tapePresetButtons" class="tape-preset-buttons"></div></section>
+          <details class="tape-fx-bank" data-tape-bank="tape" open><summary><span>TAPE</span><span data-tape-count="tape">0 ACTIVE</span></summary><div class="tape-bank-body">
+            <label class="control"><span>TAPE SATURATION</span><output for="saturation">0</output><input id="saturation" data-tape-effect="saturation" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>WOW RATE</span><output for="wowRate">0.35</output><input id="wowRate" data-tape-effect="wow_rate" type="range" min="0.10" max="1.20" step="0.05" value="0.35"></label>
+            <label class="control"><span>WOW DEPTH</span><output for="wowDepth">0</output><input id="wowDepth" data-tape-effect="wow_depth" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>FLUTTER RATE</span><output for="flutterRate">7</output><input id="flutterRate" data-tape-effect="flutter_rate" type="range" min="3" max="14" step="0.5" value="7"></label>
+            <label class="control"><span>FLUTTER DEPTH</span><output for="flutterDepth">0</output><input id="flutterDepth" data-tape-effect="flutter_depth" type="range" min="0" max="100" value="0"></label>
+            <button class="fx-reset" type="button" data-reset-tape-bank="tape">RESET TAPE</button>
+          </div></details>
+          <details class="tape-fx-bank" data-tape-bank="damage" open><summary><span>DAMAGE</span><span data-tape-count="damage">0 ACTIVE</span></summary><div class="tape-bank-body">
+            <label class="control"><span>TAPE NOISE</span><output for="noiseAmount">0</output><input id="noiseAmount" data-tape-effect="noise" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>DROPOUT AMOUNT</span><output for="dropoutAmount">0</output><input id="dropoutAmount" data-tape-effect="dropout_amount" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>DROPOUT FREQUENCY</span><output for="dropoutFrequency">0</output><input id="dropoutFrequency" data-tape-effect="dropout_frequency" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>BIT DEPTH</span><output for="bitDepth">16</output><input id="bitDepth" data-tape-effect="bit_depth" type="range" min="4" max="16" value="16"></label>
+            <label class="control"><span>SAMPLE REDUCTION</span><output for="sampleReduction">1</output><input id="sampleReduction" data-tape-effect="sample_reduction" type="range" min="1" max="24" value="1"></label>
+            <button class="fx-reset" type="button" data-reset-tape-bank="damage">RESET DAMAGE</button>
+          </div></details>
+          <details class="tape-fx-bank" data-tape-bank="tone"><summary><span>TONE</span><span data-tape-count="tone">0 ACTIVE</span></summary><div class="tape-bank-body">
+            <label class="control"><span>LOW PASS</span><output for="lowPass">20000</output><input id="lowPass" data-tape-effect="low_pass" type="range" min="700" max="20000" step="100" value="20000"></label>
+            <button class="fx-reset" type="button" data-reset-tape-bank="tone">RESET TONE</button>
+          </div></details>
+          <p class="privacy-note"><span aria-hidden="true">●</span> Audio is decoded and damaged locally. Audio, filenames, file details, and personal data never enter analytics.</p>
+        </div>
+        <div class="tape-actions">
+          <button id="tapeSurprise" class="machine-button accent" type="button">SURPRISE ME<small>DAMAGE THE TAPE FOR ME</small></button>
+          <button id="tapeReset" class="machine-button" type="button">RESET ALL</button>
+          <button id="tapeExport" class="machine-button export" type="button" disabled>EXPORT DAMAGED WAV</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="related-tools" aria-labelledby="relatedTitle"><p class="eyebrow">RELATED MACHINE</p><h2 id="relatedTitle">BREAK THE IMAGE TOO.</h2><a class="machine-button accent" href="../">OPEN IMAGE MACHINE →</a></section>
+  </main>
+  <footer><div><strong>THE PAN BROWSER TOOLS</strong><br>FREE CREATIVE MACHINES FROM 7THLEAF RECORDS</div><div class="footer-right"><span>© <span data-current-year></span> 7THLEAF RECORDS</span><button id="privacySettings" class="footer-button" type="button">PRIVACY SETTINGS</button></div></footer>
+
+  <section id="tapeSharePanel" class="tape-dialog" role="dialog" aria-modal="true" aria-labelledby="tapeShareTitle" hidden><div class="tape-dialog-box"><p class="eyebrow">EXPORT COMPLETE</p><h2 id="tapeShareTitle">TAPE<br>RECOVERED</h2><p id="tapeShareStatus" role="status" aria-live="polite">DAMAGED WAV SAVED.</p><div class="dialog-actions"><button id="tapeShare" class="machine-button accent" type="button">SHARE</button><button id="tapeCreditCopy" class="machine-button" type="button">COPY CREDIT</button><button id="tapeDownloadAgain" class="machine-button" type="button">DOWNLOAD AGAIN</button><button id="tapeShareClose" class="machine-button" type="button">CLOSE</button></div></div></section>
+  <section id="consentPanel" class="consent-panel" role="dialog" aria-modal="true" aria-labelledby="consentTitle" hidden><div class="consent-box"><p class="eyebrow">PRIVACY CONTROL</p><h2 id="consentTitle">ANALYTICS<br>SETTING</h2><p>Optional anonymous analytics help us improve these tools. Audio, filenames, and personal data are never collected. Everything works if you decline.</p><div class="consent-actions"><button id="acceptAnalytics" class="machine-button accent" type="button">ALLOW ANALYTICS</button><button id="declineAnalytics" class="machine-button" type="button">DECLINE</button></div></div></section>
+</body>
+</html>

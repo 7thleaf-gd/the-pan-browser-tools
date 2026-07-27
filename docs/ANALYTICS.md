@@ -39,8 +39,22 @@ Never send creative data, file content, filenames, user-entered text, personal d
 | `share_fallback` | — | Copy fallback used |
 | `credit_copy` | — | Fixed public credit copied |
 | `tool_error` | `error_type` | User-facing error shown |
+| `audio_upload` | — | Valid audio decoded locally |
+| `audio_play` | `playback_mode` | Playback started |
+| `audio_pause` | `playback_mode` | Playback paused |
+| `audio_seek` | — | Waveform seek completed |
+| `audio_mode_change` | `playback_mode` | Original/damaged monitor changed |
+| `tape_surprise` | `preset_name` | Controlled tape preset family selected |
+| `tape_preset_used` | `preset_name` | Tape preset selected |
+| `tape_effect_used` | `effect_name` | Tape range control adjusted |
+| `audio_export` | — | Damaged WAV export completed |
+| `audio_export_error` | `error_type` | Damaged WAV export failed |
+| `tape_share` | — | Tape share action completed or fell back |
+| `tape_credit_copy` | — | Fixed Tape Machine credit copied |
 
 Gallery images, settings snapshots, comparison position, filenames, and share payloads are never included in analytics.
+
+Tape Machine events never include audio, filenames, exact duration, file size, MIME type, effect values, clipboard contents, or other free text.
 
 ## GTM configuration
 

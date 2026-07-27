@@ -15,6 +15,7 @@ assets/
   css/            design tokens, base styles, components, content pages
   js/             analytics, consent, Canvas utilities, shared page behavior
 about/            project and privacy explanation
+tape/             THE PAN TAPE MACHINE static audio tool
 tools/            available/planned tool index
 docs/             design, tool, analytics, and release contracts
 scripts/          dependency-free site validation
@@ -36,6 +37,18 @@ There is no framework, package installation, build command, or external runtime 
 - Versioned static asset URLs so new releases replace stale mobile caches
 
 Playground session images and effect snapshots exist only in memory. They are cleared on reload and are never written to `localStorage`; only interface preferences such as open FX banks and floating-monitor position are stored.
+
+## Tape Machine features
+
+- WAV, MP3, and browser-decodable M4A input up to 3 minutes and 50 MB
+- Lightweight Canvas waveform with playhead, pointer/touch seeking, and keyboard seeking
+- Original/Damaged monitoring with short Web Audio crossfades
+- Tape Saturation, Wow, Flutter, Tape Noise, Dropout, Bit Crush, and Low Pass controls
+- Eight designed tape presets, controlled Surprise Me, section resets, and Reset All
+- OfflineAudioContext rendering and a local 16-bit PCM WAV encoder
+- Native share support with fixed-text copy fallback
+
+Audio, filenames, exact duration, file size, MIME type, and effect values are never sent to analytics or stored persistently.
 
 ## Privacy and analytics
 
@@ -62,7 +75,9 @@ node --check app.js
 node --check assets/js/analytics.js
 node --check assets/js/consent.js
 node --check assets/js/canvas-utils.js
+node --check assets/js/audio-utils.js
 node --check assets/js/site.js
+node --check tape/tape.js
 ```
 
 ## GitHub Pages

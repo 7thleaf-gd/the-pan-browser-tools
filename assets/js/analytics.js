@@ -22,14 +22,33 @@
     'share_success',
     'share_cancel',
     'share_fallback',
-    'credit_copy'
+    'credit_copy',
+    'audio_upload',
+    'audio_play',
+    'audio_pause',
+    'audio_seek',
+    'audio_mode_change',
+    'tape_surprise',
+    'tape_preset_used',
+    'tape_effect_used',
+    'audio_export',
+    'audio_export_error',
+    'tape_share',
+    'tape_credit_copy'
   ]);
   const allowedParameters = {
     effect_used: new Set(['effect_name']),
     tool_error: new Set(['error_type']),
     surprise_me: new Set(['preset_family']),
     preset_used: new Set(['preset_name']),
-    compare_used: new Set(['compare_mode'])
+    compare_used: new Set(['compare_mode']),
+    audio_play: new Set(['playback_mode']),
+    audio_pause: new Set(['playback_mode']),
+    audio_mode_change: new Set(['playback_mode']),
+    tape_surprise: new Set(['preset_name']),
+    tape_preset_used: new Set(['preset_name']),
+    tape_effect_used: new Set(['effect_name']),
+    audio_export_error: new Set(['error_type'])
   };
   let context = Object.freeze({ tool_id: '', tool_version: '' });
 
