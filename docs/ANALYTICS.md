@@ -22,9 +22,25 @@ Never send creative data, file content, filenames, user-entered text, personal d
 | `image_upload` | — | Valid image decoded locally |
 | `effect_used` | `effect_name` | Range control adjusted |
 | `random_distort` | — | Random action used |
+| `surprise_me` | `preset_family` | Controlled random preset family selected |
+| `preset_used` | `preset_name` | Designed preset selected |
+| `compare_used` | `compare_mode` | Original/current/compare mode selected |
 | `reset_tool` | — | Tool reset |
 | `image_export` | — | PNG export completed |
+| `gallery_add` | — | Export added to the in-memory session |
+| `gallery_select` | — | Session item opened |
+| `gallery_restore` | — | Session effect snapshot restored |
+| `gallery_delete` | — | Session item deleted |
+| `gallery_clear` | — | Session gallery cleared |
+| `gallery_favorite` | — | Session favorite changed |
+| `share_open` | — | Post-export share panel opened |
+| `share_success` | — | Native share completed |
+| `share_cancel` | — | Native share cancelled |
+| `share_fallback` | — | Copy fallback used |
+| `credit_copy` | — | Fixed public credit copied |
 | `tool_error` | `error_type` | User-facing error shown |
+
+Gallery images, settings snapshots, comparison position, filenames, and share payloads are never included in analytics.
 
 ## GTM configuration
 

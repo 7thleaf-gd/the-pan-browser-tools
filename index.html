@@ -107,6 +107,13 @@
             <small>PRIVATE BY DESIGN / NO SERVER UPLOAD</small>
           </div>
           <canvas id="previewCanvas" hidden aria-label="Processed image preview"></canvas>
+          <canvas id="originalPreviewCanvas" class="original-preview-canvas" hidden aria-label="Original image preview"></canvas>
+          <div id="compareHandle" class="compare-handle" role="slider" tabindex="0" aria-label="Before and after comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span></span></div>
+          <div id="previewModes" class="preview-modes" aria-label="Preview mode" hidden>
+            <button type="button" data-preview-mode="original">ORIGINAL</button>
+            <button type="button" data-preview-mode="current" class="is-active">CURRENT</button>
+            <button type="button" data-preview-mode="compare">COMPARE</button>
+          </div>
           <button id="fullscreenButton" class="fullscreen-button" type="button" hidden>FULLSCREEN PREVIEW</button>
           <div id="busyIndicator" class="busy-indicator" role="status" aria-live="polite" hidden>PROCESSING SIGNAL…</div>
         </div>
@@ -119,44 +126,73 @@
           <span class="status-badge is-available">● LIVE</span>
         </div>
         <div id="controls" class="controls">
+          <section class="preset-bank" aria-labelledby="presetTitle">
+            <div class="preset-heading"><h2 id="presetTitle">PRESET SIGNALS</h2><span id="activePreset">NONE</span></div>
+            <div id="presetButtons" class="preset-buttons"></div>
+          </section>
           <details class="fx-group" data-fx-group="basic" open>
             <summary><span>BASIC</span><span class="fx-count" data-fx-count="basic">0 ACTIVE</span></summary>
             <div class="fx-group-body">
               <label class="control"><span>PIXELATE</span><output for="pixelate">0</output><input id="pixelate" aria-label="Pixelate" data-effect="pixelate" type="range" min="0" max="40" value="0"></label>
+              <label class="control"><span>BLUR</span><output for="blur">0</output><input id="blur" aria-label="Blur" data-effect="blur" type="range" min="0" max="12" value="0"></label>
               <label class="control"><span>CONTRAST</span><output for="contrast">100</output><input id="contrast" aria-label="Contrast" data-effect="contrast" type="range" min="50" max="200" value="100"></label>
               <label class="control"><span>BRIGHTNESS</span><output for="brightness">100</output><input id="brightness" aria-label="Brightness" data-effect="brightness" type="range" min="50" max="150" value="100"></label>
               <button class="fx-reset" type="button" data-reset-group="basic">RESET BASIC</button>
             </div>
           </details>
-          <details class="fx-group" data-fx-group="analog" open>
-            <summary><span>ANALOG</span><span class="fx-count" data-fx-count="analog">0 ACTIVE</span></summary>
+          <details class="fx-group" data-fx-group="warp" open>
+            <summary><span>WARP</span><span class="fx-count" data-fx-count="warp">0 ACTIVE</span></summary>
             <div class="fx-group-body">
-              <label class="control"><span>NOISE</span><output for="noise">0</output><input id="noise" aria-label="Noise" data-effect="noise" type="range" min="0" max="100" value="0"></label>
-              <label class="control"><span>SCANLINE</span><output for="scanline">0</output><input id="scanline" aria-label="Scanline" data-effect="scanline" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>WAVE</span><output for="wave">0</output><input id="wave" aria-label="Wave" data-effect="wave" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>MELT</span><output for="melt">0</output><input id="melt" aria-label="Melt" data-effect="melt" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>HORIZONTAL TEAR</span><output for="horizontalTear">0</output><input id="horizontalTear" aria-label="Horizontal Tear" data-effect="horizontal_tear" type="range" min="0" max="100" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="warp">RESET WARP</button>
+            </div>
+          </details>
+          <details class="fx-group" data-fx-group="signal">
+            <summary><span>SIGNAL</span><span class="fx-count" data-fx-count="signal">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
               <label class="control"><span>RGB SPLIT</span><output for="rgbSplit">0</output><input id="rgbSplit" aria-label="RGB Split" data-effect="rgb_split" type="range" min="0" max="30" value="0"></label>
-              <button class="fx-reset" type="button" data-reset-group="analog">RESET ANALOG</button>
+              <label class="control"><span>SCANLINE</span><output for="scanline">0</output><input id="scanline" aria-label="Scanline" data-effect="scanline" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>BLOCK DAMAGE</span><output for="blockDamage">0</output><input id="blockDamage" aria-label="Block Damage" data-effect="block_damage" type="range" min="0" max="100" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="signal">RESET SIGNAL</button>
+            </div>
+          </details>
+          <details class="fx-group" data-fx-group="texture">
+            <summary><span>TEXTURE</span><span class="fx-count" data-fx-count="texture">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>GRAIN</span><output for="grain">0</output><input id="grain" aria-label="Grain" data-effect="grain" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>NOISE</span><output for="noise">0</output><input id="noise" aria-label="Noise" data-effect="noise" type="range" min="0" max="100" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="texture">RESET TEXTURE</button>
             </div>
           </details>
           <details class="fx-group" data-fx-group="print">
             <summary><span>PRINT</span><span class="fx-count" data-fx-count="print">0 ACTIVE</span></summary>
             <div class="fx-group-body">
               <label class="control"><span>DITHER</span><output for="dither">0</output><input id="dither" aria-label="Dither" data-effect="dither" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>HALFTONE</span><output for="halftone">0</output><input id="halftone" aria-label="Halftone" data-effect="halftone" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>THRESHOLD</span><output for="threshold">0</output><input id="threshold" aria-label="Threshold" data-effect="threshold" type="range" min="0" max="100" value="0"></label>
               <button class="fx-reset" type="button" data-reset-group="print">RESET PRINT</button>
             </div>
           </details>
           <section class="fx-future" aria-labelledby="futureFxTitle">
             <h3 id="futureFxTitle">EXPANSION BANK / RESERVED</h3>
-            <p data-planned-effects>GRAIN · BLUR · SHARPEN · BLOOM · JPEG ARTIFACT · HALFTONE · THRESHOLD · EDGE</p>
+            <p data-planned-effects>SHARPEN · BLOOM · JPEG ARTIFACT · EDGE</p>
             <span>NO MODULES INSTALLED</span>
           </section>
           <p class="privacy-note"><span aria-hidden="true">●</span> Images are processed locally with Canvas API. No image, filename, or personal data is transmitted or added to analytics.</p>
         </div>
         <div class="button-grid" aria-label="Image actions">
-          <button id="randomButton" class="machine-button accent" type="button">RANDOM<br>DISTORT</button>
+          <button id="randomButton" class="machine-button accent" type="button">SURPRISE ME<small>GENERATE A CONTROLLED ACCIDENT</small></button>
           <button id="resetButton" class="machine-button" type="button">RESET<br>TO ZERO</button>
           <button id="exportButton" class="machine-button export" type="button" disabled>EXPORT<br>PNG ↓</button>
         </div>
       </aside>
+    </section>
+
+    <section id="sessionGallery" class="session-gallery" aria-labelledby="galleryTitle">
+      <div class="gallery-heading"><div><p class="eyebrow">MEMORY ONLY / MAX 8</p><h2 id="galleryTitle">SESSION GALLERY</h2></div><button id="clearGallery" class="machine-button" type="button" disabled>CLEAR ALL</button></div>
+      <div id="galleryGrid" class="gallery-grid"><p class="gallery-empty">EXPORT A SIGNAL TO START THE SESSION GALLERY.</p></div>
     </section>
 
     <section class="manifesto" aria-label="Product principles">
@@ -184,6 +220,22 @@
   <section id="fullscreenPreview" class="fullscreen-preview" role="dialog" aria-modal="true" aria-label="Fullscreen processed image preview" hidden>
     <button id="closeFullscreen" class="machine-button fullscreen-close" type="button">CLOSE ×</button>
     <canvas id="fullscreenCanvas" aria-label="Fullscreen processed image"></canvas>
+    <canvas id="fullscreenOriginalCanvas" class="fullscreen-original" aria-label="Fullscreen original image"></canvas>
+    <div id="fullscreenCompareHandle" class="compare-handle fullscreen-compare" role="slider" tabindex="0" aria-label="Fullscreen before and after comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span></span></div>
+  </section>
+
+  <section id="artifactPanel" class="artifact-panel" role="dialog" aria-modal="true" aria-labelledby="artifactTitle" hidden>
+    <div class="artifact-box">
+      <p class="eyebrow">EXPORT COMPLETE</p><h2 id="artifactTitle">ARTIFACT READY</h2>
+      <p id="shareStatus" role="status" aria-live="polite">PNG SAVED. KEEP THE SIGNAL MOVING.</p>
+      <div class="artifact-actions"><button id="shareArtifact" class="machine-button accent" type="button">SHARE</button><button id="copyCredit" class="machine-button" type="button">COPY CREDIT</button><button id="downloadAgain" class="machine-button" type="button">DOWNLOAD AGAIN</button><button id="closeArtifact" class="machine-button" type="button">CLOSE</button></div>
+    </div>
+  </section>
+
+  <section id="galleryViewer" class="artifact-panel" role="dialog" aria-modal="true" aria-labelledby="galleryViewerTitle" hidden>
+    <div class="artifact-box gallery-viewer-box"><h2 id="galleryViewerTitle">SESSION ARTIFACT</h2><div class="gallery-compare-view"><img id="galleryLargeImage" alt="Selected session artwork"><canvas id="galleryCurrentCanvas" hidden aria-label="Current processed image for comparison"></canvas></div>
+      <div class="artifact-actions"><button id="galleryRestore" class="machine-button accent" type="button">RESTORE FX</button><button id="galleryCompare" class="machine-button" type="button">COMPARE CURRENT</button><button id="galleryFavorite" class="machine-button" type="button">FAVORITE</button><button id="galleryExport" class="machine-button" type="button">EXPORT PNG</button><button id="galleryDelete" class="machine-button" type="button">DELETE</button><button id="galleryViewerClose" class="machine-button" type="button">CLOSE</button></div>
+    </div>
   </section>
 
   <aside id="floatingPreview" class="floating-preview" data-mode="current" data-corner="top-right" aria-label="Floating Preview Monitor" hidden>
