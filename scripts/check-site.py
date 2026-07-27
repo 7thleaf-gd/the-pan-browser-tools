@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = "https://tools.thepan.xyz/"
 GTM_ID = "GTM-5W74796T"
+ASSET_VERSION = "20260727.2"
 REQUIRED = [
     "index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",
     "about/index.html", "tools/index.html",
@@ -84,6 +85,15 @@ def main():
             target = internal_target(page, link)
             if target is not None and not target.exists():
                 errors.append(f"{relative}: broken internal link {link}")
+
+        if relative == "index.html":
+            critical_assets = [
+                "styles.css", "app.js", "assets/js/analytics.js",
+                "assets/js/consent.js", "assets/js/canvas-utils.js",
+            ]
+            for asset in critical_assets:
+                if f"{asset}?v={ASSET_VERSION}" not in parser.links:
+                    errors.append(f"index.html: {asset} must use asset version {ASSET_VERSION}")
 
     sitemap = ROOT / "sitemap.xml"
     if sitemap.is_file():

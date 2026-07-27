@@ -50,14 +50,14 @@
     })(window,document,'script','dataLayer','GTM-5W74796T');
   </script>
 
-  <link rel="stylesheet" href="assets/css/tokens.css">
-  <link rel="stylesheet" href="assets/css/base.css">
-  <link rel="stylesheet" href="assets/css/components.css">
-  <link rel="stylesheet" href="styles.css">
-  <script src="assets/js/analytics.js" defer></script>
-  <script src="assets/js/consent.js" defer></script>
-  <script src="assets/js/canvas-utils.js" defer></script>
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="assets/css/tokens.css?v=20260727.2">
+  <link rel="stylesheet" href="assets/css/base.css?v=20260727.2">
+  <link rel="stylesheet" href="assets/css/components.css?v=20260727.2">
+  <link rel="stylesheet" href="styles.css?v=20260727.2">
+  <script src="assets/js/analytics.js?v=20260727.2" defer></script>
+  <script src="assets/js/consent.js?v=20260727.2" defer></script>
+  <script src="assets/js/canvas-utils.js?v=20260727.2" defer></script>
+  <script src="app.js?v=20260727.2" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#machine">Skip to image controls</a>
@@ -222,6 +222,11 @@
     <canvas id="fullscreenCanvas" aria-label="Fullscreen processed image"></canvas>
     <canvas id="fullscreenOriginalCanvas" class="fullscreen-original" aria-label="Fullscreen original image"></canvas>
     <div id="fullscreenCompareHandle" class="compare-handle fullscreen-compare" role="slider" tabindex="0" aria-label="Fullscreen before and after comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span></span></div>
+    <div id="fullscreenModes" class="preview-modes fullscreen-modes" aria-label="Fullscreen preview mode">
+      <button type="button" data-preview-mode="original">ORIGINAL</button>
+      <button type="button" data-preview-mode="current" class="is-active">CURRENT</button>
+      <button type="button" data-preview-mode="compare">COMPARE</button>
+    </div>
   </section>
 
   <section id="artifactPanel" class="artifact-panel" role="dialog" aria-modal="true" aria-labelledby="artifactTitle" hidden>
@@ -233,7 +238,7 @@
   </section>
 
   <section id="galleryViewer" class="artifact-panel" role="dialog" aria-modal="true" aria-labelledby="galleryViewerTitle" hidden>
-    <div class="artifact-box gallery-viewer-box"><h2 id="galleryViewerTitle">SESSION ARTIFACT</h2><div class="gallery-compare-view"><img id="galleryLargeImage" alt="Selected session artwork"><canvas id="galleryCurrentCanvas" hidden aria-label="Current processed image for comparison"></canvas></div>
+    <div class="artifact-box gallery-viewer-box"><h2 id="galleryViewerTitle">SESSION ARTIFACT</h2><div id="galleryCompareView" class="gallery-compare-view"><img id="galleryLargeImage" alt="Selected session artwork"><canvas id="galleryCurrentCanvas" hidden aria-label="Current processed image for comparison"></canvas><span class="gallery-compare-label gallery-saved">SAVED</span><span class="gallery-compare-label gallery-current">CURRENT</span><div id="galleryCompareHandle" class="compare-handle gallery-compare-handle" role="slider" tabindex="0" aria-label="Gallery comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span></span></div></div>
       <div class="artifact-actions"><button id="galleryRestore" class="machine-button accent" type="button">RESTORE FX</button><button id="galleryCompare" class="machine-button" type="button">COMPARE CURRENT</button><button id="galleryFavorite" class="machine-button" type="button">FAVORITE</button><button id="galleryExport" class="machine-button" type="button">EXPORT PNG</button><button id="galleryDelete" class="machine-button" type="button">DELETE</button><button id="galleryViewerClose" class="machine-button" type="button">CLOSE</button></div>
     </div>
   </section>

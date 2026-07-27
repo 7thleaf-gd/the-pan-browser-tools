@@ -47,6 +47,7 @@
     drop: document.querySelector('#dropZone'), empty: document.querySelector('#emptyState'),
     canvas: document.querySelector('#previewCanvas'), original: document.querySelector('#originalPreviewCanvas'),
     compare: document.querySelector('#compareHandle'), previewModes: document.querySelector('#previewModes'),
+    modeControls: [...document.querySelectorAll('[data-preview-mode]')],
     fullscreen: document.querySelector('#fullscreenPreview'), fullscreenCanvas: document.querySelector('#fullscreenCanvas'),
     fullscreenOriginal: document.querySelector('#fullscreenOriginalCanvas'), fullscreenCompare: document.querySelector('#fullscreenCompareHandle'),
     fullscreenButton: document.querySelector('#fullscreenButton'), closeFullscreen: document.querySelector('#closeFullscreen'),
@@ -64,6 +65,7 @@
     gallery: document.querySelector('#galleryGrid'), clearGallery: document.querySelector('#clearGallery'),
     viewer: document.querySelector('#galleryViewer'), galleryLarge: document.querySelector('#galleryLargeImage'),
     galleryCompare: document.querySelector('#galleryCompare'), galleryCurrent: document.querySelector('#galleryCurrentCanvas'),
+    galleryCompareView: document.querySelector('#galleryCompareView'), galleryCompareHandle: document.querySelector('#galleryCompareHandle'),
     galleryRestore: document.querySelector('#galleryRestore'), galleryFavorite: document.querySelector('#galleryFavorite'),
     galleryExport: document.querySelector('#galleryExport'), galleryDelete: document.querySelector('#galleryDelete'),
     galleryClose: document.querySelector('#galleryViewerClose'), artifact: document.querySelector('#artifactPanel'),
@@ -92,7 +94,10 @@
   let floatingDrag = null;
   let swipeStart = null;
   let fullscreenReturnFocus = null;
+  let artifactReturnFocus = null;
+  let viewerReturnFocus = null;
   let selectedGalleryId = null;
+  let galleryDirty = false;
   let lastExportBlob = null;
 
   function showError(message, errorType = 'processing_error') {
@@ -261,7 +266,7 @@
   function setCompareMode(mode, shouldTrack = true) {
     if (!MODES.includes(mode)) return;
     state.compareMode = mode;
-    el.previewModes.querySelectorAll('button').forEach(button => button.classList.toggle('is-active', button.dataset.previewMode === mode));
+    el.modeControls.forEach(button => button.classList.toggle('is-active', button.dataset.previewMode === mode));
     updateCompareVisuals();
     scheduleFloatingUpdate();
     if (shouldTrack) track('compare_used', { compare_mode: mode });
@@ -280,6 +285,11 @@
       el.fullscreenCompare.hidden = state.compareMode !== 'compare';
       el.fullscreenCompare.style.left = `${state.comparePosition}%`;
       el.fullscreenCompare.setAttribute('aria-valuenow', state.comparePosition);
+    }
+    if (!el.galleryCurrent.hidden) {
+      el.galleryCurrent.style.clipPath = `inset(0 0 0 ${state.comparePosition}%)`;
+      el.galleryCompareHandle.style.left = `${state.comparePosition}%`;
+      el.galleryCompareHandle.setAttribute('aria-valuenow', state.comparePosition);
     }
   }
   function setComparePosition(position) {
@@ -397,6 +407,7 @@
     }
     state.gallery.forEach((item, index) => {
       const button = document.createElement('button'); button.type = 'button'; button.className = `gallery-card${item.favorite ? ' is-favorite' : ''}`;
+      button.dataset.galleryId = item.id;
       button.setAttribute('aria-label', `Open session artwork ${index + 1}${item.favorite ? ', favorite' : ''}`);
       const image = document.createElement('img'); image.src = item.thumbUrl; image.alt = '';
       const label = document.createElement('span'); label.textContent = `${String(index + 1).padStart(2, '0')} / ${item.preset}`;
@@ -405,13 +416,24 @@
   }
   function openGallery(id) {
     const item = state.gallery.find(entry => entry.id === id); if (!item) return;
+    viewerReturnFocus = document.activeElement;
+    galleryDirty = false;
     selectedGalleryId = id; el.galleryLarge.src = item.url; el.galleryFavorite.textContent = item.favorite ? 'UNFAVORITE' : 'FAVORITE';
-    el.galleryCurrent.hidden = true; el.galleryCurrent.parentElement.classList.remove('is-comparing'); el.galleryCompare.textContent = 'COMPARE CURRENT';
+    el.galleryCurrent.hidden = true; el.galleryCompareHandle.hidden = true; el.galleryCompareView.classList.remove('is-comparing'); el.galleryCompare.textContent = 'COMPARE CURRENT';
     el.viewer.hidden = false; document.body.dataset.artifactOpen = 'true'; el.galleryClose.focus(); track('gallery_select');
   }
   function closeOverlay(dialog) {
     dialog.hidden = true;
     if (el.artifact.hidden && el.viewer.hidden) document.body.removeAttribute('data-artifact-open');
+    let returnFocus = dialog === el.artifact ? artifactReturnFocus : viewerReturnFocus;
+    if (dialog === el.viewer && galleryDirty) {
+      renderGallery();
+      galleryDirty = false;
+      returnFocus = el.gallery.querySelector(`[data-gallery-id="${selectedGalleryId}"]`) || el.clearGallery;
+    }
+    if (returnFocus && returnFocus.isConnected) returnFocus.focus();
+    else if (!el.clearGallery.disabled) el.clearGallery.focus();
+    else el.export.focus();
   }
   async function exportPng() {
     if (!loaded) return;
@@ -420,6 +442,7 @@
       download(lastExportBlob);
       await addGallery(lastExportBlob);
       el.shareStatus.textContent = 'PNG SAVED. KEEP THE SIGNAL MOVING.';
+      artifactReturnFocus = document.activeElement;
       el.artifact.hidden = false; document.body.dataset.artifactOpen = 'true'; el.share.focus();
       track('image_export'); track('share_open');
     } catch (_) { showError('PNG export failed. Please try again.', 'export_failed'); }
@@ -504,8 +527,14 @@
   el.surprise.addEventListener('click', surprise);
   el.reset.addEventListener('click', () => setEffects(defaults(), 'reset', 'NONE'));
   el.export.addEventListener('click', exportPng);
-  el.previewModes.addEventListener('click', event => { const button = event.target.closest('[data-preview-mode]'); if (button) setCompareMode(button.dataset.previewMode); });
-  bindCompareHandle(el.compare, el.drop); bindCompareHandle(el.fullscreenCompare, el.fullscreen);
+  document.querySelectorAll('.preview-modes').forEach(container => container.addEventListener('click', event => {
+    const button = event.target.closest('[data-preview-mode]');
+    if (button) {
+      event.stopPropagation();
+      setCompareMode(button.dataset.previewMode);
+    }
+  }));
+  bindCompareHandle(el.compare, el.drop); bindCompareHandle(el.fullscreenCompare, el.fullscreen); bindCompareHandle(el.galleryCompareHandle, el.galleryCompareView);
   el.fullscreenButton.addEventListener('click', event => { event.stopPropagation(); openFullscreen(); });
   el.closeFullscreen.addEventListener('click', closeFullscreen);
   el.share.addEventListener('click', shareArtifact); el.copy.addEventListener('click', copyCredit);
@@ -522,7 +551,9 @@
   });
   el.galleryFavorite.addEventListener('click', () => {
     state.gallery.forEach(item => { item.favorite = item.id === selectedGalleryId ? !item.favorite : false; });
-    renderGallery(); openGallery(selectedGalleryId); track('gallery_favorite');
+    const selected = state.gallery.find(item => item.id === selectedGalleryId);
+    el.galleryFavorite.textContent = selected && selected.favorite ? 'UNFAVORITE' : 'FAVORITE';
+    galleryDirty = true; track('gallery_favorite');
   });
   el.galleryCompare.addEventListener('click', () => {
     const comparing = el.galleryCurrent.hidden;
@@ -531,7 +562,9 @@
       el.galleryCurrent.getContext('2d').drawImage(el.canvas, 0, 0);
     }
     el.galleryCurrent.hidden = !comparing;
-    el.galleryCurrent.parentElement.classList.toggle('is-comparing', comparing);
+    el.galleryCompareHandle.hidden = !comparing;
+    el.galleryCompareView.classList.toggle('is-comparing', comparing);
+    updateCompareVisuals();
     el.galleryCompare.textContent = comparing ? 'CLOSE COMPARE' : 'COMPARE CURRENT';
     track('compare_used', { compare_mode: comparing ? 'gallery' : 'current' });
   });
@@ -539,7 +572,7 @@
   el.galleryDelete.addEventListener('click', () => {
     const index = state.gallery.findIndex(entry => entry.id === selectedGalleryId); if (index < 0) return;
     const [item] = state.gallery.splice(index, 1); URL.revokeObjectURL(item.url); URL.revokeObjectURL(item.thumbUrl);
-    closeOverlay(el.viewer); renderGallery(); track('gallery_delete');
+    galleryDirty = true; closeOverlay(el.viewer); track('gallery_delete');
   });
   el.floatingPrevious.addEventListener('click', () => changeMode(-1)); el.floatingNext.addEventListener('click', () => changeMode(1));
   el.floatingMinimize.addEventListener('click', () => {
@@ -562,6 +595,7 @@
   });
   el.floatingDragHandle.addEventListener('pointerup', finishFloatingDrag); el.floatingDragHandle.addEventListener('pointercancel', finishFloatingDrag);
   document.addEventListener('keydown', event => {
+    if (event.defaultPrevented || event.target.closest('#consentPanel')) return;
     const activeDialog = [el.viewer, el.artifact, el.fullscreen].find(dialog => !dialog.hidden);
     if (event.key === 'Tab' && activeDialog) {
       const focusable = [...activeDialog.querySelectorAll('button:not([disabled]), [tabindex="0"]')].filter(node => !node.hidden);
@@ -576,7 +610,11 @@
     else if (!el.fullscreen.hidden) closeFullscreen(); else if (!el.floating.hidden) { floatingDismissed = true; el.floating.hidden = true; }
   });
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(entries => document.body.dataset.workspaceActive = String(entries[0].isIntersecting), { threshold: .05 }).observe(document.querySelector('#machine'));
+    new IntersectionObserver(entries => {
+      const entry = entries[0];
+      const clearsPageContent = entry.boundingClientRect.bottom > Math.min(innerHeight * .45, 360);
+      document.body.dataset.workspaceActive = String(entry.isIntersecting && clearsPageContent);
+    }, { threshold: [0, .05, .2] }).observe(document.querySelector('#machine'));
     new IntersectionObserver(entries => { largePreviewVisible = entries[0].intersectionRatio >= .15; if (largePreviewVisible) floatingDismissed = false; updateFloatingVisibility(); }, { threshold: [0, .15, 1] }).observe(document.querySelector('.screen-panel'));
   } else { document.body.dataset.workspaceActive = 'true'; largePreviewVisible = false; }
   document.querySelector('#year').textContent = new Date().getFullYear();
