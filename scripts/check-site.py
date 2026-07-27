@@ -11,11 +11,12 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = "https://tools.thepan.xyz/"
 GTM_ID = "GTM-5W74796T"
 ASSET_VERSION = "20260727.2"
+TAPE_ASSET_VERSION = "20260728.2"
 REQUIRED = [
     "index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",
-    "about/index.html", "tools/index.html",
+    "about/index.html", "tools/index.html", "tape/index.html", "tape/tape.css", "tape/tape.js",
     "assets/css/tokens.css", "assets/css/base.css", "assets/css/components.css",
-    "assets/js/analytics.js", "assets/js/consent.js", "assets/js/canvas-utils.js",
+    "assets/js/analytics.js", "assets/js/consent.js", "assets/js/canvas-utils.js", "assets/js/audio-utils.js",
     "docs/DESIGN_SYSTEM.md", "docs/TOOL_TEMPLATE.md", "docs/ANALYTICS.md",
     "docs/RELEASE_CHECKLIST.md", ".github/workflows/pages.yml",
 ]
@@ -23,6 +24,7 @@ PAGES = {
     "index.html": BASE_URL,
     "tools/index.html": BASE_URL + "tools/",
     "about/index.html": BASE_URL + "about/",
+    "tape/index.html": BASE_URL + "tape/",
 }
 
 
@@ -94,6 +96,18 @@ def main():
             for asset in critical_assets:
                 if f"{asset}?v={ASSET_VERSION}" not in parser.links:
                     errors.append(f"index.html: {asset} must use asset version {ASSET_VERSION}")
+        if relative == "tape/index.html":
+            tape_assets = [
+                "../assets/css/tokens.css", "../assets/css/base.css",
+                "../assets/css/components.css", "tape.css",
+                "../assets/js/analytics.js", "../assets/js/consent.js",
+                "../assets/js/audio-utils.js", "tape.js",
+            ]
+            for asset in tape_assets:
+                if f"{asset}?v={TAPE_ASSET_VERSION}" not in parser.links:
+                    errors.append(
+                        f"tape/index.html: {asset} must use asset version {TAPE_ASSET_VERSION}"
+                    )
 
     sitemap = ROOT / "sitemap.xml"
     if sitemap.is_file():
