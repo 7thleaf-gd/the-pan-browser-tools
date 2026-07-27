@@ -31,6 +31,7 @@
   --pan-letter-label: .18em;
   --pan-z-noise: 20;
   --pan-z-sticky: 30;
+  --pan-z-floating: 40;
   --pan-z-dialog: 100;
   --pan-breakpoint-mobile: 800px;
   --pan-breakpoint-small: 520px;

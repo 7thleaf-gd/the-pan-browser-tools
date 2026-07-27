@@ -119,13 +119,36 @@
           <span class="status-badge is-available">● LIVE</span>
         </div>
         <div id="controls" class="controls">
-          <label class="control"><span>PIXELATE</span><output for="pixelate">0</output><input id="pixelate" aria-label="Pixelate" data-effect="pixelate" type="range" min="0" max="40" value="0"></label>
-          <label class="control"><span>DITHER</span><output for="dither">0</output><input id="dither" aria-label="Dither" data-effect="dither" type="range" min="0" max="100" value="0"></label>
-          <label class="control"><span>NOISE</span><output for="noise">0</output><input id="noise" aria-label="Noise" data-effect="noise" type="range" min="0" max="100" value="0"></label>
-          <label class="control"><span>RGB SPLIT</span><output for="rgbSplit">0</output><input id="rgbSplit" aria-label="RGB Split" data-effect="rgb_split" type="range" min="0" max="30" value="0"></label>
-          <label class="control"><span>SCANLINE</span><output for="scanline">0</output><input id="scanline" aria-label="Scanline" data-effect="scanline" type="range" min="0" max="100" value="0"></label>
-          <label class="control"><span>CONTRAST</span><output for="contrast">100</output><input id="contrast" aria-label="Contrast" data-effect="contrast" type="range" min="50" max="200" value="100"></label>
-          <label class="control"><span>BRIGHTNESS</span><output for="brightness">100</output><input id="brightness" aria-label="Brightness" data-effect="brightness" type="range" min="50" max="150" value="100"></label>
+          <details class="fx-group" data-fx-group="basic" open>
+            <summary><span>BASIC</span><span class="fx-count" data-fx-count="basic">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>PIXELATE</span><output for="pixelate">0</output><input id="pixelate" aria-label="Pixelate" data-effect="pixelate" type="range" min="0" max="40" value="0"></label>
+              <label class="control"><span>CONTRAST</span><output for="contrast">100</output><input id="contrast" aria-label="Contrast" data-effect="contrast" type="range" min="50" max="200" value="100"></label>
+              <label class="control"><span>BRIGHTNESS</span><output for="brightness">100</output><input id="brightness" aria-label="Brightness" data-effect="brightness" type="range" min="50" max="150" value="100"></label>
+              <button class="fx-reset" type="button" data-reset-group="basic">RESET BASIC</button>
+            </div>
+          </details>
+          <details class="fx-group" data-fx-group="analog" open>
+            <summary><span>ANALOG</span><span class="fx-count" data-fx-count="analog">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>NOISE</span><output for="noise">0</output><input id="noise" aria-label="Noise" data-effect="noise" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>SCANLINE</span><output for="scanline">0</output><input id="scanline" aria-label="Scanline" data-effect="scanline" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>RGB SPLIT</span><output for="rgbSplit">0</output><input id="rgbSplit" aria-label="RGB Split" data-effect="rgb_split" type="range" min="0" max="30" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="analog">RESET ANALOG</button>
+            </div>
+          </details>
+          <details class="fx-group" data-fx-group="print">
+            <summary><span>PRINT</span><span class="fx-count" data-fx-count="print">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>DITHER</span><output for="dither">0</output><input id="dither" aria-label="Dither" data-effect="dither" type="range" min="0" max="100" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="print">RESET PRINT</button>
+            </div>
+          </details>
+          <section class="fx-future" aria-labelledby="futureFxTitle">
+            <h3 id="futureFxTitle">EXPANSION BANK / RESERVED</h3>
+            <p data-planned-effects>GRAIN · BLUR · SHARPEN · BLOOM · JPEG ARTIFACT · HALFTONE · THRESHOLD · EDGE</p>
+            <span>NO MODULES INSTALLED</span>
+          </section>
           <p class="privacy-note"><span aria-hidden="true">●</span> Images are processed locally with Canvas API. No image, filename, or personal data is transmitted or added to analytics.</p>
         </div>
         <div class="button-grid" aria-label="Image actions">
@@ -162,5 +185,26 @@
     <button id="closeFullscreen" class="machine-button fullscreen-close" type="button">CLOSE ×</button>
     <canvas id="fullscreenCanvas" aria-label="Fullscreen processed image"></canvas>
   </section>
+
+  <aside id="floatingPreview" class="floating-preview" data-mode="current" data-corner="top-right" aria-label="Floating Preview Monitor" hidden>
+    <div id="floatingDragHandle" class="floating-header">
+      <strong>FLOATING PREVIEW MONITOR</strong>
+      <div class="floating-window-actions">
+        <button id="floatingMinimize" type="button" aria-label="Minimize floating preview">_</button>
+        <button id="floatingClose" type="button" aria-label="Close floating preview">×</button>
+      </div>
+    </div>
+    <button id="floatingCanvasButton" class="floating-canvas-button" type="button" aria-label="Open fullscreen preview">
+      <canvas id="floatingCanvas" width="480" height="270" aria-label="Floating image preview"></canvas>
+      <span id="compareDivider" class="compare-divider" aria-hidden="true"></span>
+      <span class="compare-label compare-before">BEFORE</span>
+      <span class="compare-label compare-after">AFTER</span>
+    </button>
+    <div class="floating-controls">
+      <button id="floatingPrevious" type="button" aria-label="Previous preview mode">←</button>
+      <span id="floatingMode" role="status" aria-live="polite">CURRENT</span>
+      <button id="floatingNext" type="button" aria-label="Next preview mode">→</button>
+    </div>
+  </aside>
 </body>
 </html>

@@ -3,6 +3,21 @@
 (function imageMachine() {
   const MAX_DIMENSION = 2048;
   const MAX_PIXELS = 4_000_000;
+  const FX_STATE_KEY = 'thePanFxBankState';
+  const FLOATING_CORNER_KEY = 'thePanFloatingPreviewCorner';
+  const EFFECT_DEFINITIONS = Object.freeze({
+    pixelate: { group: 'basic', defaultValue: 0 },
+    contrast: { group: 'basic', defaultValue: 100 },
+    brightness: { group: 'basic', defaultValue: 100 },
+    noise: { group: 'analog', defaultValue: 0 },
+    scanline: { group: 'analog', defaultValue: 0 },
+    rgbSplit: { group: 'analog', defaultValue: 0 },
+    dither: { group: 'print', defaultValue: 0 }
+  });
+  const PLANNED_EFFECTS = Object.freeze([
+    'Grain', 'Blur', 'Sharpen', 'Bloom', 'JPEG Artifact', 'Halftone', 'Threshold', 'Edge'
+  ]);
+  const PREVIEW_MODES = ['original', 'current', 'compare'];
   const pan = window.ThePan || {};
 
   const elements = {
@@ -15,10 +30,22 @@
     fullscreenDialog: document.querySelector('#fullscreenPreview'),
     fullscreenButton: document.querySelector('#fullscreenButton'),
     closeFullscreen: document.querySelector('#closeFullscreen'),
+    floating: document.querySelector('#floatingPreview'),
+    floatingCanvas: document.querySelector('#floatingCanvas'),
+    floatingCanvasButton: document.querySelector('#floatingCanvasButton'),
+    floatingMode: document.querySelector('#floatingMode'),
+    floatingPrevious: document.querySelector('#floatingPrevious'),
+    floatingNext: document.querySelector('#floatingNext'),
+    floatingMinimize: document.querySelector('#floatingMinimize'),
+    floatingClose: document.querySelector('#floatingClose'),
+    floatingDragHandle: document.querySelector('#floatingDragHandle'),
     imageInfo: document.querySelector('#imageInfo'),
     error: document.querySelector('#errorMessage'),
     busy: document.querySelector('#busyIndicator'),
     controls: [...document.querySelectorAll('input[type="range"]')],
+    fxGroups: [...document.querySelectorAll('[data-fx-group]')],
+    fxCounts: [...document.querySelectorAll('[data-fx-count]')],
+    fxResets: [...document.querySelectorAll('[data-reset-group]')],
     random: document.querySelector('#randomButton'),
     reset: document.querySelector('#resetButton'),
     export: document.querySelector('#exportButton')
@@ -43,6 +70,13 @@
   let lastRenderKey = '';
   let effectEventTimer = 0;
   let fullscreenReturnFocus = null;
+  let largePreviewVisible = true;
+  let floatingDismissed = false;
+  let floatingUpdateQueued = false;
+  let floatingModeIndex = 1;
+  let floatingSwipeStartX = null;
+  let suppressFullscreenUntil = 0;
+  let floatingDrag = null;
 
   function track(event, parameters) {
     pan.analytics.track(event, parameters);
@@ -66,6 +100,37 @@
 
   function values() {
     return Object.fromEntries(elements.controls.map(input => [input.id, Number(input.value)]));
+  }
+
+  function defaultValue(id) {
+    return EFFECT_DEFINITIONS[id].defaultValue;
+  }
+
+  function updateFxCounts() {
+    const current = values();
+    elements.fxCounts.forEach(counter => {
+      const group = counter.dataset.fxCount;
+      const active = Object.entries(EFFECT_DEFINITIONS)
+        .filter(([, definition]) => definition.group === group)
+        .filter(([id, definition]) => current[id] !== definition.defaultValue).length;
+      counter.textContent = `${active} ACTIVE`;
+    });
+  }
+
+  function saveFxGroupState() {
+    const state = Object.fromEntries(elements.fxGroups.map(group => [group.dataset.fxGroup, group.open]));
+    try { localStorage.setItem(FX_STATE_KEY, JSON.stringify(state)); } catch (_) {}
+  }
+
+  function restoreFxGroupState() {
+    try {
+      const state = JSON.parse(localStorage.getItem(FX_STATE_KEY));
+      if (!state || typeof state !== 'object') return;
+      elements.fxGroups.forEach(group => {
+        const saved = state[group.dataset.fxGroup];
+        if (typeof saved === 'boolean') group.open = saved;
+      });
+    } catch (_) {}
   }
 
   function renderKey() {
@@ -160,6 +225,73 @@
       }
     }
     ctx.putImageData(imageData, 0, 0);
+    scheduleFloatingUpdate();
+  }
+
+  function drawContained(targetCtx, source, clipSide) {
+    const width = targetCtx.canvas.width;
+    const height = targetCtx.canvas.height;
+    const scale = Math.min(width / source.width, height / source.height);
+    const drawWidth = source.width * scale;
+    const drawHeight = source.height * scale;
+    const x = (width - drawWidth) / 2;
+    const y = (height - drawHeight) / 2;
+    targetCtx.save();
+    if (clipSide === 'left') {
+      targetCtx.beginPath();
+      targetCtx.rect(0, 0, width / 2, height);
+      targetCtx.clip();
+    } else if (clipSide === 'right') {
+      targetCtx.beginPath();
+      targetCtx.rect(width / 2, 0, width / 2, height);
+      targetCtx.clip();
+    }
+    targetCtx.drawImage(source, x, y, drawWidth, drawHeight);
+    targetCtx.restore();
+  }
+
+  function updateFloatingPreview() {
+    floatingUpdateQueued = false;
+    if (!imageLoaded || elements.floating.hidden) return;
+    const floatingCtx = elements.floatingCanvas.getContext('2d');
+    floatingCtx.fillStyle = '#050505';
+    floatingCtx.fillRect(0, 0, elements.floatingCanvas.width, elements.floatingCanvas.height);
+    const mode = PREVIEW_MODES[floatingModeIndex];
+    if (mode === 'original') drawContained(floatingCtx, sourceCanvas);
+    else if (mode === 'current') drawContained(floatingCtx, elements.canvas);
+    else {
+      drawContained(floatingCtx, sourceCanvas, 'left');
+      drawContained(floatingCtx, elements.canvas, 'right');
+    }
+    elements.floating.dataset.mode = mode;
+    elements.floatingMode.textContent = mode.toUpperCase();
+  }
+
+  function scheduleFloatingUpdate() {
+    if (floatingUpdateQueued) return;
+    floatingUpdateQueued = true;
+    requestAnimationFrame(updateFloatingPreview);
+  }
+
+  function updateFloatingVisibility() {
+    const shouldShow = imageLoaded && !largePreviewVisible && !floatingDismissed;
+    elements.floating.hidden = !shouldShow;
+    if (shouldShow) scheduleFloatingUpdate();
+  }
+
+  function changeFloatingMode(direction) {
+    floatingModeIndex = (floatingModeIndex + direction + PREVIEW_MODES.length) % PREVIEW_MODES.length;
+    scheduleFloatingUpdate();
+  }
+
+  function resetGroup(groupName) {
+    elements.controls.forEach(input => {
+      if (EFFECT_DEFINITIONS[input.id].group !== groupName) return;
+      input.value = defaultValue(input.id);
+      updateControl(input);
+    });
+    updateFxCounts();
+    scheduleRender();
   }
 
   async function loadFile(file) {
@@ -185,6 +317,7 @@
       decoded.release();
       sourceRevision += 1;
       imageLoaded = true;
+      floatingDismissed = false;
       elements.emptyState.hidden = true;
       elements.canvas.hidden = false;
       elements.fullscreenButton.hidden = false;
@@ -193,6 +326,7 @@
       lastRenderKey = '';
       renderWillClearBusy = true;
       scheduleRender(true);
+      updateFloatingVisibility();
       track('image_upload');
     } catch (_) {
       showError('This image could not be decoded. Try exporting it as PNG or JPEG first.', 'decode_failed');
@@ -203,11 +337,11 @@
   }
 
   function resetControls(shouldTrack = true) {
-    const defaults = { pixelate: 0, dither: 0, noise: 0, rgbSplit: 0, scanline: 0, contrast: 100, brightness: 100 };
     elements.controls.forEach(input => {
-      input.value = defaults[input.id];
+      input.value = defaultValue(input.id);
       updateControl(input);
     });
+    updateFxCounts();
     scheduleRender();
     if (shouldTrack) track('reset_tool');
   }
@@ -222,6 +356,7 @@
       input.value = Math.round(min + Math.random() * (max - min));
       updateControl(input);
     });
+    updateFxCounts();
     scheduleRender();
     track('random_distort');
   }
@@ -243,13 +378,47 @@
     elements.fullscreenCanvas.height = elements.canvas.height;
     elements.fullscreenCanvas.getContext('2d').drawImage(elements.canvas, 0, 0);
     elements.fullscreenDialog.hidden = false;
+    document.body.setAttribute('data-fullscreen-open', 'true');
     elements.closeFullscreen.focus();
   }
 
   function closeFullscreen() {
     if (elements.fullscreenDialog.hidden) return;
     elements.fullscreenDialog.hidden = true;
+    document.body.removeAttribute('data-fullscreen-open');
     if (fullscreenReturnFocus) fullscreenReturnFocus.focus();
+  }
+
+  function restoreFloatingCorner() {
+    try {
+      const corner = localStorage.getItem(FLOATING_CORNER_KEY);
+      if (['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(corner)) {
+        elements.floating.dataset.corner = corner;
+      }
+    } catch (_) {}
+  }
+
+  function setFloatingMinimized(minimized) {
+    elements.floating.classList.toggle('is-minimized', minimized);
+    elements.floatingMinimize.textContent = minimized ? '□' : '_';
+    elements.floatingMinimize.setAttribute('aria-label', minimized ? 'Restore floating preview' : 'Minimize floating preview');
+  }
+
+  function closeFloating() {
+    floatingDismissed = true;
+    elements.floating.hidden = true;
+  }
+
+  function finishFloatingDrag(event) {
+    if (!floatingDrag) return;
+    const corner = `${event.clientY < window.innerHeight / 2 ? 'top' : 'bottom'}-${event.clientX < window.innerWidth / 2 ? 'left' : 'right'}`;
+    elements.floating.style.removeProperty('left');
+    elements.floating.style.removeProperty('top');
+    elements.floating.style.removeProperty('right');
+    elements.floating.style.removeProperty('bottom');
+    elements.floating.dataset.corner = corner;
+    try { localStorage.setItem(FLOATING_CORNER_KEY, corner); } catch (_) {}
+    floatingDrag = null;
   }
 
   elements.fileInput.addEventListener('change', event => loadFile(event.target.files[0]));
@@ -282,11 +451,17 @@
     updateControl(input);
     input.addEventListener('input', () => {
       updateControl(input);
+      updateFxCounts();
       scheduleRender();
       clearTimeout(effectEventTimer);
       effectEventTimer = setTimeout(() => track('effect_used', { effect_name: input.dataset.effect }), 400);
     });
   });
+  restoreFxGroupState();
+  updateFxCounts();
+  document.querySelector('[data-planned-effects]').textContent = PLANNED_EFFECTS.join(' · ').toUpperCase();
+  elements.fxGroups.forEach(group => group.addEventListener('toggle', saveFxGroupState));
+  elements.fxResets.forEach(button => button.addEventListener('click', () => resetGroup(button.dataset.resetGroup)));
   elements.random.addEventListener('click', randomize);
   elements.reset.addEventListener('click', () => resetControls(true));
   elements.export.addEventListener('click', exportPng);
@@ -302,13 +477,72 @@
     }
   });
 
+  restoreFloatingCorner();
+  elements.floatingPrevious.addEventListener('click', () => changeFloatingMode(-1));
+  elements.floatingNext.addEventListener('click', () => changeFloatingMode(1));
+  elements.floatingMinimize.addEventListener('click', () => setFloatingMinimized(!elements.floating.classList.contains('is-minimized')));
+  elements.floatingClose.addEventListener('click', closeFloating);
+  elements.floatingCanvasButton.addEventListener('click', () => {
+    if (Date.now() < suppressFullscreenUntil) return;
+    openFullscreen();
+  });
+  elements.floatingCanvasButton.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      changeFloatingMode(event.key === 'ArrowLeft' ? -1 : 1);
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      closeFloating();
+    }
+  });
+  elements.floatingCanvasButton.addEventListener('pointerdown', event => {
+    floatingSwipeStartX = event.clientX;
+  });
+  elements.floatingCanvasButton.addEventListener('pointerup', event => {
+    if (floatingSwipeStartX === null) return;
+    const distance = event.clientX - floatingSwipeStartX;
+    floatingSwipeStartX = null;
+    if (Math.abs(distance) < 40) return;
+    suppressFullscreenUntil = Date.now() + 400;
+    changeFloatingMode(distance > 0 ? -1 : 1);
+  });
+  elements.floatingDragHandle.addEventListener('pointerdown', event => {
+    if (window.matchMedia('(max-width: 800px)').matches || event.target.closest('button')) return;
+    const rect = elements.floating.getBoundingClientRect();
+    floatingDrag = { offsetX: event.clientX - rect.left, offsetY: event.clientY - rect.top };
+    elements.floatingDragHandle.setPointerCapture(event.pointerId);
+  });
+  elements.floatingDragHandle.addEventListener('pointermove', event => {
+    if (!floatingDrag) return;
+    const maxLeft = window.innerWidth - elements.floating.offsetWidth;
+    const maxTop = window.innerHeight - elements.floating.offsetHeight;
+    elements.floating.style.left = `${Math.max(0, Math.min(maxLeft, event.clientX - floatingDrag.offsetX))}px`;
+    elements.floating.style.top = `${Math.max(0, Math.min(maxTop, event.clientY - floatingDrag.offsetY))}px`;
+    elements.floating.style.right = 'auto';
+    elements.floating.style.bottom = 'auto';
+  });
+  elements.floatingDragHandle.addEventListener('pointerup', finishFloatingDrag);
+  elements.floatingDragHandle.addEventListener('pointercancel', finishFloatingDrag);
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || elements.floating.hidden) return;
+    if (event.target.closest('#consentPanel, #fullscreenPreview')) return;
+    closeFloating();
+  });
+
   if ('IntersectionObserver' in window) {
     const workspaceObserver = new IntersectionObserver(entries => {
       document.body.setAttribute('data-workspace-active', String(entries[0].isIntersecting));
     }, { threshold: 0.05 });
     workspaceObserver.observe(document.querySelector('#machine'));
+    const previewObserver = new IntersectionObserver(entries => {
+      largePreviewVisible = entries[0].intersectionRatio >= 0.15;
+      if (largePreviewVisible) floatingDismissed = false;
+      updateFloatingVisibility();
+    }, { threshold: [0, 0.15, 1] });
+    previewObserver.observe(document.querySelector('.screen-panel'));
   } else {
     document.body.setAttribute('data-workspace-active', 'true');
+    largePreviewVisible = false;
   }
 
   document.querySelector('#year').textContent = new Date().getFullYear();
