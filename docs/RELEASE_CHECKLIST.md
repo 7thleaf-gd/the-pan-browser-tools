@@ -30,7 +30,8 @@
 - [ ] Presets, Surprise Me, section resets, and Reset All work
 - [ ] PNG export opens a valid file
 - [ ] Tape Machine WAV and MP3 input, transport, seek, Original/Damaged, all presets, and all effect banks work
-- [ ] Tape Machine rejects empty, unsupported, oversized, and over-three-minute audio with useful errors
+- [ ] Tape Machine rejects empty, unsupported, over-100-MB, and over-10-minute audio with useful errors
+- [ ] Tape Machine warns above 3 minutes, recommends 5 minutes or less on mobile, and recommends 50 MB or less
 - [ ] Tape Machine WAV export, duplicate-export guard, download again, and fixed-text share fallback work
 - [ ] Oversized images are scaled within limits
 - [ ] Unsupported and invalid files show useful errors
@@ -55,7 +56,7 @@
 - [ ] Slider work is coalesced by animation frame
 - [ ] Temporary canvases are reused
 - [ ] Maximum-size images remain usable while presets and Surprise Me are repeated
-- [ ] Three-minute audio remains usable, one AudioContext is reused, and old buffers/nodes are released
+- [ ] Long audio remains usable within the 10-minute limit, one AudioContext is reused, and old buffers/nodes are released
 - [ ] Critical CSS and JavaScript URLs carry the current cache version
 - [ ] No unexpected console errors or external CDN dependencies
 - [ ] `python3 scripts/check-site.py` passes

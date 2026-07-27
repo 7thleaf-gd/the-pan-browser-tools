@@ -40,7 +40,8 @@ Playground session images and effect snapshots exist only in memory. They are cl
 
 ## Tape Machine features
 
-- WAV, MP3, and browser-decodable M4A input up to 3 minutes and 50 MB
+- WAV, MP3, and browser-decodable M4A input up to 10 minutes and 100 MB
+- A performance/memory notice above 3 minutes; 5 minutes or less recommended on mobile; 50 MB or less recommended
 - Lightweight Canvas waveform with playhead, pointer/touch seeking, and keyboard seeking
 - Original/Damaged monitoring with short Web Audio crossfades
 - Tape Saturation, Wow, Flutter, Tape Noise, Dropout, Bit Crush, and Low Pass controls

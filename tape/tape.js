@@ -4,8 +4,11 @@
   const pan = window.ThePan || {};
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   const OfflineAudioContextClass = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-  const MAX_DURATION = 180;
-  const MAX_FILE_SIZE = 50 * 1024 * 1024;
+  const LONG_AUDIO_SECONDS = 180;
+  const MOBILE_RECOMMENDED_SECONDS = 300;
+  const MAX_DURATION = 600;
+  const RECOMMENDED_FILE_SIZE = 50 * 1024 * 1024;
+  const MAX_FILE_SIZE = 100 * 1024 * 1024;
   const BANK_STORAGE_KEY = 'thePanTapeBankState';
   const SHARE_TEXT = 'Damaged with THE PAN TAPE MACHINE.\nhttps://tools.thepan.xyz/tape/\n#7thleaftools';
   const DEFAULTS = Object.freeze({
@@ -45,7 +48,8 @@
     input: document.querySelector('#audioInput'), browse: document.querySelector('#audioBrowseButton'),
     drop: document.querySelector('#audioDropZone'), empty: document.querySelector('#audioEmptyState'),
     canvas: document.querySelector('#waveformCanvas'), playhead: document.querySelector('#playhead'),
-    info: document.querySelector('#audioInfo'), error: document.querySelector('#audioError'),
+    info: document.querySelector('#audioInfo'), warning: document.querySelector('#audioWarning'),
+    error: document.querySelector('#audioError'),
     current: document.querySelector('#currentTime'), total: document.querySelector('#totalTime'),
     status: document.querySelector('#transportStatus'), play: document.querySelector('#playButton'),
     pause: document.querySelector('#pauseButton'), stop: document.querySelector('#stopButton'),
@@ -83,6 +87,10 @@
     track('tool_error', { error_type: errorType });
   }
   function clearError() { el.error.hidden = true; el.error.textContent = ''; }
+  function setWarning(messages = []) {
+    el.warning.textContent = messages.join(' ');
+    el.warning.hidden = messages.length === 0;
+  }
   function setStatus(message) { el.status.textContent = message; }
   function setBusy(busy) { el.drop.setAttribute('aria-busy', String(busy)); }
   function formatTime(seconds) {
@@ -471,11 +479,14 @@
     try { localStorage.setItem(BANK_STORAGE_KEY, JSON.stringify(Object.fromEntries(el.banks.map(bank => [bank.dataset.tapeBank, bank.open])))); } catch (_) {}
   }
   async function loadAudio(file) {
-    clearError();
+    clearError(); setWarning();
     if (!file || file.size === 0) return showError('This audio file is empty.', 'empty_file');
-    if (file.size > MAX_FILE_SIZE) return showError('This file is too large. Choose audio under 50 MB.', 'file_too_large');
+    if (file.size > MAX_FILE_SIZE) return showError('This file is over the 100 MB limit. Choose a smaller audio file.', 'file_too_large');
     const extension = file.name.split('.').pop().toLowerCase();
     if (!['wav', 'mp3', 'm4a'].includes(extension) && !file.type.startsWith('audio/')) return showError('Choose a WAV, MP3, or browser-decodable M4A file.', 'unsupported_file');
+    const warnings = [];
+    if (file.size > RECOMMENDED_FILE_SIZE) warnings.push('OVER 50 MB: decoding may use substantial memory.');
+    setWarning(warnings);
     setBusy(true); setStatus('DECODING TAPE…');
     try {
       const context = await ensureContext();
@@ -484,10 +495,16 @@
       const decoded = await context.decodeAudioData(bytes.slice(0));
       if (!decoded.duration || !decoded.length) throw new Error('empty');
       if (decoded.duration > MAX_DURATION + 0.01) {
-        showError('This tape is over 3 minutes. Trim it and try again.', 'duration_exceeded');
-        setStatus('TAPE REJECTED / OVER 3 MINUTES.');
+        setWarning();
+        showError('This tape is over the 10 minute limit. Trim it and try again.', 'duration_exceeded');
+        setStatus('TAPE REJECTED / OVER 10 MINUTES.');
         return;
       }
+      if (decoded.duration > LONG_AUDIO_SECONDS) warnings.push('LONG TAPE: processing and WAV export will take more time and memory.');
+      if (decoded.duration > MOBILE_RECOMMENDED_SECONDS && matchMedia('(max-width: 900px), (pointer: coarse)').matches) {
+        warnings.push('MOBILE NOTICE: 5 minutes or less is recommended.');
+      }
+      setWarning(warnings);
       stopActiveGraph();
       audioBuffer = decoded;
       lastWavBlob = null;
@@ -499,8 +516,15 @@
       setStatus('TAPE LOADED. PRESS PLAY.');
       updateTransport(); drawWaveform();
       track('audio_upload');
-    } catch (_) {
-      showError('This audio could not be decoded in this browser. Try WAV or MP3.', 'decode_failed');
+    } catch (error) {
+      const possibleMemoryFailure = file.size > RECOMMENDED_FILE_SIZE ||
+        error instanceof RangeError || /memory|alloc/i.test(String(error && error.message));
+      showError(
+        possibleMemoryFailure
+          ? 'Not enough browser memory to decode this audio. Close other tabs or choose a shorter file.'
+          : 'This audio could not be decoded in this browser. Try WAV or MP3.',
+        possibleMemoryFailure ? 'decode_memory_failed' : 'decode_failed'
+      );
       setStatus('DECODE FAILED.');
     } finally {
       setBusy(false); el.input.value = '';

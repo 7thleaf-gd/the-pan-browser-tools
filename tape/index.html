@@ -20,14 +20,14 @@
     try{if(localStorage.getItem('thePanAnalyticsConsent')==='granted'){gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}}catch(_){}
   </script>
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5W74796T');</script>
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20260728.1">
-  <link rel="stylesheet" href="../assets/css/base.css?v=20260728.1">
-  <link rel="stylesheet" href="../assets/css/components.css?v=20260728.1">
-  <link rel="stylesheet" href="tape.css?v=20260728.1">
-  <script src="../assets/js/analytics.js?v=20260728.1" defer></script>
-  <script src="../assets/js/consent.js?v=20260728.1" defer></script>
-  <script src="../assets/js/audio-utils.js?v=20260728.1" defer></script>
-  <script src="tape.js?v=20260728.1" defer></script>
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20260728.2">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20260728.2">
+  <link rel="stylesheet" href="../assets/css/components.css?v=20260728.2">
+  <link rel="stylesheet" href="tape.css?v=20260728.2">
+  <script src="../assets/js/analytics.js?v=20260728.2" defer></script>
+  <script src="../assets/js/consent.js?v=20260728.2" defer></script>
+  <script src="../assets/js/audio-utils.js?v=20260728.2" defer></script>
+  <script src="tape.js?v=20260728.2" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#tapeMachine">Skip to tape controls</a>
@@ -44,7 +44,8 @@
       <p class="eyebrow">BROWSER CASSETTE DAMAGE APPARATUS</p>
       <h1>DESTROY YOUR<br><em>CLEAN AUDIO.</em></h1>
       <p class="lede">LOAD A SOUND. DAMAGE THE TAPE. KEEP THE ACCIDENT.</p>
-      <label class="audio-load-main" for="audioInput"><span>LOAD A SOUND</span><small>WAV / MP3 / DECODABLE M4A · MAX 3 MINUTES</small></label>
+      <label class="audio-load-main" for="audioInput"><span>LOAD A SOUND</span><small>MAX 10 MIN / 100 MB · 50 MB OR LESS RECOMMENDED</small></label>
+      <p class="audio-limit-note">Long tapes need more processing time and memory. Mobile: 5 minutes or less recommended.</p>
       <input id="audioInput" type="file" accept=".wav,.mp3,.m4a,audio/wav,audio/mpeg,audio/mp4,audio/x-m4a" hidden>
     </section>
 
@@ -64,6 +65,7 @@
           <div id="modeButtons" class="mode-buttons" aria-label="Playback mode"><button type="button" data-playback-mode="original">ORIGINAL</button><button type="button" data-playback-mode="damaged" class="is-active">DAMAGED</button></div>
         </div>
         <p id="transportStatus" class="machine-status" role="status" aria-live="polite">LOAD AUDIO TO START.</p>
+        <div id="audioWarning" class="tape-warning" role="status" aria-live="polite" hidden></div>
         <div id="audioError" class="error-message" role="alert" aria-live="assertive" hidden></div>
       </div>
 

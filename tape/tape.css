@@ -5,6 +5,7 @@ main { padding: 0 clamp(20px, 4vw, 64px); }
 .tape-hero .lede { width: min(560px, 100%); margin-left: auto; color: #c4c6bd; font-weight: var(--pan-weight-bold); letter-spacing: .08em; }
 .audio-load-main { display: flex; justify-content: space-between; align-items: center; gap: 24px; width: min(560px, 100%); margin: 28px 0 0 auto; padding: 20px 24px; border: 1px solid var(--pan-color-green); background: var(--pan-color-green); color: #050505; cursor: pointer; font-weight: var(--pan-weight-black); }
 .audio-load-main small { font-size: 9px; letter-spacing: .1em; }
+.audio-limit-note { width: min(560px, 100%); margin: 10px 0 0 auto; color: var(--pan-color-muted); font: 700 9px/1.5 var(--pan-font-mono); letter-spacing: .08em; text-transform: uppercase; }
 .tape-machine { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(330px, .55fr); grid-template-rows: minmax(0, 1fr); height: clamp(620px, calc(100dvh - 48px), 880px); margin: 70px 0; border: var(--pan-line); background: var(--pan-color-panel); overflow: clip; }
 .tape-deck { min-width: 0; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto auto; border-right: var(--pan-line); overflow: hidden; }
 .audio-drop-zone { --tape-wave-inset: 18px; position: relative; min-height: 0; display: grid; place-items: center; padding: 18px; overflow: hidden; background: #050505; outline: none; }
@@ -26,6 +27,7 @@ main { padding: 0 clamp(20px, 4vw, 64px); }
 .mode-buttons button:last-child { border-right: 0; }
 .mode-buttons button.is-active { background: var(--pan-color-green); color: #050505; }
 .machine-status { min-height: 34px; margin: 0; padding: 10px 14px; border-top: var(--pan-line); color: var(--pan-color-muted); font: 700 10px/1.3 var(--pan-font-mono); letter-spacing: .1em; }
+.tape-warning { padding: 10px 14px; border-top: 1px solid #b98d17; background: #211b08; color: #ffd86a; font: 700 10px/1.45 var(--pan-font-mono); letter-spacing: .06em; }
 .tape-controls { min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; background: var(--pan-color-panel-raised); }
 .tape-control-scroll { min-height: 0; padding: 4px 16px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: var(--pan-color-green) var(--pan-color-panel-raised); }
 .tape-preset-bank { padding: 14px 0 18px; border-bottom: var(--pan-line); }
