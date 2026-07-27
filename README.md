@@ -4,7 +4,7 @@
 
 Free, installation-free creative browser tools from **7thleaf Records**. The public root remains **THE PAN IMAGE MACHINE v0**:
 
-https://7thleaf-gd.github.io/the-pan-browser-tools/
+https://tools.thepan.xyz/
 
 ## Wave 0 Foundation
 

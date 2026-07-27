@@ -8,7 +8,7 @@ import sys
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE_URL = "https://7thleaf-gd.github.io/the-pan-browser-tools/"
+BASE_URL = "https://tools.thepan.xyz/"
 GTM_ID = "GTM-5W74796T"
 REQUIRED = [
     "index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",

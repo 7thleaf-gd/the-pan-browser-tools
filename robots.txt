@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://7thleaf-gd.github.io/the-pan-browser-tools/sitemap.xml
+Sitemap: https://tools.thepan.xyz/sitemap.xml
