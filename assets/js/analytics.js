@@ -8,11 +8,28 @@
     'random_distort',
     'reset_tool',
     'image_export',
-    'tool_error'
+    'tool_error',
+    'surprise_me',
+    'preset_used',
+    'compare_used',
+    'gallery_add',
+    'gallery_select',
+    'gallery_restore',
+    'gallery_delete',
+    'gallery_clear',
+    'gallery_favorite',
+    'share_open',
+    'share_success',
+    'share_cancel',
+    'share_fallback',
+    'credit_copy'
   ]);
   const allowedParameters = {
     effect_used: new Set(['effect_name']),
-    tool_error: new Set(['error_type'])
+    tool_error: new Set(['error_type']),
+    surprise_me: new Set(['preset_family']),
+    preset_used: new Set(['preset_name']),
+    compare_used: new Set(['compare_mode'])
   };
   let context = Object.freeze({ tool_id: '', tool_version: '' });
 

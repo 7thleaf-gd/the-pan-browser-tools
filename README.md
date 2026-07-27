@@ -26,12 +26,15 @@ There is no framework, package installation, build command, or external runtime 
 
 - File selection and drag-and-drop
 - Live Canvas preview
-- Pixelate, ordered dither, noise, RGB split, scanline, contrast, and brightness
-- Random Distort and Reset
-- PNG export and fullscreen preview
+- Fifteen live Canvas effects across Basic, Warp, Signal, Texture, and Print banks
+- Ten designed presets, Surprise Me controlled randomization, per-bank reset, and Reset All
+- Original/current/split compare with a keyboard- and pointer-adjustable boundary
+- PNG export, native share fallback, fullscreen preview, and an eight-item in-memory session gallery
 - Automatic scaling to a maximum 2048px side and 4 megapixels
 - Desktop Studio Workspace and mobile sticky preview/action controls
 - Keyboard-accessible interactions and user-facing errors
+
+Playground session images and effect snapshots exist only in memory. They are cleared on reload and are never written to `localStorage`; only interface preferences such as open FX banks and floating-monitor position are stored.
 
 ## Privacy and analytics
 
