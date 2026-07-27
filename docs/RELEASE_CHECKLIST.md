@@ -19,13 +19,15 @@
 - [ ] Focus indicators are visible
 - [ ] Errors and busy states announce correctly
 - [ ] Consent and fullscreen dialogs trap focus, close with Escape, and restore focus
+- [ ] Fullscreen Original / Current / Compare controls and split handle work
+- [ ] Gallery compare handle works with pointer, touch, and arrow keys
 - [ ] Reduced-motion preference is honored
 
 ## Tool behavior
 
 - [ ] File selection and drag/drop work
 - [ ] Every existing effect works
-- [ ] Random and Reset work
+- [ ] Presets, Surprise Me, section resets, and Reset All work
 - [ ] PNG export opens a valid file
 - [ ] Oversized images are scaled within limits
 - [ ] Unsupported and invalid files show useful errors
@@ -49,6 +51,8 @@
 
 - [ ] Slider work is coalesced by animation frame
 - [ ] Temporary canvases are reused
+- [ ] Maximum-size images remain usable while presets and Surprise Me are repeated
+- [ ] Critical CSS and JavaScript URLs carry the current cache version
 - [ ] No unexpected console errors or external CDN dependencies
 - [ ] `python3 scripts/check-site.py` passes
 - [ ] All JavaScript passes `node --check`

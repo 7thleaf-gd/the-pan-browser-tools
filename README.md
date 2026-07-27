@@ -33,6 +33,7 @@ There is no framework, package installation, build command, or external runtime 
 - Automatic scaling to a maximum 2048px side and 4 megapixels
 - Desktop Studio Workspace and mobile sticky preview/action controls
 - Keyboard-accessible interactions and user-facing errors
+- Versioned static asset URLs so new releases replace stale mobile caches
 
 Playground session images and effect snapshots exist only in memory. They are cleared on reload and are never written to `localStorage`; only interface preferences such as open FX banks and floating-monitor position are stored.
 
