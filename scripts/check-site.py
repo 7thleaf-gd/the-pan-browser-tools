@@ -15,6 +15,7 @@ TAPE_ASSET_VERSION = "20260728.2"
 REQUIRED = [
     "index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",
     "about/index.html", "tools/index.html", "tape/index.html", "tape/tape.css", "tape/tape.js",
+    "favicon.ico", "assets/images/imagemachine_ogp.png", "assets/images/tape_ogp.png",
     "assets/css/tokens.css", "assets/css/base.css", "assets/css/components.css",
     "assets/js/analytics.js", "assets/js/consent.js", "assets/js/canvas-utils.js", "assets/js/audio-utils.js",
     "docs/DESIGN_SYSTEM.md", "docs/TOOL_TEMPLATE.md", "docs/ANALYTICS.md",
@@ -26,6 +27,10 @@ PAGES = {
     "about/index.html": BASE_URL + "about/",
     "tape/index.html": BASE_URL + "tape/",
 }
+SOCIAL_IMAGES = {
+    "index.html": BASE_URL + "assets/images/imagemachine_ogp.png",
+    "tape/index.html": BASE_URL + "assets/images/tape_ogp.png",
+}
 
 
 class PageParser(HTMLParser):
@@ -33,6 +38,8 @@ class PageParser(HTMLParser):
         super().__init__()
         self.links = []
         self.canonical = None
+        self.icons = []
+        self.metadata = {}
 
     def handle_starttag(self, tag, attrs):
         attributes = dict(attrs)
@@ -42,6 +49,12 @@ class PageParser(HTMLParser):
                 self.links.append(value)
         if tag == "link" and attributes.get("rel") == "canonical":
             self.canonical = attributes.get("href")
+        if tag == "link" and attributes.get("rel") == "icon":
+            self.icons.append(attributes.get("href"))
+        if tag == "meta":
+            key = attributes.get("property") or attributes.get("name")
+            if key:
+                self.metadata[key] = attributes.get("content")
 
 
 def internal_target(page_path, link):
@@ -79,6 +92,8 @@ def main():
         parser.feed(text)
         if parser.canonical != expected_canonical:
             errors.append(f"{relative}: canonical must be {expected_canonical}")
+        if not parser.icons:
+            errors.append(f"{relative}: missing favicon")
         if GTM_ID not in text:
             errors.append(f"{relative}: missing GTM container {GTM_ID}")
         if "googletagmanager.com/gtag/js" in text or "www.googletagmanager.com/gtag/js" in text:
@@ -108,6 +123,15 @@ def main():
                     errors.append(
                         f"tape/index.html: {asset} must use asset version {TAPE_ASSET_VERSION}"
                     )
+
+        expected_social_image = SOCIAL_IMAGES.get(relative)
+        if expected_social_image:
+            if parser.metadata.get("og:image") != expected_social_image:
+                errors.append(f"{relative}: og:image must be {expected_social_image}")
+            if parser.metadata.get("twitter:image") != expected_social_image:
+                errors.append(f"{relative}: twitter:image must be {expected_social_image}")
+            if parser.metadata.get("twitter:card") != "summary_large_image":
+                errors.append(f"{relative}: twitter:card must be summary_large_image")
 
     sitemap = ROOT / "sitemap.xml"
     if sitemap.is_file():
