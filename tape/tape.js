@@ -4,6 +4,8 @@
   const pan = window.ThePan || {};
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   const OfflineAudioContextClass = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  const IS_IOS_WEBKIT = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const LONG_AUDIO_SECONDS = 180;
   const MOBILE_RECOMMENDED_SECONDS = 300;
   const MAX_DURATION = 600;
@@ -42,10 +44,12 @@
   });
   const state = window.ThePan.tapeState = {
     settings: { ...DEFAULTS }, activePreset: 'NONE', playbackMode: 'damaged',
-    dropoutSeed: 712337, playing: false, position: 0, exporting: false
+    dropoutSeed: 712337, playing: false, position: 0, exporting: false,
+    outputRoute: 'native-webaudio'
   };
   const el = {
     input: document.querySelector('#audioInput'), browse: document.querySelector('#audioBrowseButton'),
+    screenCaptureOutput: document.querySelector('#screenCaptureOutput'),
     drop: document.querySelector('#audioDropZone'), empty: document.querySelector('#audioEmptyState'),
     canvas: document.querySelector('#waveformCanvas'), playhead: document.querySelector('#playhead'),
     info: document.querySelector('#audioInfo'), warning: document.querySelector('#audioWarning'),
@@ -64,6 +68,8 @@
     shareClose: document.querySelector('#tapeShareClose')
   };
   let audioContext = null;
+  let screenCaptureDestination = null;
+  let pendingOutputActivation = null;
   let audioBuffer = null;
   let originalPeaks = null;
   let activeGraph = null;
@@ -103,11 +109,41 @@
     if (!state.playing || !audioContext) return state.position;
     return Math.min(audioBuffer.duration, startOffset + Math.max(0, audioContext.currentTime - startTime));
   }
+  function configureAudioSession() {
+    if (!IS_IOS_WEBKIT || !navigator.audioSession) return;
+    try { navigator.audioSession.type = 'playback'; } catch (_) {}
+  }
   async function ensureContext() {
     if (!AudioContextClass) throw new Error('audio_context_unsupported');
+    configureAudioSession();
     if (!audioContext) audioContext = new AudioContextClass({ latencyHint: 'interactive' });
-    if (audioContext.state === 'suspended') await audioContext.resume();
+    if (!['running', 'closed'].includes(audioContext.state)) await audioContext.resume();
     return audioContext;
+  }
+  async function realtimeOutput(context) {
+    if (
+      !IS_IOS_WEBKIT ||
+      !el.screenCaptureOutput ||
+      typeof context.createMediaStreamDestination !== 'function' ||
+      !('srcObject' in el.screenCaptureOutput)
+    ) {
+      state.outputRoute = 'native-webaudio';
+      return context.destination;
+    }
+    if (!screenCaptureDestination) {
+      screenCaptureDestination = context.createMediaStreamDestination();
+      el.screenCaptureOutput.srcObject = screenCaptureDestination.stream;
+    }
+    try {
+      el.screenCaptureOutput.muted = false;
+      el.screenCaptureOutput.volume = 1;
+      await el.screenCaptureOutput.play();
+      state.outputRoute = 'ios-media-element';
+      return screenCaptureDestination;
+    } catch (_) {
+      state.outputRoute = 'native-webaudio-fallback';
+      return context.destination;
+    }
   }
   function saturationCurve(amount) {
     const samples = 2048;
@@ -169,7 +205,7 @@
     };
     return node;
   }
-  function buildGraph(context, source, offset, exportOnly = false) {
+  function buildGraph(context, source, offset, exportOnly = false, outputNode = context.destination) {
     const now = context.currentTime || 0;
     const dry = context.createGain();
     const wet = context.createGain();
@@ -208,7 +244,7 @@
     dry.connect(limiter);
     wet.connect(limiter);
     limiter.connect(master);
-    master.connect(context.destination);
+    master.connect(outputNode);
     const wowOsc = context.createOscillator();
     const wowGain = context.createGain();
     wowOsc.frequency.value = state.settings.wowRate;
@@ -265,12 +301,16 @@
     clearError();
     try {
       const context = await ensureContext();
+      const outputNode = pendingOutputActivation
+        ? await pendingOutputActivation
+        : await realtimeOutput(context);
+      pendingOutputActivation = null;
       stopActiveGraph();
       const token = generation;
       const safeOffset = Math.max(0, Math.min(offset, Math.max(0, audioBuffer.duration - 0.01)));
       const source = context.createBufferSource();
       source.buffer = audioBuffer;
-      activeGraph = buildGraph(context, source, safeOffset);
+      activeGraph = buildGraph(context, source, safeOffset, false, outputNode);
       startOffset = safeOffset;
       startTime = context.currentTime;
       state.position = safeOffset;
@@ -292,6 +332,7 @@
       updateTransport();
       animate();
     } catch (_) {
+      pendingOutputActivation = null;
       showError('Audio could not start. Tap Play again or check browser audio permissions.', 'audio_context_failed');
     }
   }
@@ -614,7 +655,10 @@
   ['dragenter', 'dragover'].forEach(type => el.drop.addEventListener(type, event => { event.preventDefault(); el.drop.classList.add('dragover'); }));
   ['dragleave', 'drop'].forEach(type => el.drop.addEventListener(type, event => { event.preventDefault(); el.drop.classList.remove('dragover'); }));
   el.drop.addEventListener('drop', event => loadAudio(event.dataTransfer.files[0]));
-  el.play.addEventListener('click', () => startPlayback());
+  el.play.addEventListener('click', () => {
+    if (IS_IOS_WEBKIT && audioContext) pendingOutputActivation = realtimeOutput(audioContext);
+    startPlayback();
+  });
   el.pause.addEventListener('click', pausePlayback);
   el.stop.addEventListener('click', stopPlayback);
   el.modes.addEventListener('click', event => { const button = event.target.closest('[data-playback-mode]'); if (button) setPlaybackMode(button.dataset.playbackMode); });
@@ -658,6 +702,19 @@
     }, { threshold: [0, .05, .2] }).observe(el.drop.closest('.tape-machine'));
   } else document.body.dataset.tapeActive = 'true';
   window.addEventListener('resize', drawWaveform);
-  window.addEventListener('pagehide', () => { stopActiveGraph(); if (audioContext && audioContext.state !== 'closed') audioContext.close(); audioBuffer = null; originalPeaks = null; });
+  window.addEventListener('pagehide', () => {
+    stopActiveGraph();
+    if (el.screenCaptureOutput) {
+      el.screenCaptureOutput.pause();
+      el.screenCaptureOutput.srcObject = null;
+    }
+    if (screenCaptureDestination) {
+      screenCaptureDestination.stream.getTracks().forEach(track => track.stop());
+      screenCaptureDestination = null;
+    }
+    if (audioContext && audioContext.state !== 'closed') audioContext.close();
+    audioBuffer = null;
+    originalPeaks = null;
+  });
   document.querySelectorAll('[data-current-year]').forEach(node => { node.textContent = new Date().getFullYear(); });
 }());
