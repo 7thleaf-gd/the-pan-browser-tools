@@ -4,8 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080808">
-  <meta name="robots" content="noindex, nofollow">
+  <meta name="robots" content="index, follow">
   <meta name="description" content="THE PAN — left-field indie rock, moving images, and strange browser tools from Sapporo, Japan.">
+  <link rel="canonical" href="https://thepan.xyz/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="THE PAN — Waiting for a UFO">
+  <meta property="og:description" content="Left-field indie rock for people waiting for a UFO at the edge of town.">
+  <meta property="og:url" content="https://thepan.xyz/">
+  <meta property="og:image" content="https://thepan.xyz/assets/space-zine-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
   <title>THE PAN — Waiting for a UFO</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070707'/%3E%3Cpath d='M14 35C8 20 18 8 32 8s24 12 18 27C45 49 37 56 32 56s-13-7-18-21Z' fill='%23c5ec2e' stroke='%23f5f0dc' stroke-width='4'/%3E%3Cellipse cx='24' cy='31' rx='7' ry='4' fill='%23070707' transform='rotate(20 24 31)'/%3E%3Cellipse cx='40' cy='31' rx='7' ry='4' fill='%23070707' transform='rotate(-20 40 31)'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,12 +27,8 @@
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="paper-noise" aria-hidden="true"></div>
-      <div class="star-field" aria-hidden="true">
-        <i class="star star-a"></i>
-        <i class="star star-b"></i>
-        <i class="star star-c"></i>
-        <i class="star star-d"></i>
-        <i class="star star-e"></i>
+      <img class="hero-zine-backdrop" src="assets/the-pan-ufo-zine-hero.png" alt="" aria-hidden="true">
+      <div class="star-field" data-hero-stars aria-hidden="true">
         <i class="orb orb-a"></i>
         <i class="orb orb-b"></i>
         <i class="signal signal-a">)))</i>
@@ -63,35 +66,27 @@
           </a>
         </div>
 
-        <div class="hero-art" aria-label="A UFO sends a strange signal toward the edge of town">
-          <div class="planet" aria-hidden="true">
-            <span></span>
-            <i></i>
+        <article class="hero-art hero-release-card" aria-label="Latest music release: THE PAN">
+          <p class="hero-release-label">LATEST MUSIC RELEASE</p>
+          <div class="hero-release-body">
+            <div class="hero-release-art">
+              <img src="assets/the-pan-subscription.png" alt="THE PAN album artwork">
+              <span>NEW<br>SIGNAL!</span>
+            </div>
+            <div class="hero-release-copy">
+              <h2>THE PAN</h2>
+              <p class="hero-physical">
+                <strong>PHYSICAL EDITION</strong>
+                <span>COMING SEPTEMBER</span>
+                <small lang="ja">フィジカル版 9月発売予定</small>
+              </p>
+              <div class="hero-release-links">
+                <a href="https://linkco.re/c00M4tcQ" target="_blank" rel="noopener">STREAMING ↗</a>
+                <a href="https://pampasfields.bandcamp.com/" target="_blank" rel="noopener">BANDCAMP ↗</a>
+              </div>
+            </div>
           </div>
-          <svg class="ufo-illustration" viewBox="0 0 520 440" role="img" aria-label="Hand-drawn UFO over a small town">
-            <path class="beam beam-shadow" d="M188 197 L336 197 L422 410 L92 410 Z"/>
-            <path class="beam beam-main" d="M198 194 L326 194 L401 404 L116 404 Z"/>
-            <path class="ufo-dome" d="M199 117 C217 61 302 59 325 117 Z"/>
-            <path class="ufo-body-shadow" d="M112 142 C169 105 353 103 414 145 C376 210 154 215 112 142 Z"/>
-            <path class="ufo-body" d="M107 132 C167 96 353 94 419 136 C373 193 157 198 107 132 Z"/>
-            <path class="ufo-rim" d="M93 148 C158 177 374 177 434 148 C417 205 127 213 93 148 Z"/>
-            <circle class="ufo-light light-one" cx="169" cy="169" r="13"/>
-            <circle class="ufo-light light-two" cx="232" cy="180" r="12"/>
-            <circle class="ufo-light light-three" cx="300" cy="180" r="12"/>
-            <circle class="ufo-light light-four" cx="364" cy="169" r="13"/>
-            <path class="alien-head" d="M237 285 C214 250 226 221 263 216 C303 220 312 251 288 285 C278 302 247 302 237 285 Z"/>
-            <path class="alien-eye eye-left" d="M238 249 C249 240 260 243 261 257 C249 263 241 259 238 249 Z"/>
-            <path class="alien-eye eye-right" d="M288 249 C277 240 266 243 265 257 C277 263 285 259 288 249 Z"/>
-            <path class="town-line" d="M49 408 L49 364 L78 364 L78 330 L111 330 L111 374 L150 374 L150 344 L183 344 L183 394 L219 394 L219 354 L249 354 L249 320 L281 320 L281 380 L320 380 L320 343 L353 343 L353 389 L392 389 L392 352 L430 352 L430 408 Z"/>
-            <path class="radio-wave" d="M245 314 C256 305 271 305 282 314 M232 301 C251 281 278 281 297 301 M219 289 C244 258 286 258 311 289"/>
-          </svg>
-          <div class="sighting-stamp">
-            <b>UFO?</b>
-            <span>OR JUST<br>A STAR?</span>
-          </div>
-          <div class="floating-eye" aria-hidden="true"><i></i></div>
-          <p class="art-caption">SIGHTING LOG / 43°03′N 141°21′E</p>
-        </div>
+        </article>
       </div>
 
       <div class="liquid-edge" aria-hidden="true">
@@ -140,16 +135,27 @@
       </div>
 
       <div class="door-grid">
-        <a class="door door-listen" href="https://linkco.re/c00M4tcQ" target="_blank" rel="noopener">
+        <article class="door door-listen">
           <span class="door-number">01</span>
           <div class="record-icon" aria-hidden="true"><i></i></div>
           <p>PUT THIS<br>IN YOUR EARS</p>
           <h3>LISTEN</h3>
           <small>SPOTIFY / BANDCAMP</small>
-          <b>OPEN DOOR →</b>
-        </a>
+          <div class="listen-links" aria-label="Listen to THE PAN">
+            <a class="door-action" href="https://linkco.re/c00M4tcQ" target="_blank" rel="noopener">LISTEN / BUY →</a>
+            <div class="inline-player" data-embed-group>
+              <div class="playlist-links" aria-label="Choose a Spotify playlist">
+                <button class="is-active" type="button" aria-pressed="true" data-player-src="https://open.spotify.com/embed/playlist/0qGXPQCdrx0PCKbvY0scDv?utm_source=generator&amp;theme=0" data-player-title="THE PAN Spotify playlist 01" data-player-external="https://open.spotify.com/playlist/0qGXPQCdrx0PCKbvY0scDv"><span>PLAYLIST</span> 01</button>
+                <button type="button" aria-pressed="false" data-player-src="https://open.spotify.com/embed/playlist/58UnHd9GOxwaOnBS2xbVgl?utm_source=generator&amp;theme=0" data-player-title="THE PAN Spotify playlist 02" data-player-external="https://open.spotify.com/playlist/58UnHd9GOxwaOnBS2xbVgl"><span>PLAYLIST</span> 02</button>
+                <button type="button" aria-pressed="false" data-player-src="https://open.spotify.com/embed/playlist/634mzIz7MJlbLMeFuHqjuZ?utm_source=generator&amp;theme=0" data-player-title="THE PAN Spotify playlist 03" data-player-external="https://open.spotify.com/playlist/634mzIz7MJlbLMeFuHqjuZ"><span>PLAYLIST</span> 03</button>
+              </div>
+              <iframe class="spotify-embed" data-player-frame title="THE PAN Spotify playlist 01" src="https://open.spotify.com/embed/playlist/0qGXPQCdrx0PCKbvY0scDv?utm_source=generator&amp;theme=0" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+              <a class="player-external" data-player-external-link href="https://open.spotify.com/playlist/0qGXPQCdrx0PCKbvY0scDv" target="_blank" rel="noopener">OPEN IN SPOTIFY ↗</a>
+            </div>
+          </div>
+        </article>
 
-        <a class="door door-watch" href="https://youtu.be/SyL3JaAK7i8" target="_blank" rel="noopener">
+        <article class="door door-watch">
           <span class="door-number">02</span>
           <div class="tv-icon" aria-hidden="true">
             <i></i><b></b>
@@ -157,8 +163,19 @@
           <p>FOUND FOOTAGE<br>FROM ELSEWHERE</p>
           <h3>WATCH</h3>
           <small>YOUTUBE</small>
-          <b>OPEN DOOR →</b>
-        </a>
+          <div class="inline-player watch-player" data-embed-group>
+            <div class="watch-choices" aria-label="Choose a video">
+              <button class="is-active" type="button" aria-pressed="true" data-player-src="https://www.youtube-nocookie.com/embed/SyL3JaAK7i8?rel=0" data-player-title="THE PAN video chapter 01" data-player-external="https://youtu.be/SyL3JaAK7i8">01</button>
+              <button type="button" aria-pressed="false" data-player-src="https://www.youtube-nocookie.com/embed/ycGe8IiSw8I?rel=0" data-player-title="THE PAN video chapter 02" data-player-external="https://youtu.be/ycGe8IiSw8I">02</button>
+              <button type="button" aria-pressed="false" data-player-src="https://www.youtube-nocookie.com/embed/chnqMhYl0W4?rel=0" data-player-title="THE PAN video chapter 03" data-player-external="https://youtu.be/chnqMhYl0W4">03</button>
+              <button type="button" aria-pressed="false" data-player-src="https://www.youtube-nocookie.com/embed/1vRoQPvQcUY?rel=0" data-player-title="THE PAN video chapter 04" data-player-external="https://youtu.be/1vRoQPvQcUY">04</button>
+            </div>
+            <div class="youtube-frame">
+              <iframe data-player-frame title="THE PAN video chapter 01" src="https://www.youtube-nocookie.com/embed/SyL3JaAK7i8?rel=0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a class="player-external" data-player-external-link href="https://youtu.be/SyL3JaAK7i8" target="_blank" rel="noopener">OPEN ON YOUTUBE ↗</a>
+          </div>
+        </article>
 
         <a class="door door-play" href="https://tools.thepan.xyz/" target="_blank" rel="noopener">
           <span class="door-number">03</span>
@@ -171,6 +188,20 @@
           <b>OPEN DOOR →</b>
         </a>
       </div>
+
+      <article class="space-zine-card">
+        <div class="zine-visual">
+          <img src="assets/space-zine-cover.png" alt="THE PAN presents SPACE ZINE — weird stories from somewhere strange">
+        </div>
+        <div class="zine-copy">
+          <p>THE SECRET FOURTH HATCH / READ ALL ABOUT IT</p>
+          <h2>SPACE<br><span>ZINE</span></h2>
+          <p class="zine-description">宇宙、UFO、音楽、奇妙な物語。<br>夜空を見上げる人たちのための読みもの。</p>
+          <a href="https://note.com/wonderland_oyaji" target="_blank" rel="noopener">
+            OPEN THE ZINE <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </article>
     </section>
   </main>
 

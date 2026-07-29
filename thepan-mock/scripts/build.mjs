@@ -1,14 +1,16 @@
-import { access, copyFile, mkdir, readFile, rm } from 'node:fs/promises';
+import { access, copyFile, cp, mkdir, readFile, rm } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
 const output = resolve(root, 'dist');
-const files = ['index.html', 'styles.css', 'script.js'];
+const files = ['index.html', 'styles.css', 'script.js', 'robots.txt', 'sitemap.xml'];
+const assetDirectory = 'assets';
 
 for (const file of files) {
   await access(resolve(root, file), constants.R_OK);
 }
+await access(resolve(root, assetDirectory), constants.R_OK);
 
 const html = await readFile(resolve(root, 'index.html'), 'utf8');
 const requiredText = [
@@ -31,5 +33,6 @@ await mkdir(output, { recursive: true });
 for (const file of files) {
   await copyFile(resolve(root, file), resolve(output, file));
 }
+await cp(resolve(root, assetDirectory), resolve(output, assetDirectory), { recursive: true });
 
-console.log(`Built THE PAN mock: ${files.length} files → dist/`);
+console.log(`Built THE PAN mock: ${files.length} files + ${assetDirectory}/ → dist/`);
