@@ -12,9 +12,11 @@ BASE_URL = "https://tools.thepan.xyz/"
 GTM_ID = "GTM-5W74796T"
 ASSET_VERSION = "20260727.2"
 TAPE_ASSET_VERSION = "20260728.3"
+VISUALIZER_ASSET_VERSION = "20260730.1"
 REQUIRED = [
     "index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",
     "about/index.html", "tools/index.html", "tape/index.html", "tape/tape.css", "tape/tape.js",
+    "visualizer/index.html", "visualizer/visualizer.css", "visualizer/visualizer.js",
     "favicon.ico", "assets/images/imagemachine_ogp.png", "assets/images/tape_ogp.png",
     "assets/css/tokens.css", "assets/css/base.css", "assets/css/components.css",
     "assets/js/analytics.js", "assets/js/consent.js", "assets/js/canvas-utils.js", "assets/js/audio-utils.js",
@@ -26,6 +28,7 @@ PAGES = {
     "tools/index.html": BASE_URL + "tools/",
     "about/index.html": BASE_URL + "about/",
     "tape/index.html": BASE_URL + "tape/",
+    "visualizer/index.html": BASE_URL + "visualizer/",
 }
 SOCIAL_IMAGES = {
     "index.html": BASE_URL + "assets/images/imagemachine_ogp.png",
@@ -83,6 +86,14 @@ def main():
     if (ROOT / "test").exists():
         errors.append("Obsolete root test file exists")
 
+    visualizer_script = ROOT / "visualizer/visualizer.js"
+    if visualizer_script.is_file():
+        visualizer_text = visualizer_script.read_text(encoding="utf-8")
+        forbidden_upload_apis = ["fetch(", "XMLHttpRequest", "sendBeacon", "WebSocket", "FormData"]
+        for api in forbidden_upload_apis:
+            if api in visualizer_text:
+                errors.append(f"visualizer/visualizer.js: network/upload API is forbidden ({api})")
+
     for relative, expected_canonical in PAGES.items():
         page = ROOT / relative
         if not page.is_file():
@@ -125,6 +136,21 @@ def main():
                     )
             if 'id="screenCaptureOutput"' not in text:
                 errors.append("tape/index.html: missing iOS screen-capture audio output")
+        if relative == "visualizer/index.html":
+            visualizer_assets = [
+                "../assets/css/tokens.css", "../assets/css/base.css",
+                "../assets/css/components.css", "visualizer.css",
+                "../assets/js/analytics.js", "../assets/js/consent.js",
+                "../assets/js/canvas-utils.js", "visualizer.js",
+            ]
+            for asset in visualizer_assets:
+                if f"{asset}?v={VISUALIZER_ASSET_VERSION}" not in parser.links:
+                    errors.append(
+                        f"visualizer/index.html: {asset} must use asset version "
+                        f"{VISUALIZER_ASSET_VERSION}"
+                    )
+            if 'id="sourceVideo"' not in text or 'id="visualizerCanvas"' not in text:
+                errors.append("visualizer/index.html: missing local video processing elements")
 
         expected_social_image = SOCIAL_IMAGES.get(relative)
         if expected_social_image:

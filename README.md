@@ -16,6 +16,7 @@ assets/
   js/             analytics, consent, Canvas utilities, shared page behavior
 about/            project and privacy explanation
 tape/             THE PAN TAPE MACHINE static audio tool
+visualizer/       THE PAN SIGNAL VISUALIZER local camera/video tool
 tools/            available/planned tool index
 docs/             design, tool, analytics, and release contracts
 scripts/          dependency-free site validation
@@ -51,6 +52,17 @@ Playground session images and effect snapshots exist only in memory. They are cl
 
 Audio, filenames, exact duration, file size, MIME type, and effect values are never sent to analytics or stored persistently.
 
+## Signal Visualizer features
+
+- Web camera or browser-supported local video input
+- Real-time Canvas RGB shift, wave distortion, feedback trail, noise, and particle overlay
+- Particle amount, size, speed, drift, glow, opacity, color, and blend controls
+- Native fullscreen with a mobile pseudo-fullscreen fallback
+- Processed Canvas recording and local WebM download where the browser exposes a WebM `MediaRecorder`
+- 960×540 mobile / 1280×720 desktop processing caps and a 30 fps target
+
+Camera frames, local video, filenames, recordings, and effect values are never uploaded or sent to analytics.
+
 ## Privacy and analytics
 
 Creative files are processed locally and never uploaded. Image data, filenames, free input, and personal information are never sent to `dataLayer`. Declining optional analytics never limits the tools.
@@ -79,6 +91,7 @@ node --check assets/js/canvas-utils.js
 node --check assets/js/audio-utils.js
 node --check assets/js/site.js
 node --check tape/tape.js
+node --check visualizer/visualizer.js
 ```
 
 ## GitHub Pages

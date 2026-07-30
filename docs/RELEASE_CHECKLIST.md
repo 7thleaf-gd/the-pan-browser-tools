@@ -33,6 +33,10 @@
 - [ ] Tape Machine rejects empty, unsupported, over-100-MB, and over-10-minute audio with useful errors
 - [ ] Tape Machine warns above 3 minutes, recommends 5 minutes or less on mobile, and recommends 50 MB or less
 - [ ] Tape Machine WAV export, duplicate-export guard, download again, and fixed-text share fallback work
+- [ ] Signal Visualizer camera and local video inputs both render into the processed Canvas
+- [ ] RGB shift, wave, feedback, noise, reset, native/pseudo fullscreen, and WebM recording work where supported
+- [ ] Particle overlay amount, size, speed, drift, glow, opacity, color, and blend controls work with all other effects
+- [ ] Signal Visualizer shows a useful capability message when WebM recording is unavailable
 - [ ] Oversized images are scaled within limits
 - [ ] Unsupported and invalid files show useful errors
 
@@ -46,7 +50,7 @@
 
 ## SEO and pages
 
-- [ ] Image Machine, Tape Machine, Tools, About, and 404 render
+- [ ] Image Machine, Tape Machine, Signal Visualizer, Tools, About, and 404 render
 - [ ] Titles, descriptions, canonicals, Open Graph, Twitter, robots, and JSON-LD are correct
 - [ ] Sitemap contains only real indexable pages
 - [ ] Internal links resolve
@@ -57,6 +61,7 @@
 - [ ] Temporary canvases are reused
 - [ ] Maximum-size images remain usable while presets and Surprise Me are repeated
 - [ ] Long audio remains usable within the 10-minute limit, one AudioContext is reused, and old buffers/nodes are released
+- [ ] Signal Visualizer holds a steady mobile frame rate, reuses temporary canvases, and releases camera/Object URLs
 - [ ] Critical CSS and JavaScript URLs carry the current cache version
 - [ ] No unexpected console errors or external CDN dependencies
 - [ ] `python3 scripts/check-site.py` passes

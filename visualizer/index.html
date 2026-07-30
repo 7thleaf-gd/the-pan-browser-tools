@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080808">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Feed a camera or local video into real-time RGB shift, wave, feedback, and noise. Record the result as WebM without uploading anything.">
+  <link rel="canonical" href="https://tools.thepan.xyz/visualizer/">
+  <meta property="og:title" content="THE PAN SIGNAL VISUALIZER — BREAK THE CAMERA.">
+  <meta property="og:description" content="A private browser video distortion machine. Camera and video processing stay on your device.">
+  <meta property="og:url" content="https://tools.thepan.xyz/visualizer/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <title>THE PAN SIGNAL VISUALIZER — BREAK THE CAMERA.</title>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"THE PAN SIGNAL VISUALIZER","url":"https://tools.thepan.xyz/visualizer/","applicationCategory":"MultimediaApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"7thleaf Records"}}</script>
+  <script>
+    window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+    gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});
+    try{if(localStorage.getItem('thePanAnalyticsConsent')==='granted'){gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}}catch(_){}
+  </script>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5W74796T');</script>
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20260730.1">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20260730.1">
+  <link rel="stylesheet" href="../assets/css/components.css?v=20260730.1">
+  <link rel="stylesheet" href="visualizer.css?v=20260730.1">
+  <script src="../assets/js/analytics.js?v=20260730.1" defer></script>
+  <script src="../assets/js/consent.js?v=20260730.1" defer></script>
+  <script src="../assets/js/canvas-utils.js?v=20260730.1" defer></script>
+  <script src="visualizer.js?v=20260730.1" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#visualizer">Skip to visualizer controls</a>
+  <div class="noise-layer" aria-hidden="true"></div>
+  <header class="masthead visualizer-masthead">
+    <a class="brand" href="../"><span class="brand-kicker">THE PAN BROWSER TOOLS / UNIT 003</span><span class="brand-name">THE PAN<br>SIGNAL VISUALIZER</span></a>
+    <div class="masthead-side">
+      <nav class="site-nav" aria-label="Primary navigation"><a href="../">IMAGE</a><a href="../tape/">TAPE</a><a href="./" aria-current="page">VISUALIZER</a><a href="../tools/">TOOLS</a><a href="../about/">ABOUT</a></nav>
+      <div class="masthead-meta"><span>V0 / 7THLEAF RECORDS</span><span class="signal"><i aria-hidden="true"></i> LOCAL VIDEO</span></div>
+    </div>
+    <div class="masthead-orbit" aria-hidden="true"><span>✦</span><span>◉</span><span>✺</span><span>☄</span></div>
+  </header>
+
+  <main>
+    <section class="visualizer-hero">
+      <div class="hero-copy">
+        <p class="eyebrow">PSYCHEDELIC CAMERA DAMAGE APPARATUS</p>
+        <h1>BREAK THE<br><em>CAMERA.</em></h1>
+        <p class="lede">Distort the signal. Feed back the evidence. Record the transmission.</p>
+      </div>
+      <div class="input-sticker" aria-labelledby="inputTitle">
+        <span class="sticker-star" aria-hidden="true">✷</span>
+        <p class="eyebrow">CHOOSE A SIGNAL</p>
+        <h2 id="inputTitle">CAMERA<br>OR TAPE?</h2>
+        <div class="input-actions">
+          <button id="cameraButton" class="machine-button accent" type="button">START CAMERA<small>FRONT / REAR AUTO</small></button>
+          <label class="machine-button file-button" for="videoInput">LOAD VIDEO<small>LOCAL FILE / LOOPED</small></label>
+          <input id="videoInput" type="file" accept="video/*" hidden>
+        </div>
+        <p>Nothing is uploaded. The camera, video, processed frames, and recording stay on this device.</p>
+      </div>
+    </section>
+
+    <section id="visualizer" class="visualizer-machine" aria-label="Signal visualizer">
+      <div id="monitorShell" class="monitor-shell">
+        <div class="panel-label"><span>LIVE MONITOR / OUTPUT</span><span id="sourceBadge" class="status-badge">○ NO SIGNAL</span></div>
+        <div id="monitor" class="monitor" aria-busy="false">
+          <video id="sourceVideo" class="source-video" playsinline muted loop aria-hidden="true" tabindex="-1"></video>
+          <canvas id="visualizerCanvas" width="960" height="540" aria-label="Processed live video output"></canvas>
+          <div id="emptyState" class="monitor-empty">
+            <span class="empty-ufo" aria-hidden="true">⌁</span>
+            <strong>AWAITING<br>TRANSMISSION</strong>
+            <span>START CAMERA OR LOAD VIDEO</span>
+          </div>
+          <div class="monitor-scanlines" aria-hidden="true"></div>
+          <div id="recordingIndicator" class="recording-indicator" hidden><i aria-hidden="true"></i> REC <span id="recordingTime">00:00</span></div>
+          <button id="fullscreenButton" class="monitor-button" type="button" disabled>FULLSCREEN</button>
+        </div>
+        <p id="visualizerStatus" class="machine-status" role="status" aria-live="polite">LOAD A SIGNAL TO BEGIN.</p>
+        <div id="visualizerError" class="error-message" role="alert" aria-live="assertive" hidden></div>
+      </div>
+
+      <aside class="visualizer-controls" aria-label="Video effect controls">
+        <div class="panel-label"><span>CONTROL BANK / VIDEO FX</span><span class="status-badge is-available">● LIVE</span></div>
+        <div class="control-scroll">
+          <div class="control-intro"><span aria-hidden="true">👁</span><p>TWIST FOUR KNOBS.<br>KEEP THE ACCIDENT.</p></div>
+          <label class="control"><span>RGB SHIFT</span><output for="rgbShift">6</output><input id="rgbShift" type="range" min="0" max="30" value="6"></label>
+          <label class="control"><span>WAVE DISTORTION</span><output for="waveAmount">9</output><input id="waveAmount" type="range" min="0" max="40" value="9"></label>
+          <label class="control"><span>FEEDBACK TRAIL</span><output for="feedbackAmount">66</output><input id="feedbackAmount" type="range" min="0" max="92" value="66"></label>
+          <label class="control"><span>NOISE</span><output for="noiseAmount">14</output><input id="noiseAmount" type="range" min="0" max="100" value="14"></label>
+          <details class="particle-bank" open>
+            <summary><span>PARTICLE OVERLAY</span><span id="particleState">ON</span></summary>
+            <div class="particle-bank-body">
+              <label class="particle-toggle"><input id="particleEnabled" type="checkbox" checked><span>STAR DUST SIGNAL</span><b id="particleToggleText">ENABLED</b></label>
+              <label class="control"><span>DOTS / AMOUNT</span><output for="particleAmount">64</output><input id="particleAmount" type="range" min="0" max="120" value="64"></label>
+              <label class="control"><span>SIZE</span><output for="particleSize">1.5</output><input id="particleSize" type="range" min="0.5" max="5" step="0.5" value="1.5"></label>
+              <label class="control"><span>SPEED</span><output for="particleSpeed">32</output><input id="particleSpeed" type="range" min="0" max="100" value="32"></label>
+              <label class="control"><span>DRIFT</span><output for="particleDrift">54</output><input id="particleDrift" type="range" min="0" max="100" value="54"></label>
+              <label class="control"><span>GLOW</span><output for="particleGlow">45</output><input id="particleGlow" type="range" min="0" max="100" value="45"></label>
+              <label class="control"><span>OPACITY</span><output for="particleOpacity">72</output><input id="particleOpacity" type="range" min="0" max="100" value="72"></label>
+              <label class="select-control" for="particleColor"><span>COLOR PRESET</span><select id="particleColor"><option value="white">WHITE</option><option value="lime" selected>LIME</option><option value="purple">PURPLE</option><option value="pink">PINK</option></select></label>
+              <label class="select-control" for="particleBlend"><span>BLEND MODE</span><select id="particleBlend"><option value="screen" selected>SCREEN</option><option value="lighter">LIGHT</option><option value="source-over">NORMAL</option></select></label>
+            </div>
+          </details>
+          <p class="privacy-note"><span aria-hidden="true">●</span> Frames are drawn into a local Canvas. There is no upload endpoint and no cloud copy.</p>
+        </div>
+        <div class="visualizer-actions">
+          <button id="resetButton" class="machine-button" type="button">RESET FX</button>
+          <button id="recordButton" class="machine-button record-button" type="button" disabled>RECORD WEBM<small>VIDEO ONLY / 30 FPS</small></button>
+          <button id="downloadButton" class="machine-button accent" type="button" hidden>DOWNLOAD AGAIN</button>
+        </div>
+        <p id="recordingSupport" class="recording-support">CHECKING WEBM RECORDER…</p>
+      </aside>
+    </section>
+
+    <section class="signal-notes" aria-label="Visualizer notes">
+      <article><span>01</span><h2>NO LOGIN.</h2><p>Open the page and make a mess.</p></article>
+      <article><span>02</span><h2>NO UPLOAD.</h2><p>Your camera and files stay local.</p></article>
+      <article><span>03</span><h2>EXPORT EVIDENCE.</h2><p>Save the processed canvas as WebM where supported.</p></article>
+    </section>
+  </main>
+
+  <footer><div><strong>THE PAN BROWSER TOOLS</strong><br>FREE CREATIVE MACHINES FROM 7THLEAF RECORDS</div><div class="footer-right"><span>SIGNAL STATUS: RECEIVING…</span><span>© <span data-current-year></span> 7THLEAF RECORDS</span><button id="privacySettings" class="footer-button" type="button">PRIVACY SETTINGS</button></div></footer>
+  <section id="consentPanel" class="consent-panel" role="dialog" aria-modal="true" aria-labelledby="consentTitle" hidden><div class="consent-box"><p class="eyebrow">PRIVACY CONTROL</p><h2 id="consentTitle">ANALYTICS<br>SETTING</h2><p>Optional anonymous analytics help us improve these tools. Video, camera frames, filenames, and personal data are never collected. Everything works if you decline.</p><div class="consent-actions"><button id="acceptAnalytics" class="machine-button accent" type="button">ALLOW ANALYTICS</button><button id="declineAnalytics" class="machine-button" type="button">DECLINE</button></div></div></section>
+</body>
+</html>
