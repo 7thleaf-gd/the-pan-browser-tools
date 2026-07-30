@@ -22,7 +22,8 @@ docs/             design, tool, analytics, and release contracts
 scripts/          dependency-free site validation
 ```
 
-There is no framework, package installation, build command, or external runtime dependency.
+There is no framework or package-install step. `npm run build` performs the
+dependency-free structural and JavaScript checks used by deployment.
 
 ## Image Machine features
 
@@ -55,11 +56,16 @@ Audio, filenames, exact duration, file size, MIME type, and effect values are ne
 ## Signal Visualizer features
 
 - Web camera or browser-supported local video input
-- Real-time Canvas RGB shift, wave distortion, feedback trail, noise, and particle overlay
-- Particle amount, size, speed, drift, glow, opacity, color, and blend controls
+- A true `NO EFFECT` initial state plus nine video-first glitch presets
+- Real-time Canvas RGB shift, pointer-centered wave, feedback, noise, CRT/scanline, glow, and particle overlay
+- Particle amount, size, speed, drift, glow, opacity, depth, color, blend, and pointer attraction controls
+- Lightweight `PARTICLE BODY` 2.5D video sampling with LOW/MID/HIGH/AUTO detail, outline emphasis, adaptive FPS quality, depth, spread, dissolve, rebuild, motion response, source color, and optional luminance-based subject masking
+- Mobile sticky preview with safe-area support, on/off control, and return-to-preview action
 - Native fullscreen with a mobile pseudo-fullscreen fallback
-- Processed Canvas recording and local WebM download where the browser exposes a WebM `MediaRecorder`
-- 960×540 mobile / 1280×720 desktop processing caps and a 30 fps target
+- Direct H.264/AAC MP4 recording when exposed by `MediaRecorder`, with WebM fallback
+- Optional 30-second browser-only WebM-to-MP4 conversion using a lazily loaded single-thread ffmpeg.wasm core
+- Conversion progress, cancellation, memory-failure guidance, and original WebM preservation
+- 1280×720 processing cap and a 30 fps target
 
 Camera frames, local video, filenames, recordings, and effect values are never uploaded or sent to analytics.
 
@@ -83,15 +89,7 @@ python3 -m http.server 8000
 Open `http://localhost:8000/`. Run the same dependency-free checks used by Pages:
 
 ```sh
-python3 scripts/check-site.py
-node --check app.js
-node --check assets/js/analytics.js
-node --check assets/js/consent.js
-node --check assets/js/canvas-utils.js
-node --check assets/js/audio-utils.js
-node --check assets/js/site.js
-node --check tape/tape.js
-node --check visualizer/visualizer.js
+npm run build
 ```
 
 ## GitHub Pages

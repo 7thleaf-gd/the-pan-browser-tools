@@ -34,9 +34,11 @@
 - [ ] Tape Machine warns above 3 minutes, recommends 5 minutes or less on mobile, and recommends 50 MB or less
 - [ ] Tape Machine WAV export, duplicate-export guard, download again, and fixed-text share fallback work
 - [ ] Signal Visualizer camera and local video inputs both render into the processed Canvas
-- [ ] RGB shift, wave, feedback, noise, reset, native/pseudo fullscreen, and WebM recording work where supported
+- [ ] NO EFFECT, all nine presets, RGB, wave, feedback, noise, CRT, tracking, block glitch, glow, particle overlay, and Particle Body work
+- [ ] Pointer/touch tracking and mobile sticky preview ON/OFF work without disturbing fullscreen
+- [ ] Direct MP4 is preferred where supported; WebM fallback, 30-second local MP4 conversion, progress, and cancellation work
 - [ ] Particle overlay amount, size, speed, drift, glow, opacity, color, and blend controls work with all other effects
-- [ ] Signal Visualizer shows a useful capability message when WebM recording is unavailable
+- [ ] Signal Visualizer shows a useful capability message when local recording is unavailable
 - [ ] Oversized images are scaled within limits
 - [ ] Unsupported and invalid files show useful errors
 

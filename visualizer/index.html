@@ -6,38 +6,39 @@
   <meta name="theme-color" content="#080808">
   <link rel="icon" href="../favicon.ico" sizes="any">
   <meta name="robots" content="index, follow">
-  <meta name="description" content="Feed a camera or local video into real-time RGB shift, wave, feedback, and noise. Record the result as WebM without uploading anything.">
+  <meta name="description" content="A private real-time video distortion and particle machine. Record MP4 or WebM and convert locally without uploading anything.">
   <link rel="canonical" href="https://tools.thepan.xyz/visualizer/">
-  <meta property="og:title" content="THE PAN SIGNAL VISUALIZER — BREAK THE CAMERA.">
-  <meta property="og:description" content="A private browser video distortion machine. Camera and video processing stay on your device.">
+  <meta property="og:title" content="THE PAN LIVE VISUALIZER — BREAK THE CAMERA.">
+  <meta property="og:description" content="A private browser video distortion machine. Camera, effects, recording, and conversion stay on your device.">
   <meta property="og:url" content="https://tools.thepan.xyz/visualizer/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary">
-  <title>THE PAN SIGNAL VISUALIZER — BREAK THE CAMERA.</title>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"THE PAN SIGNAL VISUALIZER","url":"https://tools.thepan.xyz/visualizer/","applicationCategory":"MultimediaApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"7thleaf Records"}}</script>
+  <title>THE PAN LIVE VISUALIZER — BREAK THE CAMERA.</title>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"THE PAN LIVE VISUALIZER","url":"https://tools.thepan.xyz/visualizer/","applicationCategory":"MultimediaApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"7thleaf Records"}}</script>
   <script>
     window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
     gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});
     try{if(localStorage.getItem('thePanAnalyticsConsent')==='granted'){gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}}catch(_){}
   </script>
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5W74796T');</script>
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20260730.1">
-  <link rel="stylesheet" href="../assets/css/base.css?v=20260730.1">
-  <link rel="stylesheet" href="../assets/css/components.css?v=20260730.1">
-  <link rel="stylesheet" href="visualizer.css?v=20260730.1">
-  <script src="../assets/js/analytics.js?v=20260730.1" defer></script>
-  <script src="../assets/js/consent.js?v=20260730.1" defer></script>
-  <script src="../assets/js/canvas-utils.js?v=20260730.1" defer></script>
-  <script src="visualizer.js?v=20260730.1" defer></script>
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20260730.6">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20260730.6">
+  <link rel="stylesheet" href="../assets/css/components.css?v=20260730.6">
+  <link rel="stylesheet" href="visualizer.css?v=20260730.6">
+  <script src="../assets/js/analytics.js?v=20260730.6" defer></script>
+  <script src="../assets/js/consent.js?v=20260730.6" defer></script>
+  <script src="../assets/js/canvas-utils.js?v=20260730.6" defer></script>
+  <script src="../assets/vendor/ffmpeg/ffmpeg.js?v=20260730.6" defer></script>
+  <script src="visualizer.js?v=20260730.6" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#visualizer">Skip to visualizer controls</a>
   <div class="noise-layer" aria-hidden="true"></div>
   <header class="masthead visualizer-masthead">
-    <a class="brand" href="../"><span class="brand-kicker">THE PAN BROWSER TOOLS / UNIT 003</span><span class="brand-name">THE PAN<br>SIGNAL VISUALIZER</span></a>
+    <a class="brand" href="../"><span class="brand-kicker">THE PAN BROWSER TOOLS / UNIT 003</span><span class="brand-name">THE PAN<br>LIVE VISUALIZER</span></a>
     <div class="masthead-side">
       <nav class="site-nav" aria-label="Primary navigation"><a href="../">IMAGE</a><a href="../tape/">TAPE</a><a href="./" aria-current="page">VISUALIZER</a><a href="../tools/">TOOLS</a><a href="../about/">ABOUT</a></nav>
-      <div class="masthead-meta"><span>V0 / 7THLEAF RECORDS</span><span class="signal"><i aria-hidden="true"></i> LOCAL VIDEO</span></div>
+      <div class="masthead-meta"><span>V1 / 7THLEAF RECORDS</span><span class="signal"><i aria-hidden="true"></i> LOCAL PROCESSING</span></div>
     </div>
     <div class="masthead-orbit" aria-hidden="true"><span>✦</span><span>◉</span><span>✺</span><span>☄</span></div>
   </header>
@@ -54,17 +55,20 @@
         <p class="eyebrow">CHOOSE A SIGNAL</p>
         <h2 id="inputTitle">CAMERA<br>OR TAPE?</h2>
         <div class="input-actions">
-          <button id="cameraButton" class="machine-button accent" type="button">START CAMERA<small>FRONT / REAR AUTO</small></button>
+          <button id="cameraButton" class="machine-button accent" type="button">START CAMERA<small>720P / 30 FPS</small></button>
           <label class="machine-button file-button" for="videoInput">LOAD VIDEO<small>LOCAL FILE / LOOPED</small></label>
           <input id="videoInput" type="file" accept="video/*" hidden>
         </div>
-        <p>Nothing is uploaded. The camera, video, processed frames, and recording stay on this device.</p>
+        <p>Nothing is uploaded. Camera, video, processed frames, recordings, and MP4 conversion stay on this device.</p>
       </div>
     </section>
 
     <section id="visualizer" class="visualizer-machine" aria-label="Signal visualizer">
-      <div id="monitorShell" class="monitor-shell">
-        <div class="panel-label"><span>LIVE MONITOR / OUTPUT</span><span id="sourceBadge" class="status-badge">○ NO SIGNAL</span></div>
+      <div id="monitorShell" class="monitor-shell is-sticky-enabled">
+        <div class="panel-label">
+          <span>LIVE MONITOR / OUTPUT</span>
+          <span id="sourceBadge" class="status-badge">○ NO SIGNAL</span>
+        </div>
         <div id="monitor" class="monitor" aria-busy="false">
           <video id="sourceVideo" class="source-video" playsinline muted loop aria-hidden="true" tabindex="-1"></video>
           <canvas id="visualizerCanvas" width="960" height="540" aria-label="Processed live video output"></canvas>
@@ -73,51 +77,122 @@
             <strong>AWAITING<br>TRANSMISSION</strong>
             <span>START CAMERA OR LOAD VIDEO</span>
           </div>
-          <div class="monitor-scanlines" aria-hidden="true"></div>
+          <div id="pointerReticle" class="pointer-reticle" aria-hidden="true"></div>
           <div id="recordingIndicator" class="recording-indicator" hidden><i aria-hidden="true"></i> REC <span id="recordingTime">00:00</span></div>
           <button id="fullscreenButton" class="monitor-button" type="button" disabled>FULLSCREEN</button>
         </div>
-        <p id="visualizerStatus" class="machine-status" role="status" aria-live="polite">LOAD A SIGNAL TO BEGIN.</p>
+        <div class="preview-tools">
+          <button id="stickyToggle" type="button" aria-pressed="true">STICKY: ON</button>
+          <button id="returnPreviewButton" type="button">↑ PREVIEW TO TOP</button>
+          <span id="activePreset">NO EFFECT</span>
+        </div>
+        <p id="visualizerStatus" class="machine-status" role="status" aria-live="polite">NO EFFECT / LOAD A SIGNAL TO BEGIN.</p>
         <div id="visualizerError" class="error-message" role="alert" aria-live="assertive" hidden></div>
       </div>
 
       <aside class="visualizer-controls" aria-label="Video effect controls">
         <div class="panel-label"><span>CONTROL BANK / VIDEO FX</span><span class="status-badge is-available">● LIVE</span></div>
         <div class="control-scroll">
-          <div class="control-intro"><span aria-hidden="true">👁</span><p>TWIST FOUR KNOBS.<br>KEEP THE ACCIDENT.</p></div>
-          <label class="control"><span>RGB SHIFT</span><output for="rgbShift">6</output><input id="rgbShift" type="range" min="0" max="30" value="6"></label>
-          <label class="control"><span>WAVE DISTORTION</span><output for="waveAmount">9</output><input id="waveAmount" type="range" min="0" max="40" value="9"></label>
-          <label class="control"><span>FEEDBACK TRAIL</span><output for="feedbackAmount">66</output><input id="feedbackAmount" type="range" min="0" max="92" value="66"></label>
-          <label class="control"><span>NOISE</span><output for="noiseAmount">14</output><input id="noiseAmount" type="range" min="0" max="100" value="14"></label>
-          <details class="particle-bank" open>
-            <summary><span>PARTICLE OVERLAY</span><span id="particleState">ON</span></summary>
+          <div class="control-intro"><span aria-hidden="true">👁</span><p>CHOOSE A TRANSMISSION.<br>THEN BREAK THE SIGNAL.</p></div>
+
+          <section class="preset-bank" aria-labelledby="presetTitle">
+            <div class="bank-heading"><h2 id="presetTitle">PRESET TRANSMISSIONS</h2><span>ONE TAP / FULL SIGNAL</span></div>
+            <div id="presetButtons" class="preset-grid">
+              <button type="button" data-preset="clean" class="is-active">CLEAN</button>
+              <button type="button" data-preset="badTracking">BAD TRACKING</button>
+              <button type="button" data-preset="vhsNight">VHS NIGHT</button>
+              <button type="button" data-preset="datamoshGhost">DATAMOSH GHOST</button>
+              <button type="button" data-preset="brokenCrt">BROKEN CRT</button>
+              <button type="button" data-preset="chromaBleed">CHROMA BLEED</button>
+              <button type="button" data-preset="tapeDropout">TAPE DROPOUT</button>
+              <button type="button" data-preset="deadChannel">DEAD CHANNEL</button>
+              <button type="button" data-preset="bodyTransmission">BODY TRANSMISSION</button>
+            </div>
+          </section>
+
+          <section class="effect-bank" aria-labelledby="effectTitle">
+            <div class="bank-heading"><h2 id="effectTitle">SIGNAL DAMAGE</h2><span>POINTER / TOUCH FOLLOWS</span></div>
+            <label class="control"><span>RGB SHIFT</span><output for="rgbShift">0</output><input id="rgbShift" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>WAVE DISTORTION</span><output for="waveAmount">0</output><input id="waveAmount" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>FEEDBACK TRAIL</span><output for="feedbackAmount">0</output><input id="feedbackAmount" type="range" min="0" max="94" value="0"></label>
+            <label class="control"><span>NOISE</span><output for="noiseAmount">0</output><input id="noiseAmount" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>CRT / SCANLINE</span><output for="scanlineAmount">0</output><input id="scanlineAmount" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>POINTER GLOW</span><output for="glowAmount">0</output><input id="glowAmount" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>TAPE TRACKING</span><output for="trackingAmount">0</output><input id="trackingAmount" type="range" min="0" max="100" value="0"></label>
+            <label class="control"><span>BLOCK GLITCH</span><output for="blockGlitch">0</output><input id="blockGlitch" type="range" min="0" max="100" value="0"></label>
+          </section>
+
+          <details class="particle-bank">
+            <summary><span>SIGNAL PARTICLES / OPTIONAL</span><span id="particleState">OFF</span></summary>
             <div class="particle-bank-body">
-              <label class="particle-toggle"><input id="particleEnabled" type="checkbox" checked><span>STAR DUST SIGNAL</span><b id="particleToggleText">ENABLED</b></label>
-              <label class="control"><span>DOTS / AMOUNT</span><output for="particleAmount">64</output><input id="particleAmount" type="range" min="0" max="120" value="64"></label>
-              <label class="control"><span>SIZE</span><output for="particleSize">1.5</output><input id="particleSize" type="range" min="0.5" max="5" step="0.5" value="1.5"></label>
-              <label class="control"><span>SPEED</span><output for="particleSpeed">32</output><input id="particleSpeed" type="range" min="0" max="100" value="32"></label>
-              <label class="control"><span>DRIFT</span><output for="particleDrift">54</output><input id="particleDrift" type="range" min="0" max="100" value="54"></label>
-              <label class="control"><span>GLOW</span><output for="particleGlow">45</output><input id="particleGlow" type="range" min="0" max="100" value="45"></label>
-              <label class="control"><span>OPACITY</span><output for="particleOpacity">72</output><input id="particleOpacity" type="range" min="0" max="100" value="72"></label>
-              <label class="select-control" for="particleColor"><span>COLOR PRESET</span><select id="particleColor"><option value="white">WHITE</option><option value="lime" selected>LIME</option><option value="purple">PURPLE</option><option value="pink">PINK</option></select></label>
-              <label class="select-control" for="particleBlend"><span>BLEND MODE</span><select id="particleBlend"><option value="screen" selected>SCREEN</option><option value="lighter">LIGHT</option><option value="source-over">NORMAL</option></select></label>
+              <label class="particle-toggle"><input id="particleEnabled" type="checkbox"><span>NOISE PARTICLES</span><b id="particleToggleText">DISABLED</b></label>
+              <label class="control"><span>DOTS / AMOUNT</span><output for="particleAmount">0</output><input id="particleAmount" type="range" min="0" max="140" value="0"></label>
+              <label class="control"><span>SIZE</span><output for="particleSize">0</output><input id="particleSize" type="range" min="0" max="6" step="0.5" value="0"></label>
+              <label class="control"><span>SPEED</span><output for="particleSpeed">0</output><input id="particleSpeed" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>DRIFT</span><output for="particleDrift">0</output><input id="particleDrift" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>GLOW</span><output for="particleGlow">0</output><input id="particleGlow" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>OPACITY</span><output for="particleOpacity">0</output><input id="particleOpacity" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>DEPTH</span><output for="particleDepth">0</output><input id="particleDepth" type="range" min="0" max="100" value="0"></label>
+              <label class="select-control" for="particleColor"><span>COLOR PRESET</span><select id="particleColor"><option value="white" selected>WHITE</option><option value="lime">LIME</option><option value="purple">PURPLE</option><option value="pink">PINK</option><option value="source">SOURCE VIDEO</option></select></label>
+              <label class="select-control" for="particleBlend"><span>BLEND MODE</span><select id="particleBlend"><option value="screen" selected>SCREEN</option><option value="lighter">LIGHT</option><option value="source-over">NORMAL</option><option value="difference">DIFFERENCE</option></select></label>
             </div>
           </details>
-          <p class="privacy-note"><span aria-hidden="true">●</span> Frames are drawn into a local Canvas. There is no upload endpoint and no cloud copy.</p>
+
+          <details class="particle-bank body-bank" open>
+            <summary><span>PARTICLE BODY / 2.5D</span><span id="particleBodyState">OFF</span></summary>
+            <div class="particle-bank-body">
+              <label class="particle-toggle"><input id="particleBodyEnabled" type="checkbox"><span>BODY SIGNAL</span><b id="particleBodyToggleText">DISABLED</b></label>
+              <label class="control"><span>AMOUNT</span><output for="bodyAmount">0</output><input id="bodyAmount" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>SIZE</span><output for="bodySize">0</output><input id="bodySize" type="range" min="0" max="8" step="0.5" value="0"></label>
+              <label class="control"><span>DEPTH</span><output for="bodyDepth">0</output><input id="bodyDepth" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>SPREAD</span><output for="bodySpread">0</output><input id="bodySpread" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>DISSOLVE</span><output for="bodyDissolve">0</output><input id="bodyDissolve" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>ATTRACT</span><output for="bodyAttract">0</output><input id="bodyAttract" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>REBUILD SPEED</span><output for="bodyRebuild">0</output><input id="bodyRebuild" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>MOTION REACTION</span><output for="bodyMotion">0</output><input id="bodyMotion" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>EDGE DETAIL</span><output for="bodyEdge">0</output><input id="bodyEdge" type="range" min="0" max="100" value="0"></label>
+              <label class="select-control" for="bodyDetail"><span>DETAIL</span><select id="bodyDetail"><option value="auto" selected>AUTO / FPS</option><option value="low">LOW</option><option value="mid">MID</option><option value="high">HIGH</option></select></label>
+              <label class="select-control" for="bodyColor"><span>COLOR SOURCE</span><select id="bodyColor"><option value="source" selected>SOURCE VIDEO</option><option value="white">WHITE</option><option value="lime">LIME</option><option value="purple">PURPLE</option><option value="pink">PINK</option></select></label>
+              <label class="particle-toggle"><input id="bodySubjectOnly" type="checkbox"><span>SUBJECT ONLY</span><b>LIGHTWEIGHT MASK</b></label>
+              <p id="bodyPerformance" class="performance-note">AUTO DETAIL / MID / MEASURING FPS…</p>
+              <p class="micro-note">HIGH draws up to roughly 5,000 source-colored particles. AUTO reduces detail if the live frame rate drops. SUBJECT ONLY estimates the foreground locally—no AI model or upload.</p>
+            </div>
+          </details>
+
+          <p class="privacy-note"><span aria-hidden="true">●</span> Frames are drawn into local Canvas. There is no upload endpoint and no cloud copy.</p>
         </div>
         <div class="visualizer-actions">
-          <button id="resetButton" class="machine-button" type="button">RESET FX</button>
-          <button id="recordButton" class="machine-button record-button" type="button" disabled>RECORD WEBM<small>VIDEO ONLY / 30 FPS</small></button>
-          <button id="downloadButton" class="machine-button accent" type="button" hidden>DOWNLOAD AGAIN</button>
+          <button id="resetButton" class="machine-button" type="button">NO EFFECT</button>
+          <button id="recordButton" class="machine-button record-button" type="button" disabled>RECORD<small>MP4 FIRST / WEBM FALLBACK</small></button>
         </div>
-        <p id="recordingSupport" class="recording-support">CHECKING WEBM RECORDER…</p>
+        <p id="recordingSupport" class="recording-support">CHECKING LOCAL RECORDER…</p>
       </aside>
+    </section>
+
+    <section id="exportPanel" class="export-panel" role="dialog" aria-modal="true" aria-labelledby="exportTitle" hidden>
+      <div class="export-box">
+        <button id="closeExportButton" class="export-close" type="button" aria-label="Close export panel">×</button>
+        <p class="eyebrow">LOCAL RECORDING COMPLETE</p>
+        <h2 id="exportTitle">EXPORT<br>THE EVIDENCE.</h2>
+        <p id="recordingSummary" class="recording-summary"></p>
+        <div class="export-actions">
+          <button id="saveWebmButton" class="machine-button" type="button">WEBM保存<small>ORIGINAL RECORDING</small></button>
+          <button id="saveMp4Button" class="machine-button accent" type="button">MP4変換して保存<small>H.264 VIDEO / AAC AUDIO</small></button>
+        </div>
+        <div id="conversionPanel" class="conversion-panel" hidden>
+          <div class="conversion-heading"><span id="conversionLabel">PREPARING LOCAL CONVERTER…</span><strong id="conversionPercent">0%</strong></div>
+          <progress id="conversionProgress" max="100" value="0">0%</progress>
+          <button id="cancelConversionButton" class="cancel-button" type="button">CANCEL CONVERSION</button>
+        </div>
+        <p id="conversionWarning" class="conversion-warning" role="status" aria-live="polite">MP4 conversion is limited to recordings of 30 seconds or less. If memory runs low, save the original WebM.</p>
+        <p class="micro-note">Direct MP4 is used first when this browser supports H.264/AAC recording. Otherwise ffmpeg.wasm loads only after you press MP4 conversion. No media is sent to a server.</p>
+      </div>
     </section>
 
     <section class="signal-notes" aria-label="Visualizer notes">
       <article><span>01</span><h2>NO LOGIN.</h2><p>Open the page and make a mess.</p></article>
-      <article><span>02</span><h2>NO UPLOAD.</h2><p>Your camera and files stay local.</p></article>
-      <article><span>03</span><h2>EXPORT EVIDENCE.</h2><p>Save the processed canvas as WebM where supported.</p></article>
+      <article><span>02</span><h2>NO UPLOAD.</h2><p>Effects, recordings, and conversion stay local.</p></article>
+      <article><span>03</span><h2>EXPORT EVIDENCE.</h2><p>Direct MP4 where supported. WebM plus optional local conversion elsewhere.</p></article>
     </section>
   </main>
 

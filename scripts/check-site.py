@@ -12,11 +12,14 @@ BASE_URL = "https://tools.thepan.xyz/"
 GTM_ID = "GTM-5W74796T"
 ASSET_VERSION = "20260727.2"
 TAPE_ASSET_VERSION = "20260728.3"
-VISUALIZER_ASSET_VERSION = "20260730.1"
+VISUALIZER_ASSET_VERSION = "20260730.6"
 REQUIRED = [
     "index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",
     "about/index.html", "tools/index.html", "tape/index.html", "tape/tape.css", "tape/tape.js",
     "visualizer/index.html", "visualizer/visualizer.css", "visualizer/visualizer.js",
+    "assets/vendor/ffmpeg/ffmpeg.js", "assets/vendor/ffmpeg/814.ffmpeg.js",
+    "assets/vendor/ffmpeg/ffmpeg-core.js", "assets/vendor/ffmpeg/ffmpeg-core.wasm",
+    "assets/vendor/ffmpeg/README.md", "package.json",
     "favicon.ico", "assets/images/imagemachine_ogp.png", "assets/images/tape_ogp.png",
     "assets/css/tokens.css", "assets/css/base.css", "assets/css/components.css",
     "assets/js/analytics.js", "assets/js/consent.js", "assets/js/canvas-utils.js", "assets/js/audio-utils.js",
@@ -141,7 +144,8 @@ def main():
                 "../assets/css/tokens.css", "../assets/css/base.css",
                 "../assets/css/components.css", "visualizer.css",
                 "../assets/js/analytics.js", "../assets/js/consent.js",
-                "../assets/js/canvas-utils.js", "visualizer.js",
+                "../assets/js/canvas-utils.js", "../assets/vendor/ffmpeg/ffmpeg.js",
+                "visualizer.js",
             ]
             for asset in visualizer_assets:
                 if f"{asset}?v={VISUALIZER_ASSET_VERSION}" not in parser.links:
@@ -151,6 +155,15 @@ def main():
                     )
             if 'id="sourceVideo"' not in text or 'id="visualizerCanvas"' not in text:
                 errors.append("visualizer/index.html: missing local video processing elements")
+            for required_id in [
+                'id="presetButtons"', 'id="particleBodyEnabled"',
+                'id="bodyDetail"', 'id="bodyEdge"',
+                'id="trackingAmount"', 'id="blockGlitch"',
+                'id="stickyToggle"', 'id="saveWebmButton"',
+                'id="saveMp4Button"', 'id="cancelConversionButton"',
+            ]:
+                if required_id not in text:
+                    errors.append(f"visualizer/index.html: missing v1 control {required_id}")
 
         expected_social_image = SOCIAL_IMAGES.get(relative)
         if expected_social_image:
