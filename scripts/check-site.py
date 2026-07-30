@@ -12,7 +12,7 @@ BASE_URL = "https://tools.thepan.xyz/"
 GTM_ID = "GTM-5W74796T"
 ASSET_VERSION = "20260727.2"
 TAPE_ASSET_VERSION = "20260728.3"
-VISUALIZER_ASSET_VERSION = "20260730.6"
+VISUALIZER_ASSET_VERSION = "20260730.7"
 REQUIRED = [
     "index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",
     "about/index.html", "tools/index.html", "tape/index.html", "tape/tape.css", "tape/tape.js",
@@ -161,6 +161,8 @@ def main():
                 'id="trackingAmount"', 'id="blockGlitch"',
                 'id="stickyToggle"', 'id="saveWebmButton"',
                 'id="saveMp4Button"', 'id="cancelConversionButton"',
+                'id="videoTransport"', 'id="videoSeek"',
+                'id="videoPlayPause"',
             ]:
                 if required_id not in text:
                     errors.append(f"visualizer/index.html: missing v1 control {required_id}")

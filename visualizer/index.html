@@ -21,15 +21,15 @@
     try{if(localStorage.getItem('thePanAnalyticsConsent')==='granted'){gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}}catch(_){}
   </script>
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5W74796T');</script>
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=20260730.6">
-  <link rel="stylesheet" href="../assets/css/base.css?v=20260730.6">
-  <link rel="stylesheet" href="../assets/css/components.css?v=20260730.6">
-  <link rel="stylesheet" href="visualizer.css?v=20260730.6">
-  <script src="../assets/js/analytics.js?v=20260730.6" defer></script>
-  <script src="../assets/js/consent.js?v=20260730.6" defer></script>
-  <script src="../assets/js/canvas-utils.js?v=20260730.6" defer></script>
-  <script src="../assets/vendor/ffmpeg/ffmpeg.js?v=20260730.6" defer></script>
-  <script src="visualizer.js?v=20260730.6" defer></script>
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20260730.7">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20260730.7">
+  <link rel="stylesheet" href="../assets/css/components.css?v=20260730.7">
+  <link rel="stylesheet" href="visualizer.css?v=20260730.7">
+  <script src="../assets/js/analytics.js?v=20260730.7" defer></script>
+  <script src="../assets/js/consent.js?v=20260730.7" defer></script>
+  <script src="../assets/js/canvas-utils.js?v=20260730.7" defer></script>
+  <script src="../assets/vendor/ffmpeg/ffmpeg.js?v=20260730.7" defer></script>
+  <script src="visualizer.js?v=20260730.7" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#visualizer">Skip to visualizer controls</a>
@@ -80,6 +80,14 @@
           <div id="pointerReticle" class="pointer-reticle" aria-hidden="true"></div>
           <div id="recordingIndicator" class="recording-indicator" hidden><i aria-hidden="true"></i> REC <span id="recordingTime">00:00</span></div>
           <button id="fullscreenButton" class="monitor-button" type="button" disabled>FULLSCREEN</button>
+        </div>
+        <div id="videoTransport" class="video-transport" hidden>
+          <button id="videoPlayPause" type="button" aria-label="Pause local video">PAUSE</button>
+          <label class="video-seek-label" for="videoSeek">
+            <span>SCRUB TAPE</span>
+            <input id="videoSeek" type="range" min="0" max="1" step="0.01" value="0" aria-label="Local video playback position">
+          </label>
+          <span class="video-time"><output id="videoCurrentTime" for="videoSeek">00:00</output><i>/</i><span id="videoDuration">00:00</span></span>
         </div>
         <div class="preview-tools">
           <button id="stickyToggle" type="button" aria-pressed="true">STICKY: ON</button>

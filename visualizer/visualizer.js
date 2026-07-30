@@ -11,7 +11,7 @@
   const maxPixels = 1280 * 720;
   const targetFrameTime = 1000 / 30;
   const conversionLimitSeconds = 30;
-  const assetVersion = '20260730.6';
+  const assetVersion = '20260730.7';
 
   const defaults = Object.freeze({
     rgbShift: 0,
@@ -103,6 +103,11 @@
     status: document.querySelector('#visualizerStatus'),
     error: document.querySelector('#visualizerError'),
     fullscreen: document.querySelector('#fullscreenButton'),
+    videoTransport: document.querySelector('#videoTransport'),
+    videoPlayPause: document.querySelector('#videoPlayPause'),
+    videoSeek: document.querySelector('#videoSeek'),
+    videoCurrentTime: document.querySelector('#videoCurrentTime'),
+    videoDuration: document.querySelector('#videoDuration'),
     sticky: document.querySelector('#stickyToggle'),
     returnPreview: document.querySelector('#returnPreviewButton'),
     pointerReticle: document.querySelector('#pointerReticle'),
@@ -157,6 +162,7 @@
   const state = {
     sourceReady: false,
     sourceKind: '',
+    scrubbingVideo: false,
     stream: null,
     objectUrl: '',
     animationFrame: 0,
@@ -329,8 +335,76 @@
     el.video.load();
     state.sourceReady = false;
     state.sourceKind = '';
+    state.scrubbingVideo = false;
     state.hasHistory = false;
     state.previousBodyLuma = null;
+    updateVideoTransport(true);
+  }
+
+  function formatMediaTime(seconds) {
+    const safeSeconds = Number.isFinite(seconds) && seconds > 0 ? Math.floor(seconds) : 0;
+    const hours = Math.floor(safeSeconds / 3600);
+    const minutes = Math.floor((safeSeconds % 3600) / 60);
+    const remainder = safeSeconds % 60;
+    if (hours > 0) {
+      return `${hours}:${String(minutes).padStart(2, '0')}:${String(remainder).padStart(2, '0')}`;
+    }
+    return `${String(minutes).padStart(2, '0')}:${String(remainder).padStart(2, '0')}`;
+  }
+
+  function updateVideoTransport(reset = false) {
+    const isLocalVideo = state.sourceKind === 'video' && state.sourceReady;
+    el.videoTransport.hidden = !isLocalVideo;
+    if (!isLocalVideo || reset) {
+      el.videoSeek.value = '0';
+      el.videoSeek.max = '1';
+      el.videoSeek.disabled = true;
+      el.videoSeek.style.setProperty('--seek-fill', '0%');
+      el.videoCurrentTime.value = '00:00';
+      el.videoDuration.textContent = '00:00';
+      el.videoPlayPause.textContent = 'PAUSE';
+      el.videoPlayPause.setAttribute('aria-label', 'Pause local video');
+      return;
+    }
+
+    const duration = el.video.duration;
+    const hasDuration = Number.isFinite(duration) && duration > 0;
+    const currentTime = hasDuration ? Math.min(el.video.currentTime || 0, duration) : 0;
+    el.videoSeek.disabled = !hasDuration;
+    el.videoSeek.max = hasDuration ? String(duration) : '1';
+    if (!state.scrubbingVideo) el.videoSeek.value = String(currentTime);
+    const seekValue = Number(el.videoSeek.value) || 0;
+    const fill = hasDuration ? Math.min(100, Math.max(0, seekValue / duration * 100)) : 0;
+    el.videoSeek.style.setProperty('--seek-fill', `${fill}%`);
+    el.videoCurrentTime.value = formatMediaTime(seekValue);
+    el.videoDuration.textContent = formatMediaTime(duration);
+    const isPaused = el.video.paused;
+    el.videoPlayPause.textContent = isPaused ? 'PLAY' : 'PAUSE';
+    el.videoPlayPause.setAttribute('aria-label', `${isPaused ? 'Play' : 'Pause'} local video`);
+  }
+
+  function seekLocalVideo() {
+    if (state.sourceKind !== 'video' || !Number.isFinite(el.video.duration)) return;
+    const target = Math.min(el.video.duration, Math.max(0, Number(el.videoSeek.value) || 0));
+    el.video.currentTime = target;
+    state.hasHistory = false;
+    state.previousBodyLuma = null;
+    updateVideoTransport();
+  }
+
+  async function toggleLocalVideoPlayback() {
+    if (state.sourceKind !== 'video') return;
+    clearError();
+    if (el.video.paused) {
+      try {
+        await el.video.play();
+      } catch (_) {
+        showError('This video could not resume. Tap the video control again.', 'video_resume_failed');
+      }
+    } else {
+      el.video.pause();
+    }
+    updateVideoTransport();
   }
 
   function dimensionsFor(width, height) {
@@ -369,6 +443,7 @@
     el.sourceBadge.classList.add('is-available');
     el.fullscreen.disabled = false;
     el.record.disabled = !state.recorderProfile;
+    updateVideoTransport();
     setStatus(allEffectsOff()
       ? 'NO EFFECT / ORIGINAL SIGNAL.'
       : `${el.activePreset.textContent} / SIGNAL LOCKED.`);
@@ -1434,6 +1509,17 @@
   }
   el.camera.addEventListener('click', startCamera);
   el.input.addEventListener('change', () => loadVideo(el.input.files[0]));
+  el.videoPlayPause.addEventListener('click', toggleLocalVideoPlayback);
+  el.videoSeek.addEventListener('pointerdown', () => { state.scrubbingVideo = true; });
+  el.videoSeek.addEventListener('touchstart', () => { state.scrubbingVideo = true; }, { passive: true });
+  el.videoSeek.addEventListener('input', seekLocalVideo);
+  el.videoSeek.addEventListener('change', () => {
+    state.scrubbingVideo = false;
+    seekLocalVideo();
+  });
+  for (const eventName of ['loadedmetadata', 'durationchange', 'timeupdate', 'seeked', 'play', 'pause', 'ended']) {
+    el.video.addEventListener(eventName, () => updateVideoTransport());
+  }
   el.reset.addEventListener('click', noEffect);
   el.record.addEventListener('click', toggleRecording);
   el.fullscreen.addEventListener('click', toggleFullscreen);
