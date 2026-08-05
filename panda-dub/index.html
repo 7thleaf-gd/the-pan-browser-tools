@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050505">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Touch the panda, UFO, drum and radio to build a phase-locked space dub. PANDA DUB runs entirely in your browser.">
+  <link rel="canonical" href="https://tools.thepan.xyz/panda-dub/">
+  <meta property="og:title" content="PANDA DUB — THE PAN Browser Tools">
+  <meta property="og:description" content="A touchable, quantized space-dub playground. Four loops, echo throws, filter and cosmic one-shots.">
+  <meta property="og:url" content="https://tools.thepan.xyz/panda-dub/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <title>PANDA DUB — THE PAN Browser Tools</title>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"PANDA DUB","url":"https://tools.thepan.xyz/panda-dub/","applicationCategory":"MusicApplication","operatingSystem":"Any","isAccessibleForFree":true,"browserRequirements":"Requires Web Audio API","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"7thleaf Records"}}</script>
+  <script>
+    window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+    gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});
+    try{if(localStorage.getItem('thePanAnalyticsConsent')==='granted'){gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}}catch(_){}
+  </script>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5W74796T');</script>
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20260805.1">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20260805.1">
+  <link rel="stylesheet" href="../assets/css/components.css?v=20260805.1">
+  <link rel="stylesheet" href="panda-dub.css?v=20260805.1">
+  <script src="../assets/js/analytics.js?v=20260805.1" defer></script>
+  <script src="../assets/js/consent.js?v=20260805.1" defer></script>
+  <script src="panda-dub.js?v=20260805.1" defer></script>
+</head>
+<body class="panda-dub-page">
+  <a class="skip-link" href="#dubPlayground">Skip to PANDA DUB</a>
+  <div class="noise-layer" aria-hidden="true"></div>
+
+  <header class="dub-masthead">
+    <a class="dub-brand" href="../tools/">
+      <span>THE PAN BROWSER TOOLS / UNIT 004</span>
+      <strong>PANDA DUB</strong>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation"><a href="../">IMAGE</a><a href="../tape/">TAPE</a><a href="../visualizer/">VISUALIZER</a><a href="./" aria-current="page">DUB</a><a href="../tools/">TOOLS</a></nav>
+  </header>
+
+  <main id="dubPlayground" class="dub-shell">
+    <section class="dub-intro" aria-labelledby="dubTitle">
+      <div>
+        <p class="cutout-label">TOUCHABLE SPACE DUB / 74 BPM</p>
+        <h1 id="dubTitle"><span>PANDA</span><span>DUB!</span></h1>
+      </div>
+      <p>TOUCH THE CREATURES.<br>DROP THE SIGNAL.<br>LET THE ECHO ESCAPE.</p>
+    </section>
+
+    <section id="dubScene" class="dub-scene" aria-label="Interactive cosmic dub scene">
+      <div class="star-field" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div id="filterShade" class="filter-shade" aria-hidden="true"></div>
+      <div class="planet planet-left" aria-hidden="true"></div>
+      <div class="liquid-horizon" aria-hidden="true"></div>
+
+      <button class="sound-object object-ufo" type="button" data-track="chord" aria-pressed="false" aria-label="Toggle chord loop on the next beat">
+        <span class="object-state" data-state-for="chord">CHORD / OFF</span>
+        <svg viewBox="0 0 240 135" role="img" aria-label="A hand-drawn turquoise UFO">
+          <path class="ufo-beam" d="M78 82 45 133h151l-32-51z"/>
+          <path class="ink purple" d="M76 59c6-36 80-42 91 0 36 9 57 21 57 30 0 17-47 31-105 31S14 106 14 89c0-10 25-22 62-30Z"/>
+          <path class="ink turquoise" d="M73 68c21 11 73 12 98 0 31 6 49 14 49 22 0 13-45 24-101 24S18 103 18 90c0-8 22-16 55-22Z"/>
+          <path class="ink offwhite" d="M84 60c5-27 64-30 74 0-19 8-54 8-74 0Z"/>
+          <circle cx="60" cy="88" r="7"/><circle cx="91" cy="98" r="7"/><circle cx="126" cy="100" r="7"/><circle cx="160" cy="96" r="7"/><circle cx="191" cy="86" r="7"/>
+        </svg>
+        <span class="object-action">TAP UFO</span>
+      </button>
+
+      <button class="sound-object object-drum" type="button" data-track="drums" aria-pressed="true" aria-label="Toggle drum loop on the next beat">
+        <span class="object-state" data-state-for="drums">DRUMS / ON</span>
+        <svg viewBox="0 0 180 190" role="img" aria-label="A hand-drawn pink sound-system drum">
+          <path class="ink pink" d="M25 40Q90 15 155 42v112Q89 177 25 151Z"/>
+          <ellipse class="ink lime" cx="90" cy="40" rx="65" ry="25"/>
+          <ellipse class="ink offwhite" cx="90" cy="40" rx="45" ry="15"/>
+          <path class="scribble" d="M38 70c30 18 76 18 104 0M38 93c30 18 76 18 104 0M38 116c30 18 76 18 104 0M38 139c30 18 76 18 104 0"/>
+          <path class="ink black-fill" d="m70 62 45 23-45 24z"/>
+        </svg>
+        <span class="object-action">HIT DRUM</span>
+      </button>
+
+      <button class="sound-object object-panda" type="button" data-track="bass" aria-pressed="true" aria-label="Toggle bass loop on the next beat">
+        <span class="object-state" data-state-for="bass">BASS / ON</span>
+        <svg viewBox="0 0 250 300" role="img" aria-label="An original cosmic panda bass selector">
+          <circle class="ink purple" cx="72" cy="67" r="40"/><circle class="ink purple" cx="181" cy="66" r="41"/>
+          <path class="ink offwhite" d="M54 74C65 16 187 12 201 76c18 78-13 132-74 132S35 152 54 74Z"/>
+          <path class="ink black-fill eye-patch" d="M72 75c23-18 49 9 34 35-15 26-55 7-48-14 2-8 7-15 14-21Z"/>
+          <path class="ink black-fill eye-patch" d="M181 75c-23-18-49 9-34 35 15 26 55 7 48-14-2-8-7-15-14-21Z"/>
+          <circle class="eye" cx="88" cy="93" r="8"/><circle class="eye" cx="166" cy="93" r="8"/>
+          <path class="ink pink" d="M115 113q12-11 24 0-2 18-12 18t-12-18Z"/>
+          <path class="mouth" d="M127 132c-2 16-19 24-32 15m32-15c2 16 19 24 32 15"/>
+          <path class="ink offwhite panda-body" d="M51 190c23-28 126-30 151 0l25 86H25Z"/>
+          <path class="ink black-fill" d="M27 253c5-36 33-56 58-42 20 12 13 51-11 65H25Zm199 0c-5-36-33-56-58-42-20 12-13 51 11 65h49Z"/>
+          <path class="bass-lines" d="M89 195q38 22 76 0M81 218q46 25 92 0M78 242q49 25 98 0"/>
+        </svg>
+        <span class="object-action">BOOP PANDA</span>
+      </button>
+
+      <button class="sound-object object-radio" type="button" data-track="voice" aria-pressed="false" aria-label="Toggle voice and effects loop on the next beat">
+        <span class="object-state" data-state-for="voice">VOICE / OFF</span>
+        <svg viewBox="0 0 210 170" role="img" aria-label="A strange lime cosmic radio">
+          <path class="antenna-line" d="m144 31 32-29m-12 40 42-12"/>
+          <path class="ink lime" d="M15 46 183 33l15 119L28 165Z"/>
+          <path class="ink offwhite" d="m35 62 93-8 7 72-92 8Z"/>
+          <path class="radio-wave" d="M52 105q34-62 68-5M60 111q27-44 54-4M70 115q17-25 35-3"/>
+          <circle class="ink pink" cx="161" cy="69" r="18"/><circle class="ink turquoise" cx="164" cy="117" r="20"/>
+        </svg>
+        <span class="object-action">TUNE RADIO</span>
+      </button>
+
+      <div class="filter-orbit">
+        <label for="filterControl"><span>MOON FILTER</span><output id="filterValue" for="filterControl">OPEN</output></label>
+        <input id="filterControl" type="range" min="0" max="100" value="100" aria-label="Master low-pass filter. Left is dark and right is open">
+      </div>
+
+      <div class="echo-station">
+        <div class="echo-targets" role="group" aria-label="Choose echo target">
+          <span>SEND:</span>
+          <button type="button" data-echo-target="drums" aria-pressed="true">DRM</button>
+          <button type="button" data-echo-target="bass" aria-pressed="false">BAS</button>
+          <button type="button" data-echo-target="chord" aria-pressed="false">CRD</button>
+          <button type="button" data-echo-target="voice" aria-pressed="false">VOX</button>
+        </div>
+        <button id="echoThrow" class="echo-throw" type="button" aria-label="Throw the selected track into the echo">
+          <span class="echo-star" aria-hidden="true">✦</span>
+          <strong>ECHO<br>THROW!</strong>
+          <small id="echoTargetLabel">DRUMS → SPACE</small>
+        </button>
+      </div>
+
+      <div class="shot-bank" aria-label="Cosmic one-shot sounds">
+        <button type="button" data-shot="shot-01"><span>POW!</span><small>PANDA DUB</small></button>
+        <button type="button" data-shot="shot-02"><span>PEW!</span><small>UFO SIGNAL</small></button>
+        <button type="button" data-shot="shot-03"><span>KRSH!</span><small>NOISE HIT</small></button>
+      </div>
+
+      <div id="comicBurst" class="comic-burst" aria-hidden="true">DUB!</div>
+      <div class="scene-caption" aria-hidden="true">MADE FOR PEOPLE WHO STILL LOOK UP AT THE SKY.</div>
+    </section>
+
+    <section class="dub-settings" aria-label="Echo settings">
+      <div class="setting-group">
+        <span>ECHO ORBIT</span>
+        <div id="delayDivision" class="division-buttons" role="group" aria-label="Echo timing">
+          <button type="button" data-division="quarter" aria-pressed="true">1/4</button>
+          <button type="button" data-division="eighth" aria-pressed="false">1/8</button>
+          <button type="button" data-division="dotted" aria-pressed="false">1/8.</button>
+        </div>
+      </div>
+      <label class="setting-group" for="feedbackControl"><span>FEEDBACK / SAFE LIMIT</span><output id="feedbackValue" for="feedbackControl">48%</output><input id="feedbackControl" type="range" min="15" max="80" value="48"></label>
+      <p>ALL SOUND STAYS IN THIS BROWSER. NO UPLOAD. NO LOGIN. JUST SIGNAL.</p>
+    </section>
+
+    <div class="bottom-spacer" aria-hidden="true"></div>
+  </main>
+
+  <div class="master-dock" role="region" aria-label="PANDA DUB master transport">
+    <div class="master-status"><span id="transportLamp" aria-hidden="true"></span><div><strong id="transportStatus" role="status" aria-live="polite">SIGNAL SLEEPING</strong><small><span id="beatCounter">BAR 1 / BEAT 1</span> · 74 BPM</small></div></div>
+    <button id="playStopButton" class="play-button" type="button"><span aria-hidden="true">▶</span><strong>PLAY</strong></button>
+    <button id="resetButton" class="reset-button" type="button">RESET</button>
+  </div>
+
+  <footer><div><strong>THE PAN BROWSER TOOLS</strong><br>FREE WEIRD MACHINES FROM 7THLEAF RECORDS</div><div class="footer-right"><span>© <span data-current-year></span> 7THLEAF RECORDS</span><button id="privacySettings" class="footer-button" type="button">PRIVACY SETTINGS</button></div></footer>
+
+  <section id="consentPanel" class="consent-panel" role="dialog" aria-modal="true" aria-labelledby="consentTitle" hidden><div class="consent-box"><p class="eyebrow">PRIVACY CONTROL</p><h2 id="consentTitle">ANALYTICS<br>SETTING</h2><p>Optional anonymous analytics help us improve these tools. Audio and personal data are never collected. Everything works if you decline.</p><div class="consent-actions"><button id="acceptAnalytics" class="machine-button accent" type="button">ALLOW ANALYTICS</button><button id="declineAnalytics" class="machine-button" type="button">DECLINE</button></div></div></section>
+</body>
+</html>

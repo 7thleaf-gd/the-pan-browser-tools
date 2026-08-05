@@ -13,10 +13,16 @@ GTM_ID = "GTM-5W74796T"
 ASSET_VERSION = "20260727.2"
 TAPE_ASSET_VERSION = "20260728.3"
 VISUALIZER_ASSET_VERSION = "20260730.7"
+PANDA_DUB_ASSET_VERSION = "20260805.1"
 REQUIRED = [
     "index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",
     "about/index.html", "tools/index.html", "tape/index.html", "tape/tape.css", "tape/tape.js",
     "visualizer/index.html", "visualizer/visualizer.css", "visualizer/visualizer.js",
+    "panda-dub/index.html", "panda-dub/panda-dub.css", "panda-dub/panda-dub.js",
+    "assets/panda-dub/README.md", "assets/panda-dub/drums.wav", "assets/panda-dub/bass.wav",
+    "assets/panda-dub/chord.wav", "assets/panda-dub/voice.wav", "assets/panda-dub/shot-01.wav",
+    "assets/panda-dub/shot-02.wav", "assets/panda-dub/shot-03.wav",
+    "scripts/generate-panda-dub-audio.py",
     "assets/vendor/ffmpeg/ffmpeg.js", "assets/vendor/ffmpeg/814.ffmpeg.js",
     "assets/vendor/ffmpeg/ffmpeg-core.js", "assets/vendor/ffmpeg/ffmpeg-core.wasm",
     "assets/vendor/ffmpeg/README.md", "package.json",
@@ -32,6 +38,7 @@ PAGES = {
     "about/index.html": BASE_URL + "about/",
     "tape/index.html": BASE_URL + "tape/",
     "visualizer/index.html": BASE_URL + "visualizer/",
+    "panda-dub/index.html": BASE_URL + "panda-dub/",
 }
 SOCIAL_IMAGES = {
     "index.html": BASE_URL + "assets/images/imagemachine_ogp.png",
@@ -166,6 +173,28 @@ def main():
             ]:
                 if required_id not in text:
                     errors.append(f"visualizer/index.html: missing v1 control {required_id}")
+        if relative == "panda-dub/index.html":
+            panda_dub_assets = [
+                "../assets/css/tokens.css", "../assets/css/base.css",
+                "../assets/css/components.css", "panda-dub.css",
+                "../assets/js/analytics.js", "../assets/js/consent.js",
+                "panda-dub.js",
+            ]
+            for asset in panda_dub_assets:
+                if f"{asset}?v={PANDA_DUB_ASSET_VERSION}" not in parser.links:
+                    errors.append(
+                        f"panda-dub/index.html: {asset} must use asset version "
+                        f"{PANDA_DUB_ASSET_VERSION}"
+                    )
+            for required_id in [
+                'id="dubScene"', 'id="playStopButton"', 'id="resetButton"',
+                'id="filterControl"', 'id="feedbackControl"', 'id="echoThrow"',
+                'data-track="drums"', 'data-track="bass"',
+                'data-track="chord"', 'data-track="voice"',
+                'data-shot="shot-01"', 'data-shot="shot-02"', 'data-shot="shot-03"',
+            ]:
+                if required_id not in text:
+                    errors.append(f"panda-dub/index.html: missing v0 control {required_id}")
 
         expected_social_image = SOCIAL_IMAGES.get(relative)
         if expected_social_image:
