@@ -4,6 +4,6 @@
   "private": true,
   "scripts": {
     "check": "python3 scripts/check-site.py",
-    "build": "npm run check && node --check app.js && node --check assets/js/analytics.js && node --check assets/js/consent.js && node --check assets/js/canvas-utils.js && node --check assets/js/audio-utils.js && node --check assets/js/site.js && node --check tape/tape.js && node --check visualizer/visualizer.js && node --check panda-dub/panda-dub.js"
+    "build": "npm run check && node --check app.js && node --check assets/js/analytics.js && node --check assets/js/consent.js && node --check assets/js/canvas-utils.js && node --check assets/js/audio-utils.js && node --check assets/js/site.js && node --check tape/tape.js && node --check visualizer/visualizer.js && node --check panda-dub/panda-dub.js && node --check still-life/still-life.js"
   }
 }
