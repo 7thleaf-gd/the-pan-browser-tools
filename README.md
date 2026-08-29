@@ -17,6 +17,7 @@ assets/
 about/            project and privacy explanation
 tape/             THE PAN TAPE MACHINE static audio tool
 visualizer/       THE PAN SIGNAL VISUALIZER local camera/video tool
+still-life/       THE PAN STILL LIFE MACHINE local OBJ graphic renderer
 tools/            available/planned tool index
 docs/             design, tool, analytics, and release contracts
 scripts/          dependency-free site validation
