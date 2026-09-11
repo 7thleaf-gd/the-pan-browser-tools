@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "0.1",
+  "product": "github-jp-assist",
+  "actions": [
+    {"id":"github.merge_pr","service":"github","sourceLabels":["Merge pull request"],"ja":"この変更を対象branchへ取り込む","risk":"high","impact":"対象branchの内容が変わる","precheck":["対象branch","CI状態","競合","Production連動"]},
+    {"id":"github.squash_merge","service":"github","sourceLabels":["Squash and merge"],"ja":"複数commitを1つにまとめて取り込む","risk":"high","impact":"対象branch更新＋履歴圧縮","precheck":["対象branch","CI状態","履歴をまとめてよいか"]},
+    {"id":"github.rebase_merge","service":"github","sourceLabels":["Rebase and merge"],"ja":"commit履歴を並べ直して取り込む","risk":"high","impact":"対象branch更新＋履歴形状が変わる","precheck":["対象branch","CI状態","履歴方針"]},
+    {"id":"github.close_pr","service":"github","sourceLabels":["Close pull request"],"ja":"取り込まずPRを閉じる","risk":"medium","impact":"PRを閉じるがコード自体は削除しない","precheck":["未mergeでよいか","再開可能性"]},
+    {"id":"github.delete_branch","service":"github","sourceLabels":["Delete branch"],"ja":"branch参照を削除する","risk":"high","impact":"branch参照が消える","precheck":["mainではないか","未merge変更","復元手段"]},
+    {"id":"github.rerun_jobs","service":"github","sourceLabels":["Re-run jobs","Re-run failed jobs"],"ja":"CIをもう一度実行する","risk":"medium","impact":"Actions minutesや課金枠を消費する可能性","precheck":["失敗原因","コード変更有無","残り利用枠"]},
+    {"id":"github.secret_variable","service":"github","sourceLabels":["New repository secret","New repository variable","Update secret","Update variable"],"ja":"実行環境へ設定値を渡す","risk":"high","impact":"CIや実行環境の挙動が変わる","precheck":["SecretかVariableか","値の露出範囲","参照workflow"]},
+    {"id":"cloudflare.deploy","service":"cloudflare","sourceLabels":["Deploy","Deployments"],"ja":"Worker / Pagesの実行版を更新する","risk":"high","impact":"公開中の実行版が変わる可能性","precheck":["PreviewかProductionか","対象project","rollback手段"]},
+    {"id":"cloudflare.rollback","service":"cloudflare","sourceLabels":["Rollback","Rollback deployment"],"ja":"以前の実行版へ戻す","risk":"high","impact":"稼働版が過去versionへ変わる","precheck":["戻すversion","DB互換性","現在の障害原因"]},
+    {"id":"cloudflare.delete_project","service":"cloudflare","sourceLabels":["Delete Worker","Delete project","Delete Project"],"ja":"公開実行物を削除する","risk":"critical","impact":"URLやWorkerが停止する可能性","precheck":["対象名","依存URL","復旧手段"]},
+    {"id":"cloudflare.custom_domain","service":"cloudflare","sourceLabels":["Custom domains","Add custom domain","Edit custom domain"],"ja":"独自ドメインを公開先へ接続する","risk":"high","impact":"公開先や既存サイトへの到達経路が変わる","precheck":["対象host","既存DNS","既存サイト影響"]},
+    {"id":"cloudflare.dns_record","service":"cloudflare","sourceLabels":["Add record","Edit record","Delete record"],"ja":"DNSの名前解決先を変える","risk":"critical","impact":"Web・メール等の到達先が変わる可能性","precheck":["host","record type","TTL","既存サービス"]},
+    {"id":"cloudflare.env_secret","service":"cloudflare","sourceLabels":["Variables and Secrets","Add variable","Add secret"],"ja":"Workerへ設定値を渡す","risk":"high","impact":"Workerの実行挙動が変わる","precheck":["Plain textかSecretか","参照コード","環境"]},
+    {"id":"cloudflare.route_trigger","service":"cloudflare","sourceLabels":["Routes","Triggers","Cron Triggers","Add route","Add trigger"],"ja":"いつ・どのURLでWorkerが動くかを変える","risk":"high","impact":"自動実行や本番trafficへの介入条件が変わる","precheck":["対象URL","実行頻度","Production traffic"]},
+    {"id":"supabase.enable_rls","service":"supabase","sourceLabels":["Enable RLS"],"ja":"テーブルへのアクセス制御を有効化する","risk":"high","impact":"policy次第でアプリから読めなくなる可能性","precheck":["既存policy","利用role","SELECT/WRITE要件"]},
+    {"id":"supabase.disable_rls","service":"supabase","sourceLabels":["Disable RLS"],"ja":"テーブルのアクセス制御を外す","risk":"critical","impact":"意図しない公開やデータ漏えいの可能性","precheck":["公開範囲","API露出","代替policy"]},
+    {"id":"supabase.policy","service":"supabase","sourceLabels":["Create policy","New policy","Edit policy"],"ja":"誰がどのDB操作をできるか決める","risk":"high","impact":"SELECT / INSERT / UPDATE / DELETE権限が変わる","precheck":["対象role","operation","条件式"]},
+    {"id":"supabase.delete_rows","service":"supabase","sourceLabels":["Delete row","Delete rows","Delete selected rows"],"ja":"DBの実データを削除する","risk":"critical","impact":"実データが消える","precheck":["対象件数","backup","復元方法"]},
+    {"id":"supabase.sql_run","service":"supabase","sourceLabels":["Run","Run query"],"ja":"SQLをDBへ実行する","risk":"dynamic","impact":"SQL内容により閲覧だけからschema/data変更まで起こり得る","precheck":["SELECTか書込系か","対象DB","transaction/rollback"]},
+    {"id":"supabase.rpc_trigger","service":"supabase","sourceLabels":["Create function","Edit function","Database Functions","Triggers","Create trigger","Edit trigger"],"ja":"DB裏側の自動処理を変える","risk":"high","impact":"呼出元や自動処理の副作用が変わる","precheck":["呼出元","副作用","Production影響"]}
+  ]
+}
