@@ -3,7 +3,7 @@
 
   const ACTIONS = [
     { id: 'github.merge_pr', service: 'github', labels: ['Merge pull request'] },
-    { id: 'cloudflare.deploy', service: 'cloudflare', labels: ['Deploy', 'Deployments'] },
+    { id: 'cloudflare.deploy', service: 'cloudflare', labels: ['Deploy'] },
     { id: 'supabase.enable_rls', service: 'supabase', labels: ['Enable RLS'] }
   ];
 
@@ -36,11 +36,20 @@
     return best && best.score >= 80 ? best : null;
   }
 
+  function isUsableActionNode(node) {
+    if (!node) return false;
+    if (node.disabled === true) return false;
+    if (node.getAttribute?.('aria-disabled') === 'true') return false;
+    if (node.hidden === true) return false;
+    const style = node.getAttribute?.('style') || '';
+    if (/display\s*:\s*none|visibility\s*:\s*hidden/i.test(style)) return false;
+    return true;
+  }
+
   function findActionableNodes(service, doc) {
     if (!doc || !doc.querySelectorAll) return [];
     const selectors = [
       'button',
-      'a',
       '[role="button"]',
       'input[type="button"]',
       'input[type="submit"]'
@@ -48,6 +57,7 @@
     const nodes = Array.from(doc.querySelectorAll(selectors.join(',')));
     const hits = [];
     for (const node of nodes) {
+      if (!isUsableActionNode(node)) continue;
       const text = node.innerText || node.textContent || node.value || node.getAttribute?.('aria-label') || '';
       const match = classifyText(service, text);
       if (match) hits.push({ node, text: String(text).trim(), match });
@@ -55,7 +65,7 @@
     return hits;
   }
 
-  const api = { normalizeText, scoreLabel, classifyText, findActionableNodes };
+  const api = { normalizeText, scoreLabel, classifyText, isUsableActionNode, findActionableNodes };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.GithubJpAssistDomRecognition = api;
 
@@ -66,6 +76,7 @@
       ['supabase', 'Enable RLS', 'supabase.enable_rls'],
       ['github', 'Close pull request', null],
       ['cloudflare', 'Delete project', null],
+      ['cloudflare', 'Deployments', null],
       ['supabase', 'Disable RLS', null]
     ];
     let failed = 0;
