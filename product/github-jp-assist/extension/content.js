@@ -1,0 +1,100 @@
+(() => {
+  const ACTIONS = [
+    ["github",["Merge pull request"],"この変更を対象branchへ取り込む","high","対象branchの内容が変わる",["対象branch","CI状態","競合","Production連動"]],
+    ["github",["Squash and merge"],"複数commitを1つにまとめて取り込む","high","対象branch更新＋履歴圧縮",["対象branch","CI状態","履歴をまとめてよいか"]],
+    ["github",["Rebase and merge"],"commit履歴を並べ直して取り込む","high","対象branch更新＋履歴形状が変わる",["対象branch","CI状態","履歴方針"]],
+    ["github",["Close pull request"],"取り込まずPRを閉じる","medium","PRを閉じるがコード自体は削除しない",["未mergeでよいか","再開可能性"]],
+    ["github",["Delete branch"],"branch参照を削除する","high","branch参照が消える",["mainではないか","未merge変更","復元手段"]],
+    ["github",["Re-run jobs","Re-run failed jobs"],"CIをもう一度実行する","medium","Actions minutesや課金枠を消費する可能性",["失敗原因","コード変更有無","残り利用枠"]],
+    ["github",["New repository secret","New repository variable","Update secret","Update variable"],"実行環境へ設定値を渡す","high","CIや実行環境の挙動が変わる",["SecretかVariableか","値の露出範囲","参照workflow"]],
+    ["cloudflare",["Deploy"],"Worker / Pagesの実行版を更新する","high","公開中の実行版が変わる可能性",["PreviewかProductionか","対象project","rollback手段"]],
+    ["cloudflare",["Rollback","Rollback deployment"],"以前の実行版へ戻す","high","稼働版が過去versionへ変わる",["戻すversion","DB互換性","現在の障害原因"]],
+    ["cloudflare",["Delete Worker","Delete project","Delete Project"],"公開実行物を削除する","critical","URLやWorkerが停止する可能性",["対象名","依存URL","復旧手段"]],
+    ["cloudflare",["Add custom domain","Edit custom domain"],"独自ドメインを公開先へ接続する","high","公開先や既存サイトへの到達経路が変わる",["対象host","既存DNS","既存サイト影響"]],
+    ["cloudflare",["Add record","Edit record","Delete record"],"DNSの名前解決先を変える","critical","Web・メール等の到達先が変わる可能性",["host","record type","TTL","既存サービス"]],
+    ["cloudflare",["Add variable","Add secret"],"Workerへ設定値を渡す","high","Workerの実行挙動が変わる",["Plain textかSecretか","参照コード","環境"]],
+    ["cloudflare",["Add route","Add trigger"],"いつ・どのURLでWorkerが動くかを変える","high","自動実行や本番trafficへの介入条件が変わる",["対象URL","実行頻度","Production traffic"]],
+    ["supabase",["Enable RLS"],"テーブルへのアクセス制御を有効化する","high","policy次第でアプリから読めなくなる可能性",["既存policy","利用role","SELECT/WRITE要件"]],
+    ["supabase",["Disable RLS"],"テーブルのアクセス制御を外す","critical","意図しない公開やデータ漏えいの可能性",["公開範囲","API露出","代替policy"]],
+    ["supabase",["Create policy","New policy","Edit policy"],"誰がどのDB操作をできるか決める","high","SELECT / INSERT / UPDATE / DELETE権限が変わる",["対象role","operation","条件式"]],
+    ["supabase",["Delete row","Delete rows","Delete selected rows"],"DBの実データを削除する","critical","実データが消える",["対象件数","backup","復元方法"]],
+    ["supabase",["Run","Run query"],"SQLをDBへ実行する","dynamic","SQL内容により閲覧だけからschema/data変更まで起こり得る",["SELECTか書込系か","対象DB","transaction/rollback"]],
+    ["supabase",["Create function","Edit function","Create trigger","Edit trigger"],"DB裏側の自動処理を変える","high","呼出元や自動処理の副作用が変わる",["呼出元","副作用","Production影響"]]
+  ].map(([service,labels,ja,risk,impact,precheck]) => ({service,labels,ja,risk,impact,precheck}));
+
+  const host = location.hostname;
+  const service = host === "github.com" ? "github" : host === "dash.cloudflare.com" ? "cloudflare" : (host === "supabase.com" || host === "app.supabase.com") ? "supabase" : null;
+  if (!service) return;
+
+  const normalize = s => (s || "").replace(/\s+/g," ").trim();
+  const allowedContext = () => {
+    const p = location.pathname;
+    if (service === "github") return /\/pull\/\d+/.test(p) || /\/settings\/(secrets|variables)\/actions/.test(p) || /\/actions\//.test(p);
+    if (service === "cloudflare") return p.split("/").filter(Boolean).length >= 2;
+    if (service === "supabase") return /\/dashboard\/project\//.test(p) || /\/project\//.test(p);
+    return false;
+  };
+
+  const panel = document.createElement("aside");
+  panel.id = "dug-panel";
+  panel.hidden = true;
+  document.documentElement.appendChild(panel);
+
+  const closePanel = () => { panel.hidden = true; panel.innerHTML = ""; };
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closePanel(); });
+
+  function show(action, sourceText) {
+    const checks = action.precheck.map(x => `<li>${escapeHtml(x)}</li>`).join("");
+    panel.innerHTML = `
+      <button class="dug-close" type="button" aria-label="閉じる">×</button>
+      <div class="dug-kicker">DEV UI GUARD JP</div>
+      <div class="dug-risk dug-risk-${action.risk}">${escapeHtml(action.risk.toUpperCase())}</div>
+      <h2>${escapeHtml(action.ja)}</h2>
+      <p class="dug-source">画面の操作: <strong>${escapeHtml(sourceText)}</strong></p>
+      <p>${escapeHtml(action.impact)}</p>
+      <h3>押す前に確認</h3>
+      <ul>${checks}</ul>
+      <p class="dug-note">この拡張は説明だけを表示し、元の操作を実行しません。</p>`;
+    panel.hidden = false;
+    panel.querySelector(".dug-close").addEventListener("click", closePanel, {once:true});
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+  }
+
+  function scan(root = document) {
+    if (!allowedContext()) return;
+    const candidates = root.querySelectorAll ? root.querySelectorAll("button,[role='button'],summary") : [];
+    for (const el of candidates) {
+      if (el.dataset.dugChecked === "1") continue;
+      el.dataset.dugChecked = "1";
+      if (el.disabled || el.getAttribute("aria-disabled") === "true" || el.hidden) continue;
+      const text = normalize(el.innerText || el.getAttribute("aria-label") || el.textContent);
+      if (!text) continue;
+      const action = ACTIONS.find(a => a.service === service && a.labels.includes(text));
+      if (!action) continue;
+      if (el.nextElementSibling?.classList?.contains("dug-badge")) continue;
+      const badge = document.createElement("button");
+      badge.type = "button";
+      badge.className = `dug-badge dug-badge-${action.risk}`;
+      badge.textContent = "JA?";
+      badge.title = "この操作を日本語で確認";
+      badge.setAttribute("aria-label", `${text} の意味と影響を日本語で確認`);
+      badge.addEventListener("click", ev => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        show(action, text);
+      });
+      el.insertAdjacentElement("afterend", badge);
+    }
+  }
+
+  scan();
+  let timer = 0;
+  const observer = new MutationObserver(() => {
+    clearTimeout(timer);
+    timer = setTimeout(() => scan(), 120);
+  });
+  observer.observe(document.documentElement, {childList:true, subtree:true});
+})();
