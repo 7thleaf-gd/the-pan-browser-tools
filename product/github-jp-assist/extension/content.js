@@ -43,15 +43,46 @@
   const closePanel = () => { panel.hidden = true; panel.innerHTML = ""; };
   document.addEventListener("keydown", e => { if (e.key === "Escape") closePanel(); });
 
+  function currentSqlText() {
+    const textarea = [...document.querySelectorAll("textarea")].find(el => !el.disabled && el.offsetParent !== null && normalize(el.value));
+    if (textarea) return textarea.value;
+    const monaco = [...document.querySelectorAll(".monaco-editor")].find(el => el.offsetParent !== null);
+    if (monaco) return monaco.innerText || monaco.textContent || "";
+    const textbox = [...document.querySelectorAll("[role='textbox']")].find(el => el.offsetParent !== null && normalize(el.innerText || el.textContent));
+    return textbox ? (textbox.innerText || textbox.textContent || "") : "";
+  }
+
+  function classifySql(sql) {
+    const cleaned = String(sql || "")
+      .replace(/--.*$/gm, " ")
+      .replace(/\/\*[\s\S]*?\*\//g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toUpperCase();
+    if (!cleaned) return null;
+    if (/\b(DROP|TRUNCATE)\b/.test(cleaned)) return {risk:"critical", impact:"DROP / TRUNCATE を検出。schemaまたは実データを大きく失う可能性", kind:"破壊的SQL"};
+    if (/\b(INSERT|UPDATE|DELETE|ALTER|CREATE|GRANT|REVOKE|MERGE)\b/.test(cleaned)) return {risk:"high", impact:"書き込み / schema・権限変更を含むSQLを検出", kind:"書き込みSQL"};
+    if (/^(SELECT|WITH)\b/.test(cleaned)) return {risk:"medium", impact:"読み取り系SQLとして判定。ただし関数呼出し等の副作用までは保証しない", kind:"読み取り候補"};
+    return {risk:"dynamic", impact:"SQL種別を安全に判定できないため、実行内容を手動確認", kind:"判定保留"};
+  }
+
+  function resolveAction(action, sourceText) {
+    if (action.service !== "supabase" || !["Run","Run query"].includes(sourceText)) return action;
+    const sql = classifySql(currentSqlText());
+    if (!sql) return {...action, impact:"SQL本文を取得できないため、SELECTか書込系かを手動確認"};
+    return {...action, risk:sql.risk, impact:sql.impact, ja:`SQLをDBへ実行する（${sql.kind}）`};
+  }
+
   function show(action, sourceText) {
-    const checks = action.precheck.map(x => `<li>${escapeHtml(x)}</li>`).join("");
+    const resolved = resolveAction(action, sourceText);
+    const checks = resolved.precheck.map(x => `<li>${escapeHtml(x)}</li>`).join("");
     panel.innerHTML = `
       <button class="dug-close" type="button" aria-label="閉じる">×</button>
       <div class="dug-kicker">DEV UI GUARD JP</div>
-      <div class="dug-risk dug-risk-${action.risk}">${escapeHtml(action.risk.toUpperCase())}</div>
-      <h2>${escapeHtml(action.ja)}</h2>
+      <div class="dug-risk dug-risk-${resolved.risk}">${escapeHtml(resolved.risk.toUpperCase())}</div>
+      <h2>${escapeHtml(resolved.ja)}</h2>
       <p class="dug-source">画面の操作: <strong>${escapeHtml(sourceText)}</strong></p>
-      <p>${escapeHtml(action.impact)}</p>
+      <p>${escapeHtml(resolved.impact)}</p>
       <h3>押す前に確認</h3>
       <ul>${checks}</ul>
       <p class="dug-note">この拡張は説明だけを表示し、元の操作を実行しません。</p>`;
