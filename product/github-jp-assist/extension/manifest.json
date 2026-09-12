@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Dev UI Guard JP",
+  "version": "0.1.0",
+  "description": "GitHub / Cloudflare / Supabase の重要操作を日本語で説明し、実行前チェックを表示します。",
+  "permissions": [],
+  "host_permissions": [
+    "https://github.com/*",
+    "https://dash.cloudflare.com/*",
+    "https://supabase.com/*",
+    "https://app.supabase.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://github.com/*",
+        "https://dash.cloudflare.com/*",
+        "https://supabase.com/*",
+        "https://app.supabase.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["style.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Dev UI Guard JP",
+    "default_popup": "popup.html"
+  }
+}
