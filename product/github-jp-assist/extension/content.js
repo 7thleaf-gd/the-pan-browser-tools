@@ -98,14 +98,22 @@
     if (!allowedContext()) return;
     const candidates = root.querySelectorAll ? root.querySelectorAll("button,[role='button'],summary") : [];
     for (const el of candidates) {
-      if (el.dataset.dugChecked === "1") continue;
-      el.dataset.dugChecked = "1";
       if (el.disabled || el.getAttribute("aria-disabled") === "true" || el.hidden) continue;
       const text = normalize(el.innerText || el.getAttribute("aria-label") || el.textContent);
       if (!text) continue;
+
+      // GitHub / Cloudflare / Supabase are SPA-heavy. A control may be reused while
+      // its label changes after hydration or navigation, so cache by label rather
+      // than permanently marking the DOM node as already checked.
+      if (el.dataset.dugCheckedText === text) continue;
+      el.dataset.dugCheckedText = text;
+
+      const oldBadge = el.nextElementSibling?.classList?.contains("dug-badge") ? el.nextElementSibling : null;
+      if (oldBadge) oldBadge.remove();
+
       const action = ACTIONS.find(a => a.service === service && a.labels.includes(text));
       if (!action) continue;
-      if (el.nextElementSibling?.classList?.contains("dug-badge")) continue;
+
       const badge = document.createElement("button");
       badge.type = "button";
       badge.className = `dug-badge dug-badge-${action.risk}`;
@@ -127,5 +135,5 @@
     clearTimeout(timer);
     timer = setTimeout(() => scan(), 120);
   });
-  observer.observe(document.documentElement, {childList:true, subtree:true});
+  observer.observe(document.documentElement, {childList:true, subtree:true, characterData:true, attributes:true, attributeFilter:["aria-label","aria-disabled","disabled","hidden"]});
 })();
