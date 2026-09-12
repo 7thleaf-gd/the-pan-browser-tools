@@ -2,9 +2,11 @@
   'use strict';
 
   const host = location.hostname;
-  const service = host.endsWith('github.com') ? 'github'
-    : host.endsWith('dash.cloudflare.com') ? 'cloudflare'
-    : host.endsWith('supabase.com') ? 'supabase'
+  const path = location.pathname;
+
+  const service = host === 'github.com' ? 'github'
+    : host === 'dash.cloudflare.com' ? 'cloudflare'
+    : host === 'supabase.com' ? 'supabase'
     : null;
 
   const targetByService = {
@@ -14,6 +16,11 @@
   };
 
   const normalize = (value) => String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+
+  const hasValidContext = (serviceName) => {
+    if (serviceName === 'github') return /^\/[^/]+\/[^/]+\/pull\/\d+(?:\/|$)/.test(path);
+    return true;
+  };
 
   const isUsable = (node) => {
     if (!node) return false;
@@ -31,6 +38,7 @@
     probe: 'github-jp-assist-live-dom-v0.1',
     timestamp: new Date().toISOString(),
     host,
+    path,
     service,
     readOnly: true,
     clicked: false,
@@ -42,6 +50,13 @@
 
   if (!service) {
     result.reason = 'unsupported-host';
+    console.table(result);
+    console.log('[GitHub JP Assist probe]', result);
+    return result;
+  }
+
+  if (!hasValidContext(service)) {
+    result.reason = 'unsupported-page-context';
     console.table(result);
     console.log('[GitHub JP Assist probe]', result);
     return result;
