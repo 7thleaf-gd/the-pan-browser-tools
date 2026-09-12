@@ -19,7 +19,18 @@
 
   const hasValidContext = (serviceName) => {
     if (serviceName === 'github') return /^\/[^/]+\/[^/]+\/pull\/\d+(?:\/|$)/.test(path);
-    return true;
+    // Cloudflare deploy controls live inside account-scoped application surfaces.
+    // Reject account home, profile, auth and other broad pages where a generic
+    // "Deploy" control could mean something unrelated to this product action.
+    if (serviceName === 'cloudflare') {
+      return /^\/[0-9a-f]{32}\/(?:workers-and-pages|pages|workers)(?:\/|$)/i.test(path);
+    }
+    // Supabase RLS is a database-table operation. Restrict detection to an
+    // authenticated project ref and table/editor/database surfaces only.
+    if (serviceName === 'supabase') {
+      return /^\/dashboard\/project\/[a-z0-9_-]+\/(?:editor|database)(?:\/|$)/i.test(path);
+    }
+    return false;
   };
 
   const isUsable = (node) => {
