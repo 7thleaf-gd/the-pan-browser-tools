@@ -1,275 +1,201 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#080808">
-  <link rel="icon" href="favicon.ico" sizes="any">
-  <meta name="robots" content="index, follow">
-  <meta name="description" content="THE PAN IMAGE MACHINE is a private, free browser-based image distortion tool by 7thleaf Records.">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <meta name="robots" content="index,follow" />
+  <title>THE PAN TOOLS — Experimental Web Lab</title>
+  <meta name="description" content="Free browser instruments for image, tape, audio visualization, object experiments and dub.">
   <link rel="canonical" href="https://tools.thepan.xyz/">
-  <meta property="og:title" content="THE PAN IMAGE MACHINE — CREATE. PLAY. DISTORT.">
-  <meta property="og:description" content="Load an image. Break the signal. Export the result. Every pixel stays in your browser.">
-  <meta property="og:url" content="https://tools.thepan.xyz/">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://tools.thepan.xyz/assets/images/imagemachine_ogp.png">
-  <meta property="og:image:width" content="1536">
-  <meta property="og:image:height" content="1024">
-  <meta property="og:image:alt" content="THE PAN IMAGE MACHINE — browser-based image destruction apparatus">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://tools.thepan.xyz/assets/images/imagemachine_ogp.png">
-  <title>THE PAN IMAGE MACHINE — CREATE. PLAY. DISTORT.</title>
-  <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"WebApplication","name":"THE PAN IMAGE MACHINE","url":"https://tools.thepan.xyz/","applicationCategory":"MultimediaApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"7thleaf Records"}}
-  </script>
-
-  <!-- Consent Mode defaults must run before Google Tag Manager. -->
   <script>
-    window.dataLayer = window.dataLayer || [];
+    window.dataLayer=window.dataLayer||[];
     function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', {
-      analytics_storage: 'denied',
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      wait_for_update: 500
-    });
-    (function () {
-      try {
-        if (localStorage.getItem('thePanAnalyticsConsent') === 'granted') {
-          gtag('consent', 'update', {
-            analytics_storage: 'granted',
-            ad_storage: 'denied',
-            ad_user_data: 'denied',
-            ad_personalization: 'denied'
-          });
-        }
-      } catch (_) {}
-    }());
+    gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});
+    try{if(localStorage.getItem('thePanAnalyticsConsent')==='granted'){gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}}catch(_){}
   </script>
-  <!-- Google Tag Manager (GA4 G-5WHCJ6DCMF is configured inside GTM; no direct gtag.js). -->
-  <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-5W74796T');
-  </script>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5W74796T');</script>
 
-  <link rel="stylesheet" href="assets/css/tokens.css?v=20260727.2">
-  <link rel="stylesheet" href="assets/css/base.css?v=20260727.2">
-  <link rel="stylesheet" href="assets/css/components.css?v=20260727.2">
-  <link rel="stylesheet" href="styles.css?v=20260727.2">
-  <script src="assets/js/analytics.js?v=20260727.2" defer></script>
-  <script src="assets/js/consent.js?v=20260727.2" defer></script>
-  <script src="assets/js/canvas-utils.js?v=20260727.2" defer></script>
-  <script src="app.js?v=20260727.2" defer></script>
+  <link rel="stylesheet" href="home.css?v=20260921.1" />
+  <style>
+    .topbar{grid-template-columns:1fr 1fr auto auto!important}
+    .lang-switch{display:flex;align-items:center;gap:5px;margin-right:18px;font:800 9px/1 monospace}
+    .lang-switch button{appearance:none;border:0;background:none;color:inherit;padding:0 2px;cursor:pointer;font:inherit;opacity:.45}
+    .lang-switch button.active{opacity:1;text-decoration:underline;text-underline-offset:3px}
+    @media(max-width:900px){.topbar{grid-template-columns:1fr auto auto!important}.lang-switch{margin-right:10px}}
+    html[lang="ja"] body{font-family:Arial,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}
+  </style>
 </head>
 <body>
-  <a class="skip-link" href="#machine">Skip to image controls</a>
-  <div class="noise-layer" aria-hidden="true"></div>
-  <header class="masthead">
-    <a class="brand" href="./" aria-label="THE PAN IMAGE MACHINE home">
-      <span class="brand-kicker">THE PAN BROWSER TOOLS / UNIT 001</span>
-      <span class="brand-name">THE PAN<br>IMAGE MACHINE</span>
+  <canvas id="signal-field" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <header class="topbar">
+    <a class="brand magnetic" href="#top" aria-label="THE PAN TOOLS home">
+      <span class="brand-mark">THE PAN</span><span class="brand-sub">TOOLS</span>
     </a>
-    <div class="masthead-side">
-      <nav class="site-nav" aria-label="Primary navigation">
-        <a href="./" aria-current="page">IMAGE MACHINE</a>
-        <a href="tape/">TAPE MACHINE</a>
-        <a href="visualizer/">VISUALIZER</a>
-        <a href="tools/">TOOLS</a>
-        <a href="about/">ABOUT</a>
-      </nav>
-      <div class="masthead-meta">
-        <span>V0 / 7THLEAF RECORDS</span>
-        <span class="signal"><i aria-hidden="true"></i> LOCAL PROCESSING</span>
-      </div>
+    <div class="top-meta">
+      <span>WEB INSTRUMENTS / 001–005</span>
+      <span class="status"><i></i> SIGNAL ONLINE</span>
     </div>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="ja">JP</button>
+      <span>/</span>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <a class="tiny-link magnetic" href="#tools">ENTER LAB ↘</a>
   </header>
 
-  <main>
-    <section class="intro">
-      <p class="eyebrow">BROWSER-BASED IMAGE DESTRUCTION APPARATUS</p>
-      <h1>CREATE.<br>PLAY.<br><em>DISTORT.</em></h1>
-      <p class="lede">Load an image. Break the signal. Export the result. Nothing is uploaded—every pixel stays in your browser.</p>
-      <label class="upload-main" for="fileInput">
-        <span>LOAD IMAGE</span>
-        <small>PNG / JPEG / WEBP / GIF · DROP OR SELECT</small>
-      </label>
-      <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+  <main id="top">
+    <section class="hero section-black" data-theme="dark">
+      <div class="hero-kicker reveal">LEFT-FIELD DIGITAL INSTRUMENTS FOR IMAGE / NOISE / SIGNAL / ACCIDENT</div>
+      <h1 class="hero-title" aria-label="THE PAN TOOLS">
+        <span class="hero-line" data-depth="0.8">THE</span>
+        <span class="hero-line outline" data-depth="1.25">PAN</span>
+        <span class="hero-line" data-depth="1.0">TOOLS</span>
+      </h1>
+      <p class="hero-note reveal">NOT AN APP STORE.<br>MORE LIKE A DRAWER FULL OF STRANGE MACHINES.</p>
+      <a class="enter-button magnetic" href="#tools"><span>TOUCH THE MACHINES</span><b>↓</b></a>
+      <div class="orb orb-a" data-float="1">A</div>
+      <div class="orb orb-b" data-float="2">07</div>
+      <div class="orb orb-c" data-float="3">?</div>
     </section>
 
-    <section id="machine" class="machine" aria-label="Image processing machine">
-      <div class="screen-panel">
-        <div class="panel-label">
-          <span>MONITOR / OUTPUT PREVIEW</span>
-          <span id="imageInfo">NO SIGNAL</span>
-        </div>
-        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Upload an image by selecting a file or dropping it here" aria-busy="false">
-          <div id="emptyState" class="empty-state">
-            <div class="target-mark" aria-hidden="true"></div>
-            <strong>INPUT REQUIRED</strong>
-            <span>DROP IMAGE HERE</span>
-            <button id="browseButton" class="text-button" type="button">OR BROWSE FILES →</button>
-            <small>PRIVATE BY DESIGN / NO SERVER UPLOAD</small>
-          </div>
-          <canvas id="previewCanvas" hidden aria-label="Processed image preview"></canvas>
-          <canvas id="originalPreviewCanvas" class="original-preview-canvas" hidden aria-label="Original image preview"></canvas>
-          <div id="compareHandle" class="compare-handle" role="slider" tabindex="0" aria-label="Before and after comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span></span></div>
-          <div id="previewModes" class="preview-modes" aria-label="Preview mode" hidden>
-            <button type="button" data-preview-mode="original">ORIGINAL</button>
-            <button type="button" data-preview-mode="current" class="is-active">CURRENT</button>
-            <button type="button" data-preview-mode="compare">COMPARE</button>
-          </div>
-          <button id="fullscreenButton" class="fullscreen-button" type="button" hidden>FULLSCREEN PREVIEW</button>
-          <div id="busyIndicator" class="busy-indicator" role="status" aria-live="polite" hidden>PROCESSING SIGNAL…</div>
-        </div>
-        <div id="errorMessage" class="error-message" role="alert" aria-live="assertive" hidden></div>
+    <section class="ticker" aria-label="Moving message">
+      <div class="ticker-track">
+        <span>NO AI VIDEO TRICKS</span><i>✦</i><span>REAL BUTTONS</span><i>✦</i><span>ANALOG TAPE</span><i>✦</i><span>USEFUL ACCIDENTS</span><i>✦</i>
+        <span>NO AI VIDEO TRICKS</span><i>✦</i><span>REAL BUTTONS</span><i>✦</i><span>ANALOG TAPE</span><i>✦</i><span>USEFUL ACCIDENTS</span><i>✦</i>
+      </div>
+    </section>
+
+    <section id="tools" class="tools-stage section-paper" data-theme="light">
+      <div class="stage-head">
+        <p class="eyebrow reveal">SELECT AN INSTRUMENT</p>
+        <h2 class="reveal">THE MACHINES<br>ARE NOT QUIET.</h2>
       </div>
 
-      <aside class="control-panel" aria-label="Image effect controls">
-        <div class="panel-label">
-          <span>CONTROL BANK / FX</span>
-          <span class="status-badge is-available">● LIVE</span>
+      <article class="tool-card card-a tilt-card reveal" data-cursor="OPEN 01">
+        <div class="tool-index">01</div>
+        <div class="tool-visual image-visual" aria-hidden="true"><span>IMG</span><i>↯</i></div>
+        <div class="tool-copy">
+          <p>IMAGE / DISTORT / EXPORT</p>
+          <h3>IMAGE<br>MACHINE</h3>
+          <span>LOAD AN IMAGE. BREAK THE SIGNAL. EXPORT THE RESULT.</span>
         </div>
-        <div id="controls" class="controls">
-          <section class="preset-bank" aria-labelledby="presetTitle">
-            <div class="preset-heading"><h2 id="presetTitle">PRESET SIGNALS</h2><span id="activePreset">NONE</span></div>
-            <div id="presetButtons" class="preset-buttons"></div>
-          </section>
-          <details class="fx-group" data-fx-group="basic" open>
-            <summary><span>BASIC</span><span class="fx-count" data-fx-count="basic">0 ACTIVE</span></summary>
-            <div class="fx-group-body">
-              <label class="control"><span>PIXELATE</span><output for="pixelate">0</output><input id="pixelate" aria-label="Pixelate" data-effect="pixelate" type="range" min="0" max="40" value="0"></label>
-              <label class="control"><span>BLUR</span><output for="blur">0</output><input id="blur" aria-label="Blur" data-effect="blur" type="range" min="0" max="12" value="0"></label>
-              <label class="control"><span>CONTRAST</span><output for="contrast">100</output><input id="contrast" aria-label="Contrast" data-effect="contrast" type="range" min="50" max="200" value="100"></label>
-              <label class="control"><span>BRIGHTNESS</span><output for="brightness">100</output><input id="brightness" aria-label="Brightness" data-effect="brightness" type="range" min="50" max="150" value="100"></label>
-              <button class="fx-reset" type="button" data-reset-group="basic">RESET BASIC</button>
-            </div>
-          </details>
-          <details class="fx-group" data-fx-group="warp" open>
-            <summary><span>WARP</span><span class="fx-count" data-fx-count="warp">0 ACTIVE</span></summary>
-            <div class="fx-group-body">
-              <label class="control"><span>WAVE</span><output for="wave">0</output><input id="wave" aria-label="Wave" data-effect="wave" type="range" min="0" max="100" value="0"></label>
-              <label class="control"><span>MELT</span><output for="melt">0</output><input id="melt" aria-label="Melt" data-effect="melt" type="range" min="0" max="100" value="0"></label>
-              <label class="control"><span>HORIZONTAL TEAR</span><output for="horizontalTear">0</output><input id="horizontalTear" aria-label="Horizontal Tear" data-effect="horizontal_tear" type="range" min="0" max="100" value="0"></label>
-              <button class="fx-reset" type="button" data-reset-group="warp">RESET WARP</button>
-            </div>
-          </details>
-          <details class="fx-group" data-fx-group="signal">
-            <summary><span>SIGNAL</span><span class="fx-count" data-fx-count="signal">0 ACTIVE</span></summary>
-            <div class="fx-group-body">
-              <label class="control"><span>RGB SPLIT</span><output for="rgbSplit">0</output><input id="rgbSplit" aria-label="RGB Split" data-effect="rgb_split" type="range" min="0" max="30" value="0"></label>
-              <label class="control"><span>SCANLINE</span><output for="scanline">0</output><input id="scanline" aria-label="Scanline" data-effect="scanline" type="range" min="0" max="100" value="0"></label>
-              <label class="control"><span>BLOCK DAMAGE</span><output for="blockDamage">0</output><input id="blockDamage" aria-label="Block Damage" data-effect="block_damage" type="range" min="0" max="100" value="0"></label>
-              <button class="fx-reset" type="button" data-reset-group="signal">RESET SIGNAL</button>
-            </div>
-          </details>
-          <details class="fx-group" data-fx-group="texture">
-            <summary><span>TEXTURE</span><span class="fx-count" data-fx-count="texture">0 ACTIVE</span></summary>
-            <div class="fx-group-body">
-              <label class="control"><span>GRAIN</span><output for="grain">0</output><input id="grain" aria-label="Grain" data-effect="grain" type="range" min="0" max="100" value="0"></label>
-              <label class="control"><span>NOISE</span><output for="noise">0</output><input id="noise" aria-label="Noise" data-effect="noise" type="range" min="0" max="100" value="0"></label>
-              <button class="fx-reset" type="button" data-reset-group="texture">RESET TEXTURE</button>
-            </div>
-          </details>
-          <details class="fx-group" data-fx-group="print">
-            <summary><span>PRINT</span><span class="fx-count" data-fx-count="print">0 ACTIVE</span></summary>
-            <div class="fx-group-body">
-              <label class="control"><span>DITHER</span><output for="dither">0</output><input id="dither" aria-label="Dither" data-effect="dither" type="range" min="0" max="100" value="0"></label>
-              <label class="control"><span>HALFTONE</span><output for="halftone">0</output><input id="halftone" aria-label="Halftone" data-effect="halftone" type="range" min="0" max="100" value="0"></label>
-              <label class="control"><span>THRESHOLD</span><output for="threshold">0</output><input id="threshold" aria-label="Threshold" data-effect="threshold" type="range" min="0" max="100" value="0"></label>
-              <button class="fx-reset" type="button" data-reset-group="print">RESET PRINT</button>
-            </div>
-          </details>
-          <section class="fx-future" aria-labelledby="futureFxTitle">
-            <h3 id="futureFxTitle">EXPANSION BANK / RESERVED</h3>
-            <p data-planned-effects>SHARPEN · BLOOM · JPEG ARTIFACT · EDGE</p>
-            <span>NO MODULES INSTALLED</span>
-          </section>
-          <p class="privacy-note"><span aria-hidden="true">●</span> Images are processed locally with Canvas API. No image, filename, or personal data is transmitted or added to analytics.</p>
+        <a class="launch magnetic" href="image-machine/">LAUNCH ↗</a>
+      </article>
+
+      <article class="tool-card card-b tilt-card reveal" data-cursor="OPEN 02">
+        <div class="tool-index">02</div>
+        <div class="tool-visual tape-visual" aria-hidden="true">
+          <div class="reel reel-left"></div><div class="reel reel-right"></div><div class="tape-line"></div>
         </div>
-        <div class="button-grid" aria-label="Image actions">
-          <button id="randomButton" class="machine-button accent" type="button">SURPRISE ME<small>GENERATE A CONTROLLED ACCIDENT</small></button>
-          <button id="resetButton" class="machine-button" type="button">RESET<br>TO ZERO</button>
-          <button id="exportButton" class="machine-button export" type="button" disabled>EXPORT<br>PNG ↓</button>
+        <div class="tool-copy">
+          <p>TAPE / DAMAGE / MEMORY</p>
+          <h3>TAPE<br>MACHINE</h3>
+          <span>RUN AN IMAGE THROUGH A MACHINE THAT REMEMBERS IT WRONG.</span>
         </div>
-      </aside>
+        <a class="launch magnetic" href="tape/">LAUNCH ↗</a>
+      </article>
+
+      <article class="tool-card card-c tilt-card reveal" data-cursor="OPEN 03">
+        <div class="tool-index">03</div>
+        <div class="tool-visual signal-visual" aria-hidden="true"><span></span><span></span><span></span><b>◉</b></div>
+        <div class="tool-copy">
+          <p>AUDIO / SIGNAL / VIDEO</p>
+          <h3>SIGNAL<br>VISUALIZER</h3>
+          <span>TURN SOUND INTO MOVING SIGNAL AND EXPORT THE PERFORMANCE.</span>
+        </div>
+        <a class="launch magnetic" href="visualizer/">LAUNCH ↗</a>
+      </article>
+
+      <article class="tool-card card-d tilt-card reveal" data-cursor="OPEN 04">
+        <div class="tool-index">04</div>
+        <div class="tool-visual wrong-visual" aria-hidden="true"><span>OBJECT</span><b>WRONG</b></div>
+        <div class="tool-copy">
+          <p>OBJECT / VIDEO / WRONG</p>
+          <h3>OBJECT WRONG<br>MACHINE</h3>
+          <span>FEED IT AN OBJECT. MAKE THE OBJECT BEHAVE INCORRECTLY.</span>
+        </div>
+        <a class="launch magnetic" href="object-wrong/">LAUNCH ↗</a>
+      </article>
+
+      <article class="tool-card card-e tilt-card reveal" data-cursor="OPEN 05">
+        <div class="tool-index">05</div>
+        <div class="tool-visual dub-visual" aria-hidden="true"><span>PANDA</span><b>DUB</b><i>● ● ●</i></div>
+        <div class="tool-copy">
+          <p>DUB / DELAY / PLAY</p>
+          <h3>PANDA<br>DUB</h3>
+          <span>A SMALL DUB PLAYGROUND. TOUCH IT UNTIL THE ECHO GETS STRANGE.</span>
+        </div>
+        <a class="launch magnetic" href="panda-dub/">LAUNCH ↗</a>
+      </article>
     </section>
 
-    <section id="sessionGallery" class="session-gallery" aria-labelledby="galleryTitle">
-      <div class="gallery-heading"><div><p class="eyebrow">MEMORY ONLY / MAX 8</p><h2 id="galleryTitle">SESSION GALLERY</h2></div><button id="clearGallery" class="machine-button" type="button" disabled>CLEAR ALL</button></div>
-      <div id="galleryGrid" class="gallery-grid"><p class="gallery-empty">EXPORT A SIGNAL TO START THE SESSION GALLERY.</p></div>
+    <section class="manifesto section-acid" data-theme="light">
+      <div class="manifesto-sticky">
+        <p class="eyebrow">WHY?</p>
+        <div class="manifesto-word" aria-hidden="true">TOOLS</div>
+        <div class="manifesto-copy">
+          <p>THE INTERNET GOT TOO CLEAN.</p>
+          <p>SO WE BUILT SMALL MACHINES</p>
+          <p>THAT LEAVE FINGERPRINTS.</p>
+        </div>
+      </div>
     </section>
 
-    <section class="manifesto" aria-label="Product principles">
-      <span>NO ACCOUNT.</span><span>NO INSTALL.</span><span>NO CLOUD.</span><span>JUST SIGNAL.</span>
+    <section class="lab-notes section-black" data-theme="dark">
+      <div class="notes-grid">
+        <div>
+          <p class="eyebrow reveal">LAB NOTES / 2026</p>
+          <h2 class="reveal">USEFUL<br>ACCIDENTS<br>ONLY.</h2>
+        </div>
+        <div class="note-list">
+          <div class="note reveal"><span>001</span><p>Hover should feel physical.</p></div>
+          <div class="note reveal"><span>002</span><p>Motion is navigation, not wallpaper.</p></div>
+          <div class="note reveal"><span>003</span><p>Tools stay simple once opened.</p></div>
+          <div class="note reveal"><span>004</span><p>If it works too perfectly, damage it a little.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="exit section-paper" data-theme="light">
+      <p class="eyebrow reveal">THE PAN / SAPPORO / EARTH?</p>
+      <h2 class="exit-title reveal">MAKE<br>SOMETHING<br>STRANGE.</h2>
+      <button id="randomize" class="randomize magnetic" type="button">RANDOMIZE SIGNAL ↻</button>
+      <p class="secret reveal">PS: type <strong>P A N</strong> on your keyboard.</p>
     </section>
   </main>
 
   <footer>
-    <div><strong>THE PAN BROWSER TOOLS</strong><br>FREE CREATIVE MACHINES FROM 7THLEAF RECORDS</div>
-    <div class="footer-right"><span>© <span id="year"></span> 7THLEAF RECORDS</span><button id="privacySettings" class="footer-button" type="button">PRIVACY SETTINGS</button></div>
+    <span>© THE PAN</span><span>TOOLS.THEPAN.XYZ</span><span>TRANSMISSION NEVER ENDS</span>
   </footer>
 
-  <section id="consentPanel" class="consent-panel" role="dialog" aria-modal="true" aria-labelledby="consentTitle" hidden>
-    <div class="consent-box">
-      <p class="eyebrow">PRIVACY CONTROL</p>
-      <h2 id="consentTitle">ANALYTICS<br>SETTING</h2>
-      <p>Optional analytics help us understand which controls get used. Images, filenames, and personal data are never collected. The machine works fully if you decline.</p>
-      <div class="consent-actions">
-        <button id="acceptAnalytics" class="machine-button accent" type="button">ALLOW ANALYTICS</button>
-        <button id="declineAnalytics" class="machine-button" type="button">DECLINE</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="fullscreenPreview" class="fullscreen-preview" role="dialog" aria-modal="true" aria-label="Fullscreen processed image preview" hidden>
-    <button id="closeFullscreen" class="machine-button fullscreen-close" type="button">CLOSE ×</button>
-    <canvas id="fullscreenCanvas" aria-label="Fullscreen processed image"></canvas>
-    <canvas id="fullscreenOriginalCanvas" class="fullscreen-original" aria-label="Fullscreen original image"></canvas>
-    <div id="fullscreenCompareHandle" class="compare-handle fullscreen-compare" role="slider" tabindex="0" aria-label="Fullscreen before and after comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span></span></div>
-    <div id="fullscreenModes" class="preview-modes fullscreen-modes" aria-label="Fullscreen preview mode">
-      <button type="button" data-preview-mode="original">ORIGINAL</button>
-      <button type="button" data-preview-mode="current" class="is-active">CURRENT</button>
-      <button type="button" data-preview-mode="compare">COMPARE</button>
-    </div>
-  </section>
-
-  <section id="artifactPanel" class="artifact-panel" role="dialog" aria-modal="true" aria-labelledby="artifactTitle" hidden>
-    <div class="artifact-box">
-      <p class="eyebrow">EXPORT COMPLETE</p><h2 id="artifactTitle">ARTIFACT READY</h2>
-      <p id="shareStatus" role="status" aria-live="polite">PNG SAVED. KEEP THE SIGNAL MOVING.</p>
-      <div class="artifact-actions"><button id="shareArtifact" class="machine-button accent" type="button">SHARE</button><button id="copyCredit" class="machine-button" type="button">COPY CREDIT</button><button id="downloadAgain" class="machine-button" type="button">DOWNLOAD AGAIN</button><button id="closeArtifact" class="machine-button" type="button">CLOSE</button></div>
-    </div>
-  </section>
-
-  <section id="galleryViewer" class="artifact-panel" role="dialog" aria-modal="true" aria-labelledby="galleryViewerTitle" hidden>
-    <div class="artifact-box gallery-viewer-box"><h2 id="galleryViewerTitle">SESSION ARTIFACT</h2><div id="galleryCompareView" class="gallery-compare-view"><img id="galleryLargeImage" alt="Selected session artwork"><canvas id="galleryCurrentCanvas" hidden aria-label="Current processed image for comparison"></canvas><span class="gallery-compare-label gallery-saved">SAVED</span><span class="gallery-compare-label gallery-current">CURRENT</span><div id="galleryCompareHandle" class="compare-handle gallery-compare-handle" role="slider" tabindex="0" aria-label="Gallery comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span></span></div></div>
-      <div class="artifact-actions"><button id="galleryRestore" class="machine-button accent" type="button">RESTORE FX</button><button id="galleryCompare" class="machine-button" type="button">COMPARE CURRENT</button><button id="galleryFavorite" class="machine-button" type="button">FAVORITE</button><button id="galleryExport" class="machine-button" type="button">EXPORT PNG</button><button id="galleryDelete" class="machine-button" type="button">DELETE</button><button id="galleryViewerClose" class="machine-button" type="button">CLOSE</button></div>
-    </div>
-  </section>
-
-  <aside id="floatingPreview" class="floating-preview" data-mode="current" data-corner="top-right" aria-label="Floating Preview Monitor" hidden>
-    <div id="floatingDragHandle" class="floating-header">
-      <strong>FLOATING PREVIEW MONITOR</strong>
-      <div class="floating-window-actions">
-        <button id="floatingMinimize" type="button" aria-label="Minimize floating preview">_</button>
-        <button id="floatingClose" type="button" aria-label="Close floating preview">×</button>
-      </div>
-    </div>
-    <button id="floatingCanvasButton" class="floating-canvas-button" type="button" aria-label="Open fullscreen preview">
-      <canvas id="floatingCanvas" width="480" height="270" aria-label="Floating image preview"></canvas>
-      <span id="compareDivider" class="compare-divider" aria-hidden="true"></span>
-      <span class="compare-label compare-before">BEFORE</span>
-      <span class="compare-label compare-after">AFTER</span>
-    </button>
-    <div class="floating-controls">
-      <button id="floatingPrevious" type="button" aria-label="Previous preview mode">←</button>
-      <span id="floatingMode" role="status" aria-live="polite">CURRENT</span>
-      <button id="floatingNext" type="button" aria-label="Next preview mode">→</button>
-    </div>
-  </aside>
+  <script src="home.js?v=20260921.1"></script>
+  <script>
+  (()=>{
+    const copy={
+      en:{
+        title:'THE PAN TOOLS — Experimental Web Lab',enter:'ENTER LAB ↘',kicker:'LEFT-FIELD DIGITAL INSTRUMENTS FOR IMAGE / NOISE / SIGNAL / ACCIDENT',hero:'NOT AN APP STORE.<br>MORE LIKE A DRAWER FULL OF STRANGE MACHINES.',touch:'TOUCH THE MACHINES',ticker:['NO AI VIDEO TRICKS','REAL BUTTONS','ANALOG TAPE','USEFUL ACCIDENTS'],select:'SELECT AN INSTRUMENT',machines:'THE MACHINES<br>ARE NOT QUIET.',tools:[['IMAGE / DISTORT / EXPORT','LOAD AN IMAGE. BREAK THE SIGNAL. EXPORT THE RESULT.','LAUNCH ↗','OPEN 01'],['TAPE / DAMAGE / MEMORY','RUN AN IMAGE THROUGH A MACHINE THAT REMEMBERS IT WRONG.','LAUNCH ↗','OPEN 02'],['AUDIO / SIGNAL / VIDEO','TURN SOUND INTO MOVING SIGNAL AND EXPORT THE PERFORMANCE.','LAUNCH ↗','OPEN 03'],['OBJECT / VIDEO / WRONG','FEED IT AN OBJECT. MAKE THE OBJECT BEHAVE INCORRECTLY.','LAUNCH ↗','OPEN 04'],['DUB / DELAY / PLAY','A SMALL DUB PLAYGROUND. TOUCH IT UNTIL THE ECHO GETS STRANGE.','LAUNCH ↗','OPEN 05']],why:'WHY?',manifesto:['THE INTERNET GOT TOO CLEAN.','SO WE BUILT SMALL MACHINES','THAT LEAVE FINGERPRINTS.'],notesLabel:'LAB NOTES / 2026',notesTitle:'USEFUL<br>ACCIDENTS<br>ONLY.',notes:['Hover should feel physical.','Motion is navigation, not wallpaper.','Tools stay simple once opened.','If it works too perfectly, damage it a little.'],exitLabel:'THE PAN / SAPPORO / EARTH?',exitTitle:'MAKE<br>SOMETHING<br>STRANGE.',random:'RANDOMIZE SIGNAL ↻',secret:'PS: type <strong>P A N</strong> on your keyboard.',footer:'TRANSMISSION NEVER ENDS',found:'SIGNAL FOUND. DO NOT LOOK DIRECTLY AT IT.'},
+      ja:{
+        title:'THE PAN TOOLS — 実験ウェブラボ',enter:'ラボへ入る ↘',kicker:'画像 / ノイズ / 信号 / 偶然をいじる、ちょっと変なデジタル楽器たち',hero:'アプリストアではありません。<br>変な機械が詰まった引き出しです。',touch:'機械に触る',ticker:['AI動画トリックなし','本物のボタン','アナログテープ','役に立つ事故'],select:'楽器を選ぶ',machines:'こいつらは<br>静かじゃない。',tools:[['画像 / 歪み / 書き出し','画像を入れる。信号を壊す。結果を書き出す。','起動 ↗','開く 01'],['テープ / 損傷 / 記憶','画像をテープに通して、少し間違えて覚えさせる。','起動 ↗','開く 02'],['音 / 信号 / 映像','音を動く信号へ変えて、その演奏を書き出す。','起動 ↗','開く 03'],['物体 / 映像 / 間違い','物体を入れて、間違った振る舞いをさせる。','起動 ↗','開く 04'],['ダブ / ディレイ / 遊ぶ','小さなダブ遊び場。エコーが変になるまで触る。','起動 ↗','開く 05']],why:'なぜ？',manifesto:['インターネットは','きれいになりすぎた。','だから指紋の残る機械を作った。'],notesLabel:'ラボノート / 2026',notesTitle:'役に立つ<br>事故だけ。',notes:['ホバーは物理現象っぽく。','動きは壁紙じゃない。ナビゲーションだ。','ツールを開いたら操作はシンプルに。','完璧に動きすぎたら、少しだけ壊す。'],exitLabel:'THE PAN / 札幌 / 地球？',exitTitle:'変なものを<br>作ろう。',random:'信号をランダム化 ↻',secret:'PS：キーボードで <strong>P A N</strong> と打ってみて。',footer:'通信は終わらない',found:'信号を検出。直視しないでください。'}
+    };
+    let lang=localStorage.getItem('thepan-tools-lang')||(navigator.language.toLowerCase().startsWith('ja')?'ja':'en');
+    const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
+    function apply(next){
+      lang=copy[next]?next:'en';localStorage.setItem('thepan-tools-lang',lang);document.documentElement.lang=lang;const t=copy[lang];document.title=t.title;
+      q('.tiny-link').textContent=t.enter;q('.hero-kicker').textContent=t.kicker;q('.hero-note').innerHTML=document.body.classList.contains('secret-mode')?t.found:t.hero;q('.enter-button span').textContent=t.touch;
+      qa('.ticker-track span').forEach((el,i)=>el.textContent=t.ticker[i%4]);q('.stage-head .eyebrow').textContent=t.select;q('.stage-head h2').innerHTML=t.machines;
+      qa('.tool-card').forEach((card,i)=>{card.querySelector('.tool-copy p').textContent=t.tools[i][0];card.querySelector('.tool-copy span').textContent=t.tools[i][1];card.querySelector('.launch').textContent=t.tools[i][2];card.dataset.cursor=t.tools[i][3]});
+      q('.manifesto .eyebrow').textContent=t.why;qa('.manifesto-copy p').forEach((el,i)=>el.textContent=t.manifesto[i]);q('.lab-notes .eyebrow').textContent=t.notesLabel;q('.lab-notes h2').innerHTML=t.notesTitle;qa('.note p').forEach((el,i)=>el.textContent=t.notes[i]);q('.exit .eyebrow').textContent=t.exitLabel;q('.exit-title').innerHTML=t.exitTitle;q('#randomize').textContent=t.random;q('.secret').innerHTML=t.secret;qa('footer span')[2].textContent=t.footer;qa('.lang-switch button').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+    }
+    qa('.lang-switch button').forEach(b=>b.addEventListener('click',()=>apply(b.dataset.lang)));apply(lang);
+    addEventListener('keydown',e=>{if(e.key.toUpperCase()==='N')setTimeout(()=>{if(document.body.classList.contains('secret-mode'))q('.hero-note').innerHTML=copy[lang].found},0)});
+  })();
+  </script>
 </body>
 </html>

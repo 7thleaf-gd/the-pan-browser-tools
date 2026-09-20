@@ -15,10 +15,11 @@ TAPE_ASSET_VERSION = "20260728.3"
 VISUALIZER_ASSET_VERSION = "20260730.7"
 PANDA_DUB_ASSET_VERSION = "20260805.1"
 REQUIRED = [
-    "index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",
+    "index.html", "home.css", "home.js", "image-machine/index.html", "styles.css", "app.js", "404.html", "robots.txt", "sitemap.xml",
     "about/index.html", "tools/index.html", "tape/index.html", "tape/tape.css", "tape/tape.js",
     "visualizer/index.html", "visualizer/visualizer.css", "visualizer/visualizer.js",
     "panda-dub/index.html", "panda-dub/panda-dub.css", "panda-dub/panda-dub.js",
+    "object-wrong/index.html", "object-wrong/object-wrong.css", "object-wrong/object-wrong.js",
     "assets/panda-dub/README.md", "assets/panda-dub/drums.wav", "assets/panda-dub/bass.wav",
     "assets/panda-dub/chord.wav", "assets/panda-dub/voice.wav", "assets/panda-dub/shot-01.wav",
     "assets/panda-dub/shot-02.wav", "assets/panda-dub/shot-03.wav",
@@ -34,14 +35,16 @@ REQUIRED = [
 ]
 PAGES = {
     "index.html": BASE_URL,
+    "image-machine/index.html": BASE_URL + "image-machine/",
     "tools/index.html": BASE_URL + "tools/",
     "about/index.html": BASE_URL + "about/",
     "tape/index.html": BASE_URL + "tape/",
     "visualizer/index.html": BASE_URL + "visualizer/",
     "panda-dub/index.html": BASE_URL + "panda-dub/",
+    "object-wrong/index.html": BASE_URL + "object-wrong/",
 }
 SOCIAL_IMAGES = {
-    "index.html": BASE_URL + "assets/images/imagemachine_ogp.png",
+    "image-machine/index.html": BASE_URL + "assets/images/imagemachine_ogp.png",
     "tape/index.html": BASE_URL + "assets/images/tape_ogp.png",
 }
 
@@ -125,13 +128,19 @@ def main():
                 errors.append(f"{relative}: broken internal link {link}")
 
         if relative == "index.html":
+            for asset in ["home.css?v=20260921.1", "home.js?v=20260921.1"]:
+                if asset not in parser.links:
+                    errors.append(f"index.html: missing production home asset {asset}")
+        if relative == "image-machine/index.html":
             critical_assets = [
-                "styles.css", "app.js", "assets/js/analytics.js",
-                "assets/js/consent.js", "assets/js/canvas-utils.js",
+                "../styles.css", "../app.js", "../assets/js/analytics.js",
+                "../assets/js/consent.js", "../assets/js/canvas-utils.js",
             ]
             for asset in critical_assets:
                 if f"{asset}?v={ASSET_VERSION}" not in parser.links:
-                    errors.append(f"index.html: {asset} must use asset version {ASSET_VERSION}")
+                    errors.append(
+                        f"image-machine/index.html: {asset} must use asset version {ASSET_VERSION}"
+                    )
         if relative == "tape/index.html":
             tape_assets = [
                 "../assets/css/tokens.css", "../assets/css/base.css",
