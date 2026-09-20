@@ -65,10 +65,30 @@
     }
   }
 
+  function makeBilingual() {
+    if (!panel) return;
+    const box = panel.querySelector('.consent-box');
+    if (!box) return;
+    box.dataset.bilingual = 'true';
+    const eyebrow = box.querySelector('.eyebrow');
+    const title = box.querySelector('h2');
+    const copy = box.querySelector('p:not(.eyebrow)');
+    const allow = box.querySelector('#acceptAnalytics');
+    const decline = box.querySelector('#declineAnalytics');
+    if (eyebrow) eyebrow.textContent = 'PRIVACY / プライバシー';
+    if (title) title.innerHTML = 'ANALYTICS<br><span class="ja">アクセス解析の設定</span>';
+    if (copy) copy.innerHTML = '<span class="consent-ja">任意の匿名アクセス解析です。作品ファイル・ファイル名・個人情報は収集しません。許可しなくても、すべての機能を使えます。</span><span class="consent-en">Optional anonymous analytics only. Creative files, filenames, and personal data are not collected. Every tool works if you decline.</span>';
+    if (allow) allow.innerHTML = '許可する<br><small>ALLOW ANALYTICS</small>';
+    if (decline) decline.innerHTML = '許可しない<br><small>DECLINE</small>';
+    const settings = document.querySelector('#privacySettings');
+    if (settings) settings.textContent = 'プライバシー設定 / PRIVACY';
+  }
+
   function init() {
     panel = document.querySelector('#consentPanel');
     if (!panel) return;
     panel.dataset.consentReady = 'true';
+    makeBilingual();
     const allow = document.querySelector('#acceptAnalytics');
     const decline = document.querySelector('#declineAnalytics');
     const settings = document.querySelector('#privacySettings');

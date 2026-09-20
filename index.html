@@ -173,9 +173,23 @@
 
   <footer>
     <span>© THE PAN</span><span>TOOLS.THEPAN.XYZ</span><span>TRANSMISSION NEVER ENDS</span>
+    <button id="privacySettings" class="home-privacy" type="button">プライバシー設定 / PRIVACY</button>
   </footer>
 
+  <section id="consentPanel" class="consent-panel home-consent" role="dialog" aria-modal="true" aria-labelledby="consentTitle" hidden>
+    <div class="consent-box">
+      <p class="eyebrow">PRIVACY / プライバシー</p>
+      <h2 id="consentTitle">ANALYTICS<br>アクセス解析の設定</h2>
+      <p>任意の匿名アクセス解析です。作品ファイル・ファイル名・個人情報は収集しません。許可しなくても、すべての機能を使えます。 / Optional anonymous analytics only. Creative files, filenames, and personal data are not collected. Every tool works if you decline.</p>
+      <div class="consent-actions">
+        <button id="acceptAnalytics" class="machine-button" type="button">許可する / ALLOW</button>
+        <button id="declineAnalytics" class="machine-button" type="button">許可しない / DECLINE</button>
+      </div>
+    </div>
+  </section>
+
   <script src="home.js?v=20260921.1"></script>
+  <script src="assets/js/consent.js?v=20260921.1" defer></script>
   <script>
   (()=>{
     const copy={

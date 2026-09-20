@@ -28,8 +28,8 @@ REQUIRED = [
     "assets/vendor/ffmpeg/ffmpeg-core.js", "assets/vendor/ffmpeg/ffmpeg-core.wasm",
     "assets/vendor/ffmpeg/README.md", "package.json",
     "favicon.ico", "assets/images/imagemachine_ogp.png", "assets/images/tape_ogp.png",
-    "assets/css/tokens.css", "assets/css/base.css", "assets/css/components.css",
-    "assets/js/analytics.js", "assets/js/consent.js", "assets/js/canvas-utils.js", "assets/js/audio-utils.js",
+    "assets/css/tokens.css", "assets/css/base.css", "assets/css/components.css", "assets/css/shell.css",
+    "assets/js/analytics.js", "assets/js/consent.js", "assets/js/shell.js", "assets/js/canvas-utils.js", "assets/js/audio-utils.js",
     "docs/DESIGN_SYSTEM.md", "docs/TOOL_TEMPLATE.md", "docs/ANALYTICS.md",
     "docs/RELEASE_CHECKLIST.md", ".github/workflows/pages.yml",
 ]
@@ -127,6 +127,11 @@ def main():
             if target is not None and not target.exists():
                 errors.append(f"{relative}: broken internal link {link}")
 
+        if relative != "index.html":
+            if "../assets/css/shell.css?v=20260921.1" not in parser.links:
+                errors.append(f"{relative}: missing shared navigation shell CSS")
+            if "../assets/js/shell.js?v=20260921.1" not in parser.links:
+                errors.append(f"{relative}: missing shared navigation/i18n shell JS")
         if relative == "index.html":
             for asset in ["home.css?v=20260921.1", "home.js?v=20260921.1"]:
                 if asset not in parser.links:

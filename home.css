@@ -36,3 +36,22 @@ footer{background:var(--ink);color:var(--paper);min-height:80px;padding:25px 22p
 .dub-visual b{transform:translateY(46%);-webkit-text-stroke:2px var(--ink);color:transparent}
 .dub-visual i{position:absolute;bottom:22px;font:900 12px monospace;letter-spacing:.5em}
 .launch{display:inline-flex;color:inherit;text-decoration:none}
+
+/* Consent is intentionally bilingual on the home page. */
+.home-privacy{appearance:none;border:0;border-bottom:1px solid currentColor;background:none;color:inherit;padding:0 0 3px;font:800 9px monospace;cursor:pointer}
+.home-privacy:hover{color:var(--acid)}
+.consent-panel{position:fixed;inset:0;z-index:300;display:grid;place-items:end;background:rgba(0,0,0,.76);padding:18px}
+.consent-panel[hidden]{display:none}
+.consent-box{width:min(540px,100%);padding:28px;border:1px solid var(--acid);background:#0b0b0b;color:var(--paper);box-shadow:12px 12px 0 rgba(215,255,40,.16)}
+.consent-box .eyebrow{font:800 10px/1 monospace;letter-spacing:.14em;color:var(--acid)}
+.consent-box h2{margin:15px 0;font:950 46px/.84 Arial,sans-serif;letter-spacing:-.06em}
+.consent-box h2 .ja{display:inline-block;margin-top:8px;color:var(--acid);font-size:.52em;letter-spacing:-.04em}
+.consent-box p:not(.eyebrow){font:600 13px/1.6 Arial,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;color:#c7c7c0}
+.consent-box .consent-ja{display:block;margin-bottom:8px;color:var(--paper);font-weight:800}
+.consent-box .consent-en{display:block;font-size:.9em}
+.consent-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:24px}
+.consent-box .machine-button{min-height:64px;border:1px solid #555;background:#151515;color:var(--paper);padding:12px;text-align:left;font:900 12px/1.25 monospace;cursor:pointer}
+.consent-box .machine-button:first-child{border-color:var(--acid);background:var(--acid);color:var(--ink)}
+.consent-box .machine-button:hover{border-color:var(--acid)}
+body[data-consent-open="true"]{overflow:hidden}
+@media(max-width:520px){footer{gap:12px;flex-wrap:wrap}.consent-box{padding:22px}.consent-box h2{font-size:38px}.consent-actions{grid-template-columns:1fr}}

@@ -1,0 +1,122 @@
+/* Shared navigation + language shell for THE PAN Browser Tools. */
+.pan-lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: end;
+  font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: .08em;
+}
+.pan-lang-switch button {
+  appearance: none;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  color: var(--pan-color-muted);
+  padding: 3px 2px;
+  font: inherit;
+  cursor: pointer;
+}
+.pan-lang-switch button:hover,
+.pan-lang-switch button.is-active {
+  color: var(--pan-color-green);
+  border-color: currentColor;
+}
+.pan-lang-switch .sep { color: var(--pan-color-line-strong); }
+
+.site-nav.pan-site-nav {
+  flex-wrap: nowrap;
+  gap: clamp(10px, 1.6vw, 24px);
+  max-width: min(100%, 900px);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  white-space: nowrap;
+  padding-bottom: 3px;
+}
+.site-nav.pan-site-nav::-webkit-scrollbar { display: none; }
+.site-nav.pan-site-nav a { flex: 0 0 auto; }
+
+.pan-machine-shelf {
+  margin: clamp(24px, 4vw, 54px) clamp(20px, 4vw, 64px) 0;
+  border: var(--pan-line);
+  background: var(--pan-color-panel);
+}
+.pan-machine-shelf__head {
+  min-height: 42px;
+  padding: 0 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: var(--pan-line);
+  color: var(--pan-color-muted);
+  font-size: var(--pan-font-size-label);
+  font-weight: var(--pan-weight-bold);
+  letter-spacing: var(--pan-letter-label);
+}
+.pan-machine-shelf__links {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.pan-machine-shelf__links a {
+  min-height: 74px;
+  padding: 14px;
+  border-right: var(--pan-line);
+  color: var(--pan-color-white);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: var(--pan-weight-black);
+  letter-spacing: .06em;
+}
+.pan-machine-shelf__links a:last-child { border-right: 0; }
+.pan-machine-shelf__links a:hover,
+.pan-machine-shelf__links a[aria-current="page"] {
+  color: var(--pan-color-green);
+  background: rgba(168,255,0,.04);
+}
+.pan-machine-shelf__links small {
+  color: var(--pan-color-muted);
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+html[lang="ja"] body {
+  font-family: Arial, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+}
+.consent-box[data-bilingual="true"] h2 .ja {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--pan-color-green);
+  font-size: .52em;
+  letter-spacing: -.04em;
+}
+.consent-box[data-bilingual="true"] .consent-ja {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--pan-color-white);
+  font-weight: 700;
+}
+.consent-box[data-bilingual="true"] .consent-en {
+  display: block;
+  font-size: .88em;
+}
+.consent-box[data-bilingual="true"] .machine-button {
+  line-height: 1.25;
+}
+@media (max-width: 900px) {
+  .masthead-side { max-width: 68vw; }
+  .pan-machine-shelf__links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pan-machine-shelf__links a { border-bottom: var(--pan-line); }
+  .pan-machine-shelf__links a:nth-child(2n) { border-right: 0; }
+  .pan-machine-shelf__links a:last-child { border-bottom: 0; }
+}
+@media (max-width: 520px) {
+  .masthead-side { max-width: 100%; }
+  .site-nav.pan-site-nav { width: calc(100vw - 40px); justify-content: flex-start; }
+  .pan-lang-switch { justify-self: start; }
+  .pan-machine-shelf__links { grid-template-columns: 1fr; }
+  .pan-machine-shelf__links a { border-right: 0; }
+}
