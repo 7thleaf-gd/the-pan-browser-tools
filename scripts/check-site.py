@@ -31,7 +31,7 @@ REQUIRED = [
     "assets/css/tokens.css", "assets/css/base.css", "assets/css/components.css", "assets/css/shell.css",
     "assets/js/analytics.js", "assets/js/consent.js", "assets/js/shell.js", "assets/js/canvas-utils.js", "assets/js/audio-utils.js",
     "docs/DESIGN_SYSTEM.md", "docs/TOOL_TEMPLATE.md", "docs/ANALYTICS.md",
-    "docs/RELEASE_CHECKLIST.md", ".github/workflows/pages.yml",
+    "docs/RELEASE_CHECKLIST.md", ".circleci/config.yml",
 ]
 PAGES = {
     "index.html": BASE_URL,
