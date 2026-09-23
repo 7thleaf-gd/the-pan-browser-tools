@@ -11,14 +11,6 @@ jobs:
           name: Validate static site
           command: npm run build
       - run:
-          name: Configure GitHub deploy key
-          command: |
-            test -n "$GH_PAGES_DEPLOY_KEY_B64"
-            mkdir -p ~/.ssh
-            echo "$GH_PAGES_DEPLOY_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
-            chmod 600 ~/.ssh/id_ed25519
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
-      - run:
           name: Stage static site
           command: |
             set -euo pipefail
