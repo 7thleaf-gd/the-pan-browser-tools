@@ -3,7 +3,8 @@ import json,re,urllib.request,urllib.error
 HOST='tools.thepan.xyz'
 KEY='65c4754752b477da0dafffbca6277852'
 SITEMAP=f"https://{HOST}/sitemap.xml"
-xml=urllib.request.urlopen(SITEMAP,timeout=20).read().decode("utf-8","replace")
+sitemap_req=urllib.request.Request(SITEMAP,headers={"User-Agent":"Mozilla/5.0 7thleaf-indexnow/1.0"})
+xml=urllib.request.urlopen(sitemap_req,timeout=20).read().decode("utf-8","replace")
 urls=re.findall(r"<loc>(.*?)</loc>",xml)
 if not urls:
     raise SystemExit("no sitemap URLs found")
