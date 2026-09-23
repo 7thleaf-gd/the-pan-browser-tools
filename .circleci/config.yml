@@ -16,11 +16,12 @@ jobs:
             set -euo pipefail
             rm -rf /tmp/the-pan-browser-tools-pages
             mkdir -p /tmp/the-pan-browser-tools-pages
-            rsync -a ./ /tmp/the-pan-browser-tools-pages/ \
-              --exclude '.git' \
-              --exclude '.github' \
-              --exclude '.circleci' \
-              --exclude 'node_modules'
+            tar \
+              --exclude='./.git' \
+              --exclude='./.github' \
+              --exclude='./.circleci' \
+              --exclude='./node_modules' \
+              -cf - . | tar -C /tmp/the-pan-browser-tools-pages -xf -
             printf '%s\n' 'tools.thepan.xyz' > /tmp/the-pan-browser-tools-pages/CNAME
             touch /tmp/the-pan-browser-tools-pages/.nojekyll
       - run:
