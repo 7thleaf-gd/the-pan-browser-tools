@@ -1,0 +1,54 @@
+version: 2.1
+
+jobs:
+  deploy-pages:
+    docker:
+      - image: cimg/node:20.19
+    resource_class: small
+    steps:
+      - checkout
+      - run:
+          name: Validate static site
+          command: npm run build
+      - run:
+          name: Configure GitHub deploy key
+          command: |
+            test -n "$GH_PAGES_DEPLOY_KEY_B64"
+            mkdir -p ~/.ssh
+            echo "$GH_PAGES_DEPLOY_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+            chmod 600 ~/.ssh/id_ed25519
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - run:
+          name: Stage static site
+          command: |
+            set -euo pipefail
+            rm -rf /tmp/the-pan-browser-tools-pages
+            mkdir -p /tmp/the-pan-browser-tools-pages
+            rsync -a ./ /tmp/the-pan-browser-tools-pages/ \
+              --exclude '.git' \
+              --exclude '.github' \
+              --exclude '.circleci' \
+              --exclude 'node_modules'
+            printf '%s\n' 'tools.thepan.xyz' > /tmp/the-pan-browser-tools-pages/CNAME
+            touch /tmp/the-pan-browser-tools-pages/.nojekyll
+      - run:
+          name: Publish gh-pages branch
+          command: |
+            set -euo pipefail
+            cd /tmp/the-pan-browser-tools-pages
+            git init
+            git checkout -b gh-pages
+            git config user.name "circleci-pages"
+            git config user.email "circleci-pages@users.noreply.github.com"
+            git add -A
+            git commit -m "deploy: THE PAN tools pages $CIRCLE_SHA1"
+            git remote add origin git@github.com:7thleaf-gd/the-pan-browser-tools.git
+            git push --force origin gh-pages
+
+workflows:
+  pages:
+    jobs:
+      - deploy-pages:
+          filters:
+            branches:
+              only: main
