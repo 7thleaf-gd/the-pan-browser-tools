@@ -1,0 +1,14 @@
+.content-page { padding: 70px clamp(20px, 4vw, 64px) 100px; }
+.page-hero { padding-bottom: 60px; border-bottom: var(--pan-line); }
+.page-hero h1 { margin: 20px 0; font-size: clamp(62px, 12vw, 170px); line-height: .76; letter-spacing: -.075em; font-weight: var(--pan-weight-black); }
+.page-hero h1 em { color: var(--pan-color-green); font-style: normal; }
+.page-hero .lede { max-width: 620px; color: #c4c6bd; font-size: clamp(18px, 2.5vw, 28px); line-height: 1.35; }
+.tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 60px; }
+.prose-grid { display: grid; grid-template-columns: minmax(180px, .45fr) minmax(0, 1fr); gap: clamp(30px, 8vw, 130px); padding: 58px 0; border-bottom: var(--pan-line); }
+.prose-grid h2 { margin: 0; color: var(--pan-color-green); font-size: 13px; letter-spacing: .14em; }
+.prose-grid p { margin: 0 0 1em; max-width: 720px; font-size: clamp(18px, 2.4vw, 28px); line-height: 1.45; }
+.back-link { display: inline-block; margin-top: 40px; color: var(--pan-color-green); font-weight: var(--pan-weight-black); letter-spacing: .1em; }
+@media (max-width: 700px) {
+  .tool-grid, .prose-grid { grid-template-columns: 1fr; }
+  .page-hero h1 { font-size: 20vw; }
+}
