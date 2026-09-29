@@ -1,7 +1,7 @@
 # CURRENT — THE PAN Browser Tools
 
 Updated: 2026-09-29
-STATUS: WIRING CLEANUP
+STATUS: FIX / PRODUCTION PASS
 AUTHORITY: 7thleaf-gd/the-pan-browser-tools
 PRODUCTION_HOSTNAME: tools.thepan.xyz
 PROVIDER: GitHub Pages
@@ -69,10 +69,14 @@ Not published:
 
 ## Acceptance
 
-- branch/static validation: PENDING
-- main deploy-pages: PENDING
-- gh-pages head references final main SHA: PENDING
-- CNAME correct: PENDING
-- operations/docs excluded from gh-pages: PENDING
+- branch/static validation: PASS
+- main deploy-pages: PASS
+- gh-pages head references final main SHA: PASS
+- CNAME correct: PASS
+- operations/docs excluded from gh-pages: PASS
 
-READBACK: PENDING
+MAIN_SHA: `90ae2370a618ac6e2becfdaba91466234aeee8e2`
+GH_PAGES_SHA: `2c2c9c2e4b13bef0e542b03ee1f33d5964a7294e`
+CIRCLECI_VERIFY_RUN: `12`
+CIRCLECI_DEPLOY_RUN: `13`
+READBACK: THE_PAN_BROWSER_TOOLS_PRODUCTION_PASS
