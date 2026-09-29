@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  deploy-pages:
+  verify:
     docker:
       - image: cimg/node:20.19
     resource_class: small
@@ -11,13 +11,26 @@ jobs:
           name: Validate static site
           command: npm run build
       - run:
+          name: Validate deploy script
+          command: bash -n scripts/deploy-pages.sh
+
+  deploy-pages:
+    docker:
+      - image: cimg/node:20.19
+    resource_class: small
+    steps:
+      - checkout
+      - run:
           name: Publish GitHub Pages
           command: bash scripts/deploy-pages.sh
 
 workflows:
   pages:
     jobs:
+      - verify
       - deploy-pages:
+          requires:
+            - verify
           filters:
             branches:
               only: main
