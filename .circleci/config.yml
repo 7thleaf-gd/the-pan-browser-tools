@@ -11,32 +11,8 @@ jobs:
           name: Validate static site
           command: npm run build
       - run:
-          name: Stage static site
-          command: |
-            set -euo pipefail
-            rm -rf /tmp/the-pan-browser-tools-pages
-            mkdir -p /tmp/the-pan-browser-tools-pages
-            tar \
-              --exclude='./.git' \
-              --exclude='./.github' \
-              --exclude='./.circleci' \
-              --exclude='./node_modules' \
-              -cf - . | tar -C /tmp/the-pan-browser-tools-pages -xf -
-            printf '%s\n' 'tools.thepan.xyz' > /tmp/the-pan-browser-tools-pages/CNAME
-            touch /tmp/the-pan-browser-tools-pages/.nojekyll
-      - run:
-          name: Publish gh-pages branch
-          command: |
-            set -euo pipefail
-            cd /tmp/the-pan-browser-tools-pages
-            git init
-            git checkout -b gh-pages
-            git config user.name "circleci-pages"
-            git config user.email "circleci-pages@users.noreply.github.com"
-            git add -A
-            git commit -m "deploy: THE PAN tools pages $CIRCLE_SHA1"
-            git remote add origin git@github.com:7thleaf-gd/the-pan-browser-tools.git
-            git push --force origin gh-pages
+          name: Publish GitHub Pages
+          command: bash scripts/deploy-pages.sh
 
 workflows:
   pages:
