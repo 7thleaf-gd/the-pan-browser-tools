@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="THE PAN IMAGE MACHINE is a private, free browser-based image distortion tool by 7thleaf Records.">
+  <link rel="canonical" href="https://tools.thepan.xyz/image-machine/">
+  <meta property="og:title" content="THE PAN IMAGE MACHINE — CREATE. PLAY. DISTORT.">
+  <meta property="og:description" content="Load an image. Break the signal. Export the result. Every pixel stays in your browser.">
+  <meta property="og:url" content="https://tools.thepan.xyz/image-machine/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://tools.thepan.xyz/assets/images/imagemachine_ogp.png">
+  <meta property="og:image:width" content="1536">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:image:alt" content="THE PAN IMAGE MACHINE — browser-based image destruction apparatus">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://tools.thepan.xyz/assets/images/imagemachine_ogp.png">
+  <title>THE PAN IMAGE MACHINE — CREATE. PLAY. DISTORT.</title>
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebApplication","name":"THE PAN IMAGE MACHINE","url":"https://tools.thepan.xyz/image-machine/","applicationCategory":"MultimediaApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Organization","name":"7thleaf Records"}}
+  </script>
+
+  <!-- Consent Mode defaults must run before Google Tag Manager. -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    (function () {
+      try {
+        if (localStorage.getItem('thePanAnalyticsConsent') === 'granted') {
+          gtag('consent', 'update', {
+            analytics_storage: 'granted',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied'
+          });
+        }
+      } catch (_) {}
+    }());
+  </script>
+  <!-- Google Tag Manager (GA4 G-5WHCJ6DCMF is configured inside GTM; no direct gtag.js). -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-5W74796T');
+  </script>
+
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=20260727.2">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20260727.2">
+  <link rel="stylesheet" href="../assets/css/components.css?v=20260727.2"><link rel="stylesheet" href="../assets/css/shell.css?v=20260921.1">
+  <link rel="stylesheet" href="../styles.css?v=20260727.2">
+  <script src="../assets/js/analytics.js?v=20260727.2" defer></script>
+  <script src="../assets/js/consent.js?v=20260727.2" defer></script><script src="../assets/js/shell.js?v=20260921.1" defer></script>
+  <script src="../assets/js/canvas-utils.js?v=20260727.2" defer></script>
+  <script src="../app.js?v=20260727.2" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#machine">Skip to image controls</a>
+  <div class="noise-layer" aria-hidden="true"></div>
+  <header class="masthead">
+    <a class="brand" href="../" aria-label="THE PAN TOOLS home">
+      <span class="brand-kicker">THE PAN BROWSER TOOLS / UNIT 001</span>
+      <span class="brand-name">THE PAN<br>IMAGE MACHINE</span>
+    </a>
+    <div class="masthead-side">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="./" aria-current="page">IMAGE MACHINE</a>
+        <a href="../tape/">TAPE MACHINE</a>
+        <a href="../visualizer/">VISUALIZER</a>
+        <a href="../tools/">TOOLS</a>
+        <a href="../about/">ABOUT</a>
+      </nav>
+      <div class="masthead-meta">
+        <span>V0 / 7THLEAF RECORDS</span>
+        <span class="signal"><i aria-hidden="true"></i> LOCAL PROCESSING</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p class="eyebrow">BROWSER-BASED IMAGE DESTRUCTION APPARATUS</p>
+      <h1>CREATE.<br>PLAY.<br><em>DISTORT.</em></h1>
+      <p class="lede">Load an image. Break the signal. Export the result. Nothing is uploaded—every pixel stays in your browser.</p>
+      <label class="upload-main" for="fileInput">
+        <span>LOAD IMAGE</span>
+        <small>PNG / JPEG / WEBP / GIF · DROP OR SELECT</small>
+      </label>
+      <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+    </section>
+
+    <section id="machine" class="machine" aria-label="Image processing machine">
+      <div class="screen-panel">
+        <div class="panel-label">
+          <span>MONITOR / OUTPUT PREVIEW</span>
+          <span id="imageInfo">NO SIGNAL</span>
+        </div>
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Upload an image by selecting a file or dropping it here" aria-busy="false">
+          <div id="emptyState" class="empty-state">
+            <div class="target-mark" aria-hidden="true"></div>
+            <strong>INPUT REQUIRED</strong>
+            <span>DROP IMAGE HERE</span>
+            <button id="browseButton" class="text-button" type="button">OR BROWSE FILES →</button>
+            <small>PRIVATE BY DESIGN / NO SERVER UPLOAD</small>
+          </div>
+          <canvas id="previewCanvas" hidden aria-label="Processed image preview"></canvas>
+          <canvas id="originalPreviewCanvas" class="original-preview-canvas" hidden aria-label="Original image preview"></canvas>
+          <div id="compareHandle" class="compare-handle" role="slider" tabindex="0" aria-label="Before and after comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span></span></div>
+          <div id="previewModes" class="preview-modes" aria-label="Preview mode" hidden>
+            <button type="button" data-preview-mode="original">ORIGINAL</button>
+            <button type="button" data-preview-mode="current" class="is-active">CURRENT</button>
+            <button type="button" data-preview-mode="compare">COMPARE</button>
+          </div>
+          <button id="fullscreenButton" class="fullscreen-button" type="button" hidden>FULLSCREEN PREVIEW</button>
+          <div id="busyIndicator" class="busy-indicator" role="status" aria-live="polite" hidden>PROCESSING SIGNAL…</div>
+        </div>
+        <div id="errorMessage" class="error-message" role="alert" aria-live="assertive" hidden></div>
+      </div>
+
+      <aside class="control-panel" aria-label="Image effect controls">
+        <div class="panel-label">
+          <span>CONTROL BANK / FX</span>
+          <span class="status-badge is-available">● LIVE</span>
+        </div>
+        <div id="controls" class="controls">
+          <section class="preset-bank" aria-labelledby="presetTitle">
+            <div class="preset-heading"><h2 id="presetTitle">PRESET SIGNALS</h2><span id="activePreset">NONE</span></div>
+            <div id="presetButtons" class="preset-buttons"></div>
+          </section>
+          <details class="fx-group" data-fx-group="basic" open>
+            <summary><span>BASIC</span><span class="fx-count" data-fx-count="basic">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>PIXELATE</span><output for="pixelate">0</output><input id="pixelate" aria-label="Pixelate" data-effect="pixelate" type="range" min="0" max="40" value="0"></label>
+              <label class="control"><span>BLUR</span><output for="blur">0</output><input id="blur" aria-label="Blur" data-effect="blur" type="range" min="0" max="12" value="0"></label>
+              <label class="control"><span>CONTRAST</span><output for="contrast">100</output><input id="contrast" aria-label="Contrast" data-effect="contrast" type="range" min="50" max="200" value="100"></label>
+              <label class="control"><span>BRIGHTNESS</span><output for="brightness">100</output><input id="brightness" aria-label="Brightness" data-effect="brightness" type="range" min="50" max="150" value="100"></label>
+              <button class="fx-reset" type="button" data-reset-group="basic">RESET BASIC</button>
+            </div>
+          </details>
+          <details class="fx-group" data-fx-group="warp" open>
+            <summary><span>WARP</span><span class="fx-count" data-fx-count="warp">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>WAVE</span><output for="wave">0</output><input id="wave" aria-label="Wave" data-effect="wave" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>MELT</span><output for="melt">0</output><input id="melt" aria-label="Melt" data-effect="melt" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>HORIZONTAL TEAR</span><output for="horizontalTear">0</output><input id="horizontalTear" aria-label="Horizontal Tear" data-effect="horizontal_tear" type="range" min="0" max="100" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="warp">RESET WARP</button>
+            </div>
+          </details>
+          <details class="fx-group" data-fx-group="signal">
+            <summary><span>SIGNAL</span><span class="fx-count" data-fx-count="signal">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>RGB SPLIT</span><output for="rgbSplit">0</output><input id="rgbSplit" aria-label="RGB Split" data-effect="rgb_split" type="range" min="0" max="30" value="0"></label>
+              <label class="control"><span>SCANLINE</span><output for="scanline">0</output><input id="scanline" aria-label="Scanline" data-effect="scanline" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>BLOCK DAMAGE</span><output for="blockDamage">0</output><input id="blockDamage" aria-label="Block Damage" data-effect="block_damage" type="range" min="0" max="100" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="signal">RESET SIGNAL</button>
+            </div>
+          </details>
+          <details class="fx-group" data-fx-group="texture">
+            <summary><span>TEXTURE</span><span class="fx-count" data-fx-count="texture">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>GRAIN</span><output for="grain">0</output><input id="grain" aria-label="Grain" data-effect="grain" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>NOISE</span><output for="noise">0</output><input id="noise" aria-label="Noise" data-effect="noise" type="range" min="0" max="100" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="texture">RESET TEXTURE</button>
+            </div>
+          </details>
+          <details class="fx-group" data-fx-group="print">
+            <summary><span>PRINT</span><span class="fx-count" data-fx-count="print">0 ACTIVE</span></summary>
+            <div class="fx-group-body">
+              <label class="control"><span>DITHER</span><output for="dither">0</output><input id="dither" aria-label="Dither" data-effect="dither" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>HALFTONE</span><output for="halftone">0</output><input id="halftone" aria-label="Halftone" data-effect="halftone" type="range" min="0" max="100" value="0"></label>
+              <label class="control"><span>THRESHOLD</span><output for="threshold">0</output><input id="threshold" aria-label="Threshold" data-effect="threshold" type="range" min="0" max="100" value="0"></label>
+              <button class="fx-reset" type="button" data-reset-group="print">RESET PRINT</button>
+            </div>
+          </details>
+          <section class="fx-future" aria-labelledby="futureFxTitle">
+            <h3 id="futureFxTitle">EXPANSION BANK / RESERVED</h3>
+            <p data-planned-effects>SHARPEN · BLOOM · JPEG ARTIFACT · EDGE</p>
+            <span>NO MODULES INSTALLED</span>
+          </section>
+          <p class="privacy-note"><span aria-hidden="true">●</span> Images are processed locally with Canvas API. No image, filename, or personal data is transmitted or added to analytics.</p>
+        </div>
+        <div class="button-grid" aria-label="Image actions">
+          <button id="randomButton" class="machine-button accent" type="button">SURPRISE ME<small>GENERATE A CONTROLLED ACCIDENT</small></button>
+          <button id="resetButton" class="machine-button" type="button">RESET<br>TO ZERO</button>
+          <button id="exportButton" class="machine-button export" type="button" disabled>EXPORT<br>PNG ↓</button>
+        </div>
+      </aside>
+    </section>
+
+    <section id="sessionGallery" class="session-gallery" aria-labelledby="galleryTitle">
+      <div class="gallery-heading"><div><p class="eyebrow">MEMORY ONLY / MAX 8</p><h2 id="galleryTitle">SESSION GALLERY</h2></div><button id="clearGallery" class="machine-button" type="button" disabled>CLEAR ALL</button></div>
+      <div id="galleryGrid" class="gallery-grid"><p class="gallery-empty">EXPORT A SIGNAL TO START THE SESSION GALLERY.</p></div>
+    </section>
+
+    <section class="manifesto" aria-label="Product principles">
+      <span>NO ACCOUNT.</span><span>NO INSTALL.</span><span>NO CLOUD.</span><span>JUST SIGNAL.</span>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>THE PAN BROWSER TOOLS</strong><br>FREE CREATIVE MACHINES FROM 7THLEAF RECORDS</div>
+    <div class="footer-right"><span>© <span id="year"></span> 7THLEAF RECORDS</span><button id="privacySettings" class="footer-button" type="button">PRIVACY SETTINGS</button></div>
+  </footer>
+
+  <section id="consentPanel" class="consent-panel" role="dialog" aria-modal="true" aria-labelledby="consentTitle" hidden>
+    <div class="consent-box">
+      <p class="eyebrow">PRIVACY CONTROL</p>
+      <h2 id="consentTitle">ANALYTICS<br>SETTING</h2>
+      <p>Optional analytics help us understand which controls get used. Images, filenames, and personal data are never collected. The machine works fully if you decline.</p>
+      <div class="consent-actions">
+        <button id="acceptAnalytics" class="machine-button accent" type="button">ALLOW ANALYTICS</button>
+        <button id="declineAnalytics" class="machine-button" type="button">DECLINE</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="fullscreenPreview" class="fullscreen-preview" role="dialog" aria-modal="true" aria-label="Fullscreen processed image preview" hidden>
+    <button id="closeFullscreen" class="machine-button fullscreen-close" type="button">CLOSE ×</button>
+    <canvas id="fullscreenCanvas" aria-label="Fullscreen processed image"></canvas>
+    <canvas id="fullscreenOriginalCanvas" class="fullscreen-original" aria-label="Fullscreen original image"></canvas>
+    <div id="fullscreenCompareHandle" class="compare-handle fullscreen-compare" role="slider" tabindex="0" aria-label="Fullscreen before and after comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span></span></div>
+    <div id="fullscreenModes" class="preview-modes fullscreen-modes" aria-label="Fullscreen preview mode">
+      <button type="button" data-preview-mode="original">ORIGINAL</button>
+      <button type="button" data-preview-mode="current" class="is-active">CURRENT</button>
+      <button type="button" data-preview-mode="compare">COMPARE</button>
+    </div>
+  </section>
+
+  <section id="artifactPanel" class="artifact-panel" role="dialog" aria-modal="true" aria-labelledby="artifactTitle" hidden>
+    <div class="artifact-box">
+      <p class="eyebrow">EXPORT COMPLETE</p><h2 id="artifactTitle">ARTIFACT READY</h2>
+      <p id="shareStatus" role="status" aria-live="polite">PNG SAVED. KEEP THE SIGNAL MOVING.</p>
+      <div class="artifact-actions"><button id="shareArtifact" class="machine-button accent" type="button">SHARE</button><button id="copyCredit" class="machine-button" type="button">COPY CREDIT</button><button id="downloadAgain" class="machine-button" type="button">DOWNLOAD AGAIN</button><button id="closeArtifact" class="machine-button" type="button">CLOSE</button></div>
+    </div>
+  </section>
+
+  <section id="galleryViewer" class="artifact-panel" role="dialog" aria-modal="true" aria-labelledby="galleryViewerTitle" hidden>
+    <div class="artifact-box gallery-viewer-box"><h2 id="galleryViewerTitle">SESSION ARTIFACT</h2><div id="galleryCompareView" class="gallery-compare-view"><img id="galleryLargeImage" alt="Selected session artwork"><canvas id="galleryCurrentCanvas" hidden aria-label="Current processed image for comparison"></canvas><span class="gallery-compare-label gallery-saved">SAVED</span><span class="gallery-compare-label gallery-current">CURRENT</span><div id="galleryCompareHandle" class="compare-handle gallery-compare-handle" role="slider" tabindex="0" aria-label="Gallery comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" hidden><span></span></div></div>
+      <div class="artifact-actions"><button id="galleryRestore" class="machine-button accent" type="button">RESTORE FX</button><button id="galleryCompare" class="machine-button" type="button">COMPARE CURRENT</button><button id="galleryFavorite" class="machine-button" type="button">FAVORITE</button><button id="galleryExport" class="machine-button" type="button">EXPORT PNG</button><button id="galleryDelete" class="machine-button" type="button">DELETE</button><button id="galleryViewerClose" class="machine-button" type="button">CLOSE</button></div>
+    </div>
+  </section>
+
+  <aside id="floatingPreview" class="floating-preview" data-mode="current" data-corner="top-right" aria-label="Floating Preview Monitor" hidden>
+    <div id="floatingDragHandle" class="floating-header">
+      <strong>FLOATING PREVIEW MONITOR</strong>
+      <div class="floating-window-actions">
+        <button id="floatingMinimize" type="button" aria-label="Minimize floating preview">_</button>
+        <button id="floatingClose" type="button" aria-label="Close floating preview">×</button>
+      </div>
+    </div>
+    <button id="floatingCanvasButton" class="floating-canvas-button" type="button" aria-label="Open fullscreen preview">
+      <canvas id="floatingCanvas" width="480" height="270" aria-label="Floating image preview"></canvas>
+      <span id="compareDivider" class="compare-divider" aria-hidden="true"></span>
+      <span class="compare-label compare-before">BEFORE</span>
+      <span class="compare-label compare-after">AFTER</span>
+    </button>
+    <div class="floating-controls">
+      <button id="floatingPrevious" type="button" aria-label="Previous preview mode">←</button>
+      <span id="floatingMode" role="status" aria-live="polite">CURRENT</span>
+      <button id="floatingNext" type="button" aria-label="Next preview mode">→</button>
+    </div>
+  </aside>
+</body>
+</html>

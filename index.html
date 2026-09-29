@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <meta name="robots" content="index,follow" />
+  <title>Free Image, Tape & Live Visual Browser Tools — THE PAN</title>
+  <meta name="description" content="Free browser tools for image distortion, tape effects, live visuals, audio experiments and dub. No login required.">
+  <link rel="canonical" href="https://tools.thepan.xyz/">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[
+    {"@type":"WebSite","name":"THE PAN Browser Tools","url":"https://tools.thepan.xyz/","description":"Free browser tools for image distortion, tape effects, live visuals, audio experiments and dub."},
+    {"@type":"ItemList","name":"THE PAN Browser Tools","itemListElement":[
+      {"@type":"ListItem","position":1,"item":{"@type":"WebApplication","name":"Image Machine","url":"https://tools.thepan.xyz/image-machine/","applicationCategory":"MultimediaApplication","operatingSystem":"Web Browser","offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}},
+      {"@type":"ListItem","position":2,"item":{"@type":"WebApplication","name":"Tape Machine","url":"https://tools.thepan.xyz/tape/","applicationCategory":"MultimediaApplication","operatingSystem":"Web Browser","offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}},
+      {"@type":"ListItem","position":3,"item":{"@type":"WebApplication","name":"Live Visualizer","url":"https://tools.thepan.xyz/visualizer/","applicationCategory":"MultimediaApplication","operatingSystem":"Web Browser","offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}}
+    ]}
+  ]}
+  </script>
+
+  <script>
+    window.dataLayer=window.dataLayer||[];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});
+    try{if(localStorage.getItem('thePanAnalyticsConsent')==='granted'){gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}}catch(_){}
+  </script>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5W74796T');</script>
+
+  <link rel="stylesheet" href="home.css?v=20260921.1" />
+  <style>
+    .topbar{grid-template-columns:1fr 1fr auto auto!important}
+    .lang-switch{display:flex;align-items:center;gap:5px;margin-right:18px;font:800 9px/1 monospace}
+    .lang-switch button{appearance:none;border:0;background:none;color:inherit;padding:0 2px;cursor:pointer;font:inherit;opacity:.45}
+    .lang-switch button.active{opacity:1;text-decoration:underline;text-underline-offset:3px}
+    @media(max-width:900px){.topbar{grid-template-columns:1fr auto auto!important}.lang-switch{margin-right:10px}}
+    html[lang="ja"] body{font-family:Arial,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}
+  </style>
+</head>
+<body>
+  <canvas id="signal-field" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <header class="topbar">
+    <a class="brand magnetic" href="#top" aria-label="THE PAN TOOLS home">
+      <span class="brand-mark">THE PAN</span><span class="brand-sub">TOOLS</span>
+    </a>
+    <div class="top-meta">
+      <span>WEB INSTRUMENTS / 001–005</span>
+      <span class="status"><i></i> SIGNAL ONLINE</span>
+    </div>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="ja">JP</button>
+      <span>/</span>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <a class="tiny-link magnetic" href="#tools">ENTER LAB ↘</a>
+  </header>
+
+  <main id="top">
+    <section class="hero section-black" data-theme="dark">
+      <div class="hero-kicker reveal">LEFT-FIELD DIGITAL INSTRUMENTS FOR IMAGE / NOISE / SIGNAL / ACCIDENT</div>
+      <h1 class="hero-title" aria-label="THE PAN TOOLS">
+        <span class="hero-line" data-depth="0.8">THE</span>
+        <span class="hero-line outline" data-depth="1.25">PAN</span>
+        <span class="hero-line" data-depth="1.0">TOOLS</span>
+      </h1>
+      <p class="hero-note reveal">NOT AN APP STORE.<br>MORE LIKE A DRAWER FULL OF STRANGE MACHINES.</p>
+      <a class="enter-button magnetic" href="#tools"><span>TOUCH THE MACHINES</span><b>↓</b></a>
+      <div class="orb orb-a" data-float="1">A</div>
+      <div class="orb orb-b" data-float="2">07</div>
+      <div class="orb orb-c" data-float="3">?</div>
+    </section>
+
+    <section class="ticker" aria-label="Moving message">
+      <div class="ticker-track">
+        <span>NO AI VIDEO TRICKS</span><i>✦</i><span>REAL BUTTONS</span><i>✦</i><span>ANALOG TAPE</span><i>✦</i><span>USEFUL ACCIDENTS</span><i>✦</i>
+        <span>NO AI VIDEO TRICKS</span><i>✦</i><span>REAL BUTTONS</span><i>✦</i><span>ANALOG TAPE</span><i>✦</i><span>USEFUL ACCIDENTS</span><i>✦</i>
+      </div>
+    </section>
+
+    <section id="tools" class="tools-stage section-paper" data-theme="light">
+      <div class="stage-head">
+        <p class="eyebrow reveal">SELECT AN INSTRUMENT</p>
+        <h2 class="reveal">THE MACHINES<br>ARE NOT QUIET.</h2>
+      </div>
+
+      <article class="tool-card card-a tilt-card reveal" data-cursor="OPEN 01">
+        <div class="tool-index">01</div>
+        <div class="tool-visual image-visual" aria-hidden="true"><span>IMG</span><i>↯</i></div>
+        <div class="tool-copy">
+          <p>IMAGE / DISTORT / EXPORT</p>
+          <h3>IMAGE<br>MACHINE</h3>
+          <span>LOAD AN IMAGE. BREAK THE SIGNAL. EXPORT THE RESULT.</span>
+        </div>
+        <a class="launch magnetic" href="image-machine/">LAUNCH ↗</a>
+      </article>
+
+      <article class="tool-card card-b tilt-card reveal" data-cursor="OPEN 02">
+        <div class="tool-index">02</div>
+        <div class="tool-visual tape-visual" aria-hidden="true">
+          <div class="reel reel-left"></div><div class="reel reel-right"></div><div class="tape-line"></div>
+        </div>
+        <div class="tool-copy">
+          <p>TAPE / DAMAGE / MEMORY</p>
+          <h3>TAPE<br>MACHINE</h3>
+          <span>RUN AN IMAGE THROUGH A MACHINE THAT REMEMBERS IT WRONG.</span>
+        </div>
+        <a class="launch magnetic" href="tape/">LAUNCH ↗</a>
+      </article>
+
+      <article class="tool-card card-c tilt-card reveal" data-cursor="OPEN 03">
+        <div class="tool-index">03</div>
+        <div class="tool-visual signal-visual" aria-hidden="true"><span></span><span></span><span></span><b>◉</b></div>
+        <div class="tool-copy">
+          <p>AUDIO / SIGNAL / VIDEO</p>
+          <h3>SIGNAL<br>VISUALIZER</h3>
+          <span>TURN SOUND INTO MOVING SIGNAL AND EXPORT THE PERFORMANCE.</span>
+        </div>
+        <a class="launch magnetic" href="visualizer/">LAUNCH ↗</a>
+      </article>
+
+      <article class="tool-card card-d tilt-card reveal" data-cursor="OPEN 04">
+        <div class="tool-index">04</div>
+        <div class="tool-visual wrong-visual" aria-hidden="true"><span>OBJECT</span><b>WRONG</b></div>
+        <div class="tool-copy">
+          <p>OBJECT / VIDEO / WRONG</p>
+          <h3>OBJECT WRONG<br>MACHINE</h3>
+          <span>FEED IT AN OBJECT. MAKE THE OBJECT BEHAVE INCORRECTLY.</span>
+        </div>
+        <a class="launch magnetic" href="object-wrong/">LAUNCH ↗</a>
+      </article>
+
+      <article class="tool-card card-e tilt-card reveal" data-cursor="OPEN 05">
+        <div class="tool-index">05</div>
+        <div class="tool-visual dub-visual" aria-hidden="true"><span>PANDA</span><b>DUB</b><i>● ● ●</i></div>
+        <div class="tool-copy">
+          <p>DUB / DELAY / PLAY</p>
+          <h3>PANDA<br>DUB</h3>
+          <span>A SMALL DUB PLAYGROUND. TOUCH IT UNTIL THE ECHO GETS STRANGE.</span>
+        </div>
+        <a class="launch magnetic" href="panda-dub/">LAUNCH ↗</a>
+      </article>
+    </section>
+
+    <section class="manifesto section-acid" data-theme="light">
+      <div class="manifesto-sticky">
+        <p class="eyebrow">WHY?</p>
+        <div class="manifesto-word" aria-hidden="true">TOOLS</div>
+        <div class="manifesto-copy">
+          <p>THE INTERNET GOT TOO CLEAN.</p>
+          <p>SO WE BUILT SMALL MACHINES</p>
+          <p>THAT LEAVE FINGERPRINTS.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lab-notes section-black" data-theme="dark">
+      <div class="notes-grid">
+        <div>
+          <p class="eyebrow reveal">LAB NOTES / 2026</p>
+          <h2 class="reveal">USEFUL<br>ACCIDENTS<br>ONLY.</h2>
+        </div>
+        <div class="note-list">
+          <div class="note reveal"><span>001</span><p>Hover should feel physical.</p></div>
+          <div class="note reveal"><span>002</span><p>Motion is navigation, not wallpaper.</p></div>
+          <div class="note reveal"><span>003</span><p>Tools stay simple once opened.</p></div>
+          <div class="note reveal"><span>004</span><p>If it works too perfectly, damage it a little.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="exit section-paper" data-theme="light">
+      <p class="eyebrow reveal">THE PAN / SAPPORO / EARTH?</p>
+      <h2 class="exit-title reveal">MAKE<br>SOMETHING<br>STRANGE.</h2>
+      <button id="randomize" class="randomize magnetic" type="button">RANDOMIZE SIGNAL ↻</button>
+      <p class="secret reveal">PS: type <strong>P A N</strong> on your keyboard.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>© THE PAN</span><span>TOOLS.THEPAN.XYZ</span><span>TRANSMISSION NEVER ENDS</span>
+    <button id="privacySettings" class="home-privacy" type="button">プライバシー設定 / PRIVACY</button>
+  </footer>
+
+  <section id="consentPanel" class="consent-panel home-consent" role="dialog" aria-modal="true" aria-labelledby="consentTitle" hidden>
+    <div class="consent-box">
+      <p class="eyebrow">PRIVACY / プライバシー</p>
+      <h2 id="consentTitle">ANALYTICS<br>アクセス解析の設定</h2>
+      <p>任意の匿名アクセス解析です。作品ファイル・ファイル名・個人情報は収集しません。許可しなくても、すべての機能を使えます。 / Optional anonymous analytics only. Creative files, filenames, and personal data are not collected. Every tool works if you decline.</p>
+      <div class="consent-actions">
+        <button id="acceptAnalytics" class="machine-button" type="button">許可する / ALLOW</button>
+        <button id="declineAnalytics" class="machine-button" type="button">許可しない / DECLINE</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="home.js?v=20260921.1"></script>
+  <script src="assets/js/consent.js?v=20260921.1" defer></script>
+  <script>
+  (()=>{
+    const copy={
+      en:{
+        title:'THE PAN TOOLS — Experimental Web Lab',enter:'ENTER LAB ↘',kicker:'LEFT-FIELD DIGITAL INSTRUMENTS FOR IMAGE / NOISE / SIGNAL / ACCIDENT',hero:'NOT AN APP STORE.<br>MORE LIKE A DRAWER FULL OF STRANGE MACHINES.',touch:'TOUCH THE MACHINES',ticker:['NO AI VIDEO TRICKS','REAL BUTTONS','ANALOG TAPE','USEFUL ACCIDENTS'],select:'SELECT AN INSTRUMENT',machines:'THE MACHINES<br>ARE NOT QUIET.',tools:[['IMAGE / DISTORT / EXPORT','LOAD AN IMAGE. BREAK THE SIGNAL. EXPORT THE RESULT.','LAUNCH ↗','OPEN 01'],['TAPE / DAMAGE / MEMORY','RUN AN IMAGE THROUGH A MACHINE THAT REMEMBERS IT WRONG.','LAUNCH ↗','OPEN 02'],['AUDIO / SIGNAL / VIDEO','TURN SOUND INTO MOVING SIGNAL AND EXPORT THE PERFORMANCE.','LAUNCH ↗','OPEN 03'],['OBJECT / VIDEO / WRONG','FEED IT AN OBJECT. MAKE THE OBJECT BEHAVE INCORRECTLY.','LAUNCH ↗','OPEN 04'],['DUB / DELAY / PLAY','A SMALL DUB PLAYGROUND. TOUCH IT UNTIL THE ECHO GETS STRANGE.','LAUNCH ↗','OPEN 05']],why:'WHY?',manifesto:['THE INTERNET GOT TOO CLEAN.','SO WE BUILT SMALL MACHINES','THAT LEAVE FINGERPRINTS.'],notesLabel:'LAB NOTES / 2026',notesTitle:'USEFUL<br>ACCIDENTS<br>ONLY.',notes:['Hover should feel physical.','Motion is navigation, not wallpaper.','Tools stay simple once opened.','If it works too perfectly, damage it a little.'],exitLabel:'THE PAN / SAPPORO / EARTH?',exitTitle:'MAKE<br>SOMETHING<br>STRANGE.',random:'RANDOMIZE SIGNAL ↻',secret:'PS: type <strong>P A N</strong> on your keyboard.',footer:'TRANSMISSION NEVER ENDS',found:'SIGNAL FOUND. DO NOT LOOK DIRECTLY AT IT.'},
+      ja:{
+        title:'THE PAN TOOLS — 実験ウェブラボ',enter:'ラボへ入る ↘',kicker:'画像 / ノイズ / 信号 / 偶然をいじる、ちょっと変なデジタル楽器たち',hero:'アプリストアではありません。<br>変な機械が詰まった引き出しです。',touch:'機械に触る',ticker:['AI動画トリックなし','本物のボタン','アナログテープ','役に立つ事故'],select:'楽器を選ぶ',machines:'こいつらは<br>静かじゃない。',tools:[['画像 / 歪み / 書き出し','画像を入れる。壊す。書き出す。','起動 ↗','開く 01'],['テープ / ダメージ / 記憶','音をカセットに通したように劣化させて、その偶然を書き出す。','起動 ↗','開く 02'],['映像 / 信号 / 録画','カメラや動画を壊して、その映像をそのまま録画する。','起動 ↗','開く 03'],['物体 / 映像 / バグ','写真や動画の中の物体を、わざと変な姿にバグらせる。','起動 ↗','開く 04'],['ダブ / ディレイ / 遊ぶ','小さなダブの遊び場。エコーが変になるまで触って遊ぶ。','起動 ↗','開く 05']],why:'なぜ？',manifesto:['インターネットは','きれいになりすぎた。','だから指紋の残る機械を作った。'],notesLabel:'ラボノート / 2026',notesTitle:'役に立つ<br>事故だけ。',notes:['ホバーにも手触りを。','動きは壁紙じゃない。ナビゲーションだ。','ツールを開いたら操作はシンプルに。','完璧に動きすぎたら、少しだけ壊す。'],exitLabel:'THE PAN / 札幌 / 地球？',exitTitle:'変なものを<br>作ろう。',random:'信号をランダム化 ↻',secret:'PS：キーボードで <strong>P A N</strong> と打ってみて。',footer:'通信は終わらない',found:'信号を検出。直視しないでください。'}
+    };
+    let lang=localStorage.getItem('thepan-tools-lang')||(navigator.language.toLowerCase().startsWith('ja')?'ja':'en');
+    const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
+    function apply(next){
+      lang=copy[next]?next:'en';localStorage.setItem('thepan-tools-lang',lang);document.documentElement.lang=lang;const t=copy[lang];document.title=t.title;
+      q('.tiny-link').textContent=t.enter;q('.hero-kicker').textContent=t.kicker;q('.hero-note').innerHTML=document.body.classList.contains('secret-mode')?t.found:t.hero;q('.enter-button span').textContent=t.touch;
+      qa('.ticker-track span').forEach((el,i)=>el.textContent=t.ticker[i%4]);q('.stage-head .eyebrow').textContent=t.select;q('.stage-head h2').innerHTML=t.machines;
+      qa('.tool-card').forEach((card,i)=>{card.querySelector('.tool-copy p').textContent=t.tools[i][0];card.querySelector('.tool-copy span').textContent=t.tools[i][1];card.querySelector('.launch').textContent=t.tools[i][2];card.dataset.cursor=t.tools[i][3]});
+      q('.manifesto .eyebrow').textContent=t.why;qa('.manifesto-copy p').forEach((el,i)=>el.textContent=t.manifesto[i]);q('.lab-notes .eyebrow').textContent=t.notesLabel;q('.lab-notes h2').innerHTML=t.notesTitle;qa('.note p').forEach((el,i)=>el.textContent=t.notes[i]);q('.exit .eyebrow').textContent=t.exitLabel;q('.exit-title').innerHTML=t.exitTitle;q('#randomize').textContent=t.random;q('.secret').innerHTML=t.secret;qa('footer span')[2].textContent=t.footer;qa('.lang-switch button').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+    }
+    qa('.lang-switch button').forEach(b=>b.addEventListener('click',()=>apply(b.dataset.lang)));apply(lang);
+    addEventListener('keydown',e=>{if(e.key.toUpperCase()==='N')setTimeout(()=>{if(document.body.classList.contains('secret-mode'))q('.hero-note').innerHTML=copy[lang].found},0)});
+  })();
+  </script>
+</body>
+</html>
