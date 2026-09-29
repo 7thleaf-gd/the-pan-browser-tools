@@ -95,7 +95,18 @@ npm run build
 
 ## GitHub Pages
 
-`.github/workflows/pages.yml` validates the site, uploads the repository as a Pages artifact, and deploys after pushes to `main`. Repository Pages source must remain **GitHub Actions**.
+Canonical production path:
+
+```text
+GitHub main
+  -> CircleCI
+  -> npm run build
+  -> scripts/deploy-pages.sh
+  -> gh-pages
+  -> tools.thepan.xyz
+```
+
+CircleCI is the only deploy executor. The deploy script publishes only the public static surface; repository operations/docs are excluded from the `gh-pages` branch.
 
 ## Foundation documentation
 
